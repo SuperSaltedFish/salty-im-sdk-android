@@ -1,0 +1,3 @@
+rootProject.name='salty-im-sdk'
+include ':app'
+include ':im_core'

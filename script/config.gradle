@@ -1,0 +1,39 @@
+ext.Ver = [
+        compileSdkVersion: 29,
+        buildToolsVersion: "29.0.3",
+        minSdkVersion    : 24,
+        targetSdkVersion : 29,
+        versionCode      : 1,
+        versionName      : "1.0",
+        flavorDimensions : "1.0"
+]
+
+def androidx_dependencies = [
+        appcompat       : "androidx.appcompat:appcompat:1.0.2"
+]
+
+def grpc_dependencies = [
+        javaxAnnotation  : "javax.annotation:javax.annotation-api:1.3.2",
+        grpcAndroid      : "io.grpc:grpc-android:1.29.0",
+        grpcStud         : "io.grpc:grpc-stub:1.29.0",
+        grpcOKHttp       : "io.grpc:grpc-okhttp:1.29.0",
+        grpcProtobufLite : "io.grpc:grpc-protobuf-lite:1.29.0",
+
+        protoc           : "com.google.protobuf:protoc:3.11.4",
+        protocGenGrpcJava: "io.grpc:protoc-gen-grpc-java:1.29.0",
+        protocGenJavalite: "com.google.protobuf:protoc-gen-javalite:3.0.0"
+]
+
+def test_dependencies = [
+        junit          : "junit:junit:4.13",
+        androidJunit   : "androidx.test.ext:junit:1.1.1",
+        androidEspresso: "androidx.test.espresso:espresso-core:3.2.0"
+]
+
+ext.Deps = [
+        androidx  : androidx_dependencies,
+        grpc      : grpc_dependencies,
+        test      : test_dependencies
+]
+
+

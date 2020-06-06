@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+apply from: '../script/grpc.gradle'
+
+android {
+    compileSdkVersion Ver.compileSdkVersion
+    buildToolsVersion Ver.buildToolsVersion
+    defaultConfig {
+        minSdkVersion Ver.minSdkVersion
+        targetSdkVersion Ver.targetSdkVersion
+        versionCode Ver.versionCode
+        versionName Ver.versionName
+        flavorDimensions Ver.flavorDimensions
+
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'SERVER_ADDRESS', '"www.orline.cn:9090"'
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'SERVER_ADDRESS', '"www.orline.cn:9090"'
+        }
+    }
+
+    sourceSets {
+        main {
+            proto {
+                srcDir '../salty-im-proto'
+            }
+        }
+    }
+
+}
+
+dependencies {
+    testImplementation Deps.test.junit
+    androidTestImplementation Deps.test.androidJunit
+    androidTestImplementation Deps.test.androidEspresso
+}
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.12"
+    }
+}

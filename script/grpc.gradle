@@ -1,0 +1,42 @@
+apply plugin: 'com.google.protobuf'
+
+protobuf {
+    protoc {
+        artifact = Deps.grpc.protoc
+    }
+    plugins {
+        javalite {
+            artifact = Deps.grpc.protocGenJavalite
+        }
+        grpc {
+            artifact = Deps.grpc.protocGenGrpcJava
+        }
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option 'lite'
+                }
+            }
+            task.plugins {
+                grpc {
+                    option 'lite'
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation Deps.grpc.javaxAnnotation
+    implementation Deps.grpc.grpcAndroid
+    implementation Deps.grpc.grpcStud
+    implementation Deps.grpc.grpcOKHttp
+    implementation Deps.grpc.grpcProtobufLite
+}
+
+
+
+
