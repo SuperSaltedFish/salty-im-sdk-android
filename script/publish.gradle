@@ -14,7 +14,7 @@ publishing {
             version Ver.versionName
 
             artifact("${buildDir}/outputs/aar/${project.getName()}-debug.aar")
-//            artifact("${buildDir}/outputs/aar/${project.getName()}.${project.VERSION_NAME}-release.aar")
+//            artifact("${buildDir}/outputs/aar/${project.getName()}-release.aar")
 
             pom.withXml {
                 if (project.name == 'salty-im-sdk') {
