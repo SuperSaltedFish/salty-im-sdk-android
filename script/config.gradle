@@ -5,7 +5,7 @@ ext.Ver = [
         targetSdkVersion : 29,
         versionCode      : 1,
         versionName      : "1.0.0",
-        flavorDimensions : "1.0"
+        flavorDimensions : "stage"
 ]
 
 def androidx_dependencies = [
