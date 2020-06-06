@@ -17,7 +17,7 @@ publishing {
 //            artifact("${buildDir}/outputs/aar/${project.getName()}.${project.VERSION_NAME}-release.aar")
 
             pom.withXml {
-                if (project.name == 'salty-im-android') {
+                if (project.name == 'salty-im-sdk') {
                     def root = asNode()
                     def dependencies = root.appendNode('dependencies')
                     project.rootProject.subprojects {
