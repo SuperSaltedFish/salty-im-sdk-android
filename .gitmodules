@@ -1,0 +1,3 @@
+[submodule "proto/salty-im-proto"]
+	path = proto/salty-im-proto
+	url = git@github.com:SuperSaltedFish/salty-im-proto.git
