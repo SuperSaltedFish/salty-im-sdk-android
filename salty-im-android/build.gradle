@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from: "$rootDir/script/publish.gradle"
 
 android {
     compileSdkVersion Ver.compileSdkVersion
@@ -29,7 +30,11 @@ android {
 }
 
 dependencies {
+    testImplementation Deps.test.junit
+    androidTestImplementation Deps.test.androidJunit
+    androidTestImplementation Deps.test.androidEspresso
+
     implementation Deps.androidx.appcompat
 
-    api project(path: ':im_core')
+    api project(path: ':salty-im-core')
 }

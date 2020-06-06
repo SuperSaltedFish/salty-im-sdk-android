@@ -1,0 +1,35 @@
+apply plugin: 'maven-publish'
+
+publishing {
+    repositories {
+        maven {
+            url "$buildDir/repo"
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            groupId "me.zhixingye"
+            artifactId project.getName()
+            version Ver.versionName
+
+            artifact("${buildDir}/outputs/aar/${project.getName()}-debug.aar")
+//            artifact("${buildDir}/outputs/aar/${project.getName()}.${project.VERSION_NAME}-release.aar")
+
+            pom.withXml {
+                if (project.name == 'salty-im-android') {
+                    def root = asNode()
+                    def dependencies = root.appendNode('dependencies')
+                    project.rootProject.subprojects {
+                        def dependency = dependencies.appendNode('dependency')
+                        dependency.appendNode("groupId", "me.zhixingye")
+                        dependency.appendNode("artifactId", it.getName())
+                        dependency.appendNode("version", Ver.versionName)
+                        println("salty-im-sdk add dependency: ${it.getName()}")
+                    }
+                }
+            }
+        }
+    }
+}
+
