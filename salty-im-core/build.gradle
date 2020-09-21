@@ -47,7 +47,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.12"
+        classpath Deps.grpc.protobufGradlePlugin
     }
 }
 
