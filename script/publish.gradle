@@ -8,8 +8,6 @@ afterEvaluate {
                 groupId "me.zhixingye"
                 artifactId project.getName()
                 version Ver.versionName
-
-                artifact("${buildDir}/outputs/aar/${project.getName()}-debug.aar")
             }
 
             debug(MavenPublication) {
@@ -17,18 +15,12 @@ afterEvaluate {
                 groupId "me.zhixingye"
                 artifactId project.getName()
                 version Ver.versionName
-
-                artifact("${buildDir}/outputs/aar/${project.getName()}-release.aar")
             }
         }
-    }
-
-    publishing {
         repositories {
             maven {
                 url "$buildDir/repo"
             }
         }
-
     }
 }
