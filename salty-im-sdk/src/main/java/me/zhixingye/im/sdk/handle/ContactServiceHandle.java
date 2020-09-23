@@ -1,9 +1,8 @@
 package me.zhixingye.im.sdk.handle;
 
-import android.os.RemoteException;
-
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.DeleteContactResp;
+import com.salty.protos.GetContactOperationMessageListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
@@ -49,5 +48,13 @@ public class ContactServiceHandle extends IContactServiceHandle.Stub {
                 .deleteContact(
                         userId,
                         new ByteRemoteCallback<DeleteContactResp>(callback));
+    }
+
+    @Override
+    public void getContactOperationMessageList(long maxMessageTime, IRemoteCallback callback) {
+        IMCore.get().getContactService()
+                .getContactOperationMessageList(
+                        maxMessageTime,
+                        new ByteRemoteCallback<GetContactOperationMessageListResp>(callback));
     }
 }
