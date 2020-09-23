@@ -5,12 +5,17 @@ import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactServiceGrpc;
 import com.salty.protos.DeleteContactReq;
 import com.salty.protos.DeleteContactResp;
+import com.salty.protos.GetHistoryContactOperationMessageReq;
+import com.salty.protos.GetHistoryContactOperationMessageResp;
 import com.salty.protos.RefusedContactReq;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactReq;
 import com.salty.protos.RequestContactResp;
+
 import io.grpc.ManagedChannel;
+
 import java.util.concurrent.TimeUnit;
+
 import me.zhixingye.im.listener.RequestCallback;
 
 /**
@@ -68,5 +73,15 @@ public class ContactApi extends BasicApi {
         mContactServiceStub.deleteContact(
                 createReq(req),
                 new DefaultStreamObserver<>(DeleteContactResp.getDefaultInstance(), callback));
+    }
+
+    public void getHistoryContactOperationMessage(long maxMessageTime, RequestCallback<GetHistoryContactOperationMessageResp> callback) {
+        GetHistoryContactOperationMessageReq req = GetHistoryContactOperationMessageReq.newBuilder()
+                .setMaxMessageTime(maxMessageTime)
+                .build();
+
+        mContactServiceStub.getContactOperationMessageList(
+                createReq(req),
+                new DefaultStreamObserver<>(GetHistoryContactOperationMessageResp.getDefaultInstance(), callback));
     }
 }
