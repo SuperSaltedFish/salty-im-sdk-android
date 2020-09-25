@@ -5,6 +5,7 @@ package me.zhixingye.im.sdk;
 import me.zhixingye.im.sdk.IRemoteCallback;
 
 interface IUserServiceHandle {
+
     void updateUserInfo(String nickname, String description, int sex, long birthday, String location, IRemoteCallback callback);
 
     void getUserInfoByUserId(String userId, IRemoteCallback callback);

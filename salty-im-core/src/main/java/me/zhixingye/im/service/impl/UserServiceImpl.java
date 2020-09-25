@@ -4,6 +4,9 @@ import com.salty.protos.GetUserInfoResp;
 import com.salty.protos.QueryUserInfoResp;
 import com.salty.protos.UpdateUserInfoResp;
 import com.salty.protos.UserProfile;
+
+import javax.annotation.Nullable;
+
 import me.zhixingye.im.api.UserApi;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.ApiService;
@@ -23,8 +26,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfile getUserProfile() {
+    public UserProfile getCurrentUserProfile() {
         return mUserProfile;
+    }
+
+    @Nullable
+    @Override
+    public UserProfile getLocalCacheUserProfile(String userId) {
+        return null;
     }
 
     @Override

@@ -4,6 +4,9 @@ import com.salty.protos.GetUserInfoResp;
 import com.salty.protos.QueryUserInfoResp;
 import com.salty.protos.UpdateUserInfoResp;
 import com.salty.protos.UserProfile;
+
+import javax.annotation.Nullable;
+
 import me.zhixingye.im.listener.RequestCallback;
 
 /**
@@ -12,10 +15,13 @@ import me.zhixingye.im.listener.RequestCallback;
  * @author zhixingye , 2020年05月01日.
  */
 public interface UserService extends BasicService {
-    UserProfile getUserProfile();
+    UserProfile getCurrentUserProfile();
+
+    @Nullable
+    UserProfile getLocalCacheUserProfile(String userId);
 
     void updateUserInfo(String nickname, String description, UserProfile.Sex sex, long birthday,
-            String location, RequestCallback<UpdateUserInfoResp> callback);
+                        String location, RequestCallback<UpdateUserInfoResp> callback);
 
     void getUserInfoByUserId(String userId, RequestCallback<GetUserInfoResp> callback);
 

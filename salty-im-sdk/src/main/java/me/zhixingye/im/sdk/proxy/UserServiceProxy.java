@@ -5,6 +5,8 @@ import com.salty.protos.QueryUserInfoResp;
 import com.salty.protos.UpdateUserInfoResp;
 import com.salty.protos.UserProfile;
 
+import javax.annotation.Nullable;
+
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.sdk.IRemoteService;
@@ -34,7 +36,13 @@ public class UserServiceProxy implements UserService, RemoteProxy {
     }
 
     @Override
-    public UserProfile getUserProfile() {
+    public UserProfile getCurrentUserProfile() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public UserProfile getLocalCacheUserProfile(String userId) {
         return null;
     }
 

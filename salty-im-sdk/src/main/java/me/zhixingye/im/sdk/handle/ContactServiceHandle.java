@@ -18,43 +18,38 @@ import me.zhixingye.im.sdk.IRemoteCallback;
 public class ContactServiceHandle extends IContactServiceHandle.Stub {
     @Override
     public void requestContact(String userId, String reason, IRemoteCallback callback) {
-        IMCore.get().getContactService()
-                .requestContact(
-                        userId,
-                        reason,
-                        new ByteRemoteCallback<RequestContactResp>(callback));
+        IMCore.get().getContactService().requestContact(
+                userId,
+                reason,
+                new ByteRemoteCallback<RequestContactResp>(callback));
     }
 
     @Override
     public void refusedContact(String userId, String reason, IRemoteCallback callback) {
-        IMCore.get().getContactService()
-                .refusedContact(
-                        userId,
-                        reason,
-                        new ByteRemoteCallback<RefusedContactResp>(callback));
+        IMCore.get().getContactService().refusedContact(
+                userId,
+                reason,
+                new ByteRemoteCallback<RefusedContactResp>(callback));
     }
 
     @Override
     public void acceptContact(String userId, IRemoteCallback callback) {
-        IMCore.get().getContactService()
-                .acceptContact(
-                        userId,
-                        new ByteRemoteCallback<AcceptContactResp>(callback));
+        IMCore.get().getContactService().acceptContact(
+                userId,
+                new ByteRemoteCallback<AcceptContactResp>(callback));
     }
 
     @Override
     public void deleteContact(String userId, IRemoteCallback callback) {
-        IMCore.get().getContactService()
-                .deleteContact(
-                        userId,
-                        new ByteRemoteCallback<DeleteContactResp>(callback));
+        IMCore.get().getContactService().deleteContact(
+                userId,
+                new ByteRemoteCallback<DeleteContactResp>(callback));
     }
 
     @Override
     public void getContactOperationMessageList(long maxMessageTime, IRemoteCallback callback) {
-        IMCore.get().getContactService()
-                .getContactOperationMessageList(
-                        maxMessageTime,
-                        new ByteRemoteCallback<GetContactOperationMessageListResp>(callback));
+        IMCore.get().getContactService().getContactOperationMessageList(
+                maxMessageTime,
+                new ByteRemoteCallback<GetContactOperationMessageListResp>(callback));
     }
 }
