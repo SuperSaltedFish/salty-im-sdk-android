@@ -9,7 +9,7 @@ protobuf {
             artifact = Deps.grpc.protocGenJavalite
         }
         grpc {
-            artifact = Deps.grpc.protocGenGrpcJava
+            artifact = Deps.grpc.grpcProtocGenJava
         }
     }
 

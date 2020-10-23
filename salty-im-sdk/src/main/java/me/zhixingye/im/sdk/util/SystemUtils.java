@@ -1,7 +1,12 @@
 package me.zhixingye.im.sdk.util;
 
 import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.Application;
 import android.content.Context;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
+import android.os.Process;
 
 import java.util.List;
 
@@ -13,17 +18,21 @@ import java.util.List;
 public class SystemUtils {
 
     public static String getCurrentProcessName(Context cxt) {
-        ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);
-        if (am == null) {
-            return null;
-        }
-        List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
-        if (runningApps == null) {
-            return null;
-        }
-        for (ActivityManager.RunningAppProcessInfo info : runningApps) {
-            if (info.pid == android.os.Process.myPid()) {
-                return info.processName;
+        if (VERSION.SDK_INT >= VERSION_CODES.P) {
+            return Application.getProcessName();
+        } else {
+            ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);
+            if (am == null) {
+                return null;
+            }
+            List<RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
+            if (runningApps == null) {
+                return null;
+            }
+            for (RunningAppProcessInfo info : runningApps) {
+                if (info.pid == Process.myPid()) {
+                    return info.processName;
+                }
             }
         }
         return null;

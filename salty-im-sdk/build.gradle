@@ -35,6 +35,7 @@ dependencies {
     androidTestImplementation Deps.test.androidEspresso
 
     implementation Deps.androidx.appcompat
+    implementation Deps.androidx.startup
 
     api project(path: ':salty-im-core')
 }

@@ -35,9 +35,11 @@ import me.zhixingye.im.tool.Logger;
  */
 public class IMClient {
 
+    private static final String TAG = "IMClient";
+
     private static IMClient sIMClient;
 
-    public synchronized static void init(Context context) {
+    synchronized static void init(Context context) {
         String currentProcess = SystemUtils.getCurrentProcessName(context);
         String mainProcess = context.getPackageName();
         if (TextUtils.equals(currentProcess, mainProcess)) {
@@ -56,8 +58,6 @@ public class IMClient {
         return sIMClient;
     }
 
-    private Context mAppContext;
-
     private AccountService mAccountServiceProxy;
     private ContactService mContactServiceProxy;
     private ConversationService mConversationServiceProxy;
@@ -70,9 +70,8 @@ public class IMClient {
     private IRemoteService mIRemoteService;
 
     private IMClient(Context context) {
-        mAppContext = context;
         initProxyService();
-        autoBindRemoteService();
+        autoBindRemoteService(context.getApplicationContext());
     }
 
     private void initProxyService() {
@@ -87,15 +86,14 @@ public class IMClient {
 
     }
 
-    private void autoBindRemoteService() {
-        mAppContext.bindService(
-                new Intent(mAppContext, IMRemoteService.class),
+    private void autoBindRemoteService(Context context) {
+        context.bindService(
+                new Intent(context, IMRemoteService.class),
                 new ServiceConnection() {
                     @Override
                     public void onServiceConnected(ComponentName name, IBinder service) {
-                        Logger.e("yezhixin","onServiceConnected");
+                        Logger.i(TAG, "onServiceConnected");
                         mIRemoteService = IRemoteService.Stub.asInterface(service);
-
                         ((RemoteProxy) mAccountServiceProxy).onBindHandle(mIRemoteService);
                         ((RemoteProxy) mContactServiceProxy).onBindHandle(mIRemoteService);
                         ((RemoteProxy) mConversationServiceProxy).onBindHandle(mIRemoteService);
@@ -108,11 +106,13 @@ public class IMClient {
 
                     @Override
                     public void onServiceDisconnected(ComponentName name) {
+                        Logger.w(TAG, "onServiceDisconnected");
                         mIRemoteService = null;
                     }
 
                     @Override
                     public void onBindingDied(ComponentName name) {
+                        Logger.w(TAG, "onBindingDied");
                         onServiceDisconnected(name);
                     }
 
