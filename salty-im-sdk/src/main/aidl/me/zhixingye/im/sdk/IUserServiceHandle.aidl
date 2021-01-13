@@ -6,6 +6,10 @@ import me.zhixingye.im.sdk.IRemoteCallback;
 
 interface IUserServiceHandle {
 
+    byte[] getCurrentUserProfile();
+
+    byte[] getUserProfileFromLocal(String userId);
+
     void updateUserInfo(String nickname, String description, int sex, long birthday, String location, IRemoteCallback callback);
 
     void getUserInfoByUserId(String userId, IRemoteCallback callback);

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Nullable
     @Override
-    public UserProfile getLocalCacheUserProfile(String userId) {
+    public UserProfile getUserProfileFromLocal(String userId) {
         return null;
     }
 

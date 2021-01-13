@@ -16,6 +16,25 @@ import me.zhixingye.im.sdk.IUserServiceHandle;
  * @author zhixingye , 2020年05月01日.
  */
 public class UserServiceHandle extends IUserServiceHandle.Stub {
+
+    @Override
+    public byte[] getCurrentUserProfile() {
+        UserProfile profile = IMCore.get().getUserService().getCurrentUserProfile();
+        if (profile == null) {
+            return null;
+        }
+        return profile.toByteArray();
+    }
+
+    @Override
+    public byte[] getUserProfileFromLocal(String userId) {
+        UserProfile profile = IMCore.get().getUserService().getUserProfileFromLocal(userId);
+        if (profile == null) {
+            return null;
+        }
+        return profile.toByteArray();
+    }
+
     @Override
     public void updateUserInfo(String nickname, String description, int sex, long birthday, String location, IRemoteCallback callback) {
         IMCore.get().getUserService().updateUserInfo(

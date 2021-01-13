@@ -39,7 +39,7 @@ public class ProxyHelper {
      */
     private static class NullStringHandler implements InvocationHandler {
 
-        private Object mOriginal;
+        private final Object mOriginal;
 
         NullStringHandler(Object Original) {
             mOriginal = Original;
@@ -48,7 +48,7 @@ public class ProxyHelper {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if (args != null && args.length != 0) {
-                Class[] paramsClass = method.getParameterTypes();
+                Class<?>[] paramsClass = method.getParameterTypes();
                 for (int i = 0, length = paramsClass.length; i < length; i++) {
                     if (paramsClass[i] == String.class && args[i] == null) {
                         args[i] = "";

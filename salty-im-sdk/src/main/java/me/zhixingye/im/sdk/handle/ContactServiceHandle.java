@@ -1,6 +1,7 @@
 package me.zhixingye.im.sdk.handle;
 
 import com.salty.protos.AcceptContactResp;
+import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationMessageListResp;
 import com.salty.protos.RefusedContactResp;
@@ -51,5 +52,14 @@ public class ContactServiceHandle extends IContactServiceHandle.Stub {
         IMCore.get().getContactService().getContactOperationMessageList(
                 maxMessageTime,
                 new ByteRemoteCallback<GetContactOperationMessageListResp>(callback));
+    }
+
+    @Override
+    public byte[] getContactOperationFromLocal(String targetUserId) {
+        ContactOperationMessage operation = IMCore.get().getContactService().getContactOperationFromLocal(targetUserId);
+        if (operation == null) {
+            return null;
+        }
+        return operation.toByteArray();
     }
 }

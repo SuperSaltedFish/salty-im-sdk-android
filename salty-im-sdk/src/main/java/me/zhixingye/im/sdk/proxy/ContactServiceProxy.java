@@ -1,15 +1,17 @@
 package me.zhixingye.im.sdk.proxy;
 
 import com.salty.protos.AcceptContactResp;
+import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationMessageListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
+import javax.annotation.Nullable;
+
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.IContactServiceHandle;
 import me.zhixingye.im.sdk.IRemoteService;
-import me.zhixingye.im.sdk.util.CallbackUtil;
 import me.zhixingye.im.service.ContactService;
 import me.zhixingye.im.tool.Logger;
 
@@ -42,7 +44,6 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -53,7 +54,6 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -64,7 +64,6 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -75,7 +74,6 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -86,7 +84,21 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
+        }
+    }
+
+    @Nullable
+    @Override
+    public ContactOperationMessage getContactOperationFromLocal(String targetUserId) {
+        try {
+            byte[] data = mContactHandle.getContactOperationFromLocal(targetUserId);
+            if (data == null) {
+                return null;
+            }
+            return ContactOperationMessage.parseFrom(data);
+        } catch (Exception e) {
+            Logger.e(TAG, "远程调用失败", e);
+            return null;
         }
     }
 }

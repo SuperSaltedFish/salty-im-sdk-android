@@ -1,10 +1,13 @@
 package me.zhixingye.im.service;
 
 import com.salty.protos.AcceptContactResp;
+import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationMessageListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
+
+import javax.annotation.Nullable;
 
 import me.zhixingye.im.listener.RequestCallback;
 
@@ -23,4 +26,7 @@ public interface ContactService extends BasicService {
     void deleteContact(String userId, RequestCallback<DeleteContactResp> callback);
 
     void getContactOperationMessageList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback);
+
+    @Nullable
+    ContactOperationMessage getContactOperationFromLocal(String targetUserId);
 }

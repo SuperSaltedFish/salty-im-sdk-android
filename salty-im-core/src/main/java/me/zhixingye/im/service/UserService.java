@@ -15,13 +15,13 @@ import me.zhixingye.im.listener.RequestCallback;
  * @author zhixingye , 2020年05月01日.
  */
 public interface UserService extends BasicService {
+    @Nullable
     UserProfile getCurrentUserProfile();
 
     @Nullable
-    UserProfile getLocalCacheUserProfile(String userId);
+    UserProfile getUserProfileFromLocal(String userId);
 
-    void updateUserInfo(String nickname, String description, UserProfile.Sex sex, long birthday,
-                        String location, RequestCallback<UpdateUserInfoResp> callback);
+    void updateUserInfo(String nickname, String description, UserProfile.Sex sex, long birthday, String location, RequestCallback<UpdateUserInfoResp> callback);
 
     void getUserInfoByUserId(String userId, RequestCallback<GetUserInfoResp> callback);
 

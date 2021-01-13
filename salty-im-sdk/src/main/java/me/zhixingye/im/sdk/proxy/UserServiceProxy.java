@@ -11,7 +11,6 @@ import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.sdk.IRemoteService;
 import me.zhixingye.im.sdk.IUserServiceHandle;
-import me.zhixingye.im.sdk.util.CallbackUtil;
 import me.zhixingye.im.tool.Logger;
 
 /**
@@ -37,13 +36,31 @@ public class UserServiceProxy implements UserService, RemoteProxy {
 
     @Override
     public UserProfile getCurrentUserProfile() {
-        return null;
+        try {
+            byte[] data = mUserHandle.getCurrentUserProfile();
+            if (data == null) {
+                return null;
+            }
+            return UserProfile.parseFrom(data);
+        } catch (Exception e) {
+            Logger.e(TAG, "远程调用失败", e);
+            return null;
+        }
     }
 
     @Nullable
     @Override
-    public UserProfile getLocalCacheUserProfile(String userId) {
-        return null;
+    public UserProfile getUserProfileFromLocal(String userId) {
+        try {
+            byte[] data = mUserHandle.getUserProfileFromLocal(userId);
+            if (data == null) {
+                return null;
+            }
+            return UserProfile.parseFrom(data);
+        } catch (Exception e) {
+            Logger.e(TAG, "远程调用失败", e);
+            return null;
+        }
     }
 
     @Override
@@ -53,7 +70,6 @@ public class UserServiceProxy implements UserService, RemoteProxy {
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -64,7 +80,6 @@ public class UserServiceProxy implements UserService, RemoteProxy {
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -75,7 +90,6 @@ public class UserServiceProxy implements UserService, RemoteProxy {
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -86,7 +100,6 @@ public class UserServiceProxy implements UserService, RemoteProxy {
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 }

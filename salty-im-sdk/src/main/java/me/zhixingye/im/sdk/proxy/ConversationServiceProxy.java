@@ -12,7 +12,6 @@ import com.salty.protos.UpdateNotificationStatusResp;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.IConversationServiceHandle;
 import me.zhixingye.im.sdk.IRemoteService;
-import me.zhixingye.im.sdk.util.CallbackUtil;
 import me.zhixingye.im.service.ConversationService;
 import me.zhixingye.im.tool.Logger;
 
@@ -44,7 +43,6 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -55,7 +53,6 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -66,7 +63,6 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -77,7 +73,6 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -88,7 +83,6 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -99,7 +93,6 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 
@@ -110,7 +103,6 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
-            CallbackUtil.callRemoteError(callback);
         }
     }
 }

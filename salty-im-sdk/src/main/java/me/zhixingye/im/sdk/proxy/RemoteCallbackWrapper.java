@@ -22,7 +22,7 @@ public class RemoteCallbackWrapper<T> extends IRemoteCallback.Stub {
 
     private static final Handler UI_HANDLER = new Handler(Looper.getMainLooper());
 
-    private RequestCallback<T> mCallback;
+    private final RequestCallback<T> mCallback;
 
     public RemoteCallbackWrapper(RequestCallback<T> callback) {
         mCallback = callback;
@@ -44,7 +44,7 @@ public class RemoteCallbackWrapper<T> extends IRemoteCallback.Stub {
         }
 
         try {
-            Class type = (Class) pType.getActualTypeArguments()[0];
+            Class<?> type = (Class<?>) pType.getActualTypeArguments()[0];
             if (type == Void.class) {
                 mCallback.onCompleted(null);
                 return;

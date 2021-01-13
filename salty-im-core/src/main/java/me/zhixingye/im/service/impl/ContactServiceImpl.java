@@ -1,6 +1,7 @@
 package me.zhixingye.im.service.impl;
 
 import com.salty.protos.AcceptContactResp;
+import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationMessageListResp;
 import com.salty.protos.RefusedContactResp;
@@ -55,6 +56,11 @@ public class ContactServiceImpl implements ContactService {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
                 .getContactOperationMessageList(maxMessageTime, callback);
+    }
+
+    @Override
+    public ContactOperationMessage getContactOperationFromLocal(String targetUserId) {
+        return null;
     }
 
 
