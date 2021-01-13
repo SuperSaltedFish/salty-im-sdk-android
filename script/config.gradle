@@ -1,6 +1,6 @@
 ext.Ver = [
-        compileSdkVersion: 29,
-        buildToolsVersion: "29.0.3",
+        compileSdkVersion: 30,
+        buildToolsVersion: "30.0.3",
         minSdkVersion    : 26,
         targetSdkVersion : 29,
         versionCode      : 1,
@@ -9,11 +9,11 @@ ext.Ver = [
 ]
 
 def androidx_dependencies = [
-        appcompat: "androidx.appcompat:appcompat:1.1.0",
-        startup: "androidx.startup:startup-runtime:1.0.0-beta01"
+        appcompat: "androidx.appcompat:appcompat:1.2.0",
+        startup: "androidx.startup:startup-runtime:1.0.0"
 ]
 
-def grpc_version = '1.32.1'
+def grpc_version = '1.34.1'
 def grpc_dependencies = [
         grpcAndroid         : "io.grpc:grpc-android:$grpc_version",
         grpcStud            : "io.grpc:grpc-stub:$grpc_version",
@@ -25,7 +25,7 @@ def grpc_dependencies = [
 
         protoc              : "com.google.protobuf:protoc:3.12.0",
         protocGenJavalite   : "com.google.protobuf:protoc-gen-javalite:3.0.1",
-        protobufGradlePlugin: "com.google.protobuf:protobuf-gradle-plugin:0.8.13"
+        protobufGradlePlugin: "com.google.protobuf:protobuf-gradle-plugin:0.8.14"
 ]
 
 def test_dependencies = [
