@@ -208,7 +208,6 @@ public class AccountServiceImpl extends BasicServiceImpl implements AccountServi
 
         isLogged = true;
 
-
         return true;
     }
 
@@ -218,7 +217,6 @@ public class AccountServiceImpl extends BasicServiceImpl implements AccountServi
         } else {
             ServiceAccessor.get(StorageService.class).putByteArrayToStorage(TAG, STORAGE_KEY_LOGIN_INFO, loginResp.toByteArray());
         }
-        ServiceAccessor.get(StorageService.class).getByteArrayFromStorage(TAG, STORAGE_KEY_LOGIN_INFO);
     }
 
     @Nullable
