@@ -1,6 +1,5 @@
 package me.zhixingye.im.sdk.proxy;
 
-import com.salty.protos.LoginResp;
 import com.salty.protos.RegisterResp;
 import com.salty.protos.ResetPasswordResp;
 import com.salty.protos.UserProfile;
@@ -74,7 +73,7 @@ public class AccountServiceProxy implements AccountService, RemoteProxy {
     }
 
     @Override
-    public void loginByTelephone(String telephone, String password, @Nullable RequestCallback<LoginResp> callback) {
+    public void loginByTelephone(String telephone, String password, @Nullable RequestCallback<UserProfile> callback) {
         try {
             mAccountHandle.loginByTelephone(telephone, password, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
@@ -84,7 +83,7 @@ public class AccountServiceProxy implements AccountService, RemoteProxy {
     }
 
     @Override
-    public void loginByEmail(String email, String password, @Nullable RequestCallback<LoginResp> callback) {
+    public void loginByEmail(String email, String password, @Nullable RequestCallback<UserProfile> callback) {
         try {
             mAccountHandle.loginByEmail(email, password, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
@@ -94,7 +93,7 @@ public class AccountServiceProxy implements AccountService, RemoteProxy {
     }
 
     @Override
-    public void loginByLastLoginInfo(RequestCallback<LoginResp> callback) {
+    public void loginByLastLoginInfo(RequestCallback<UserProfile> callback) {
         try {
             mAccountHandle.loginByLastLoginInfo(new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {

@@ -4,6 +4,7 @@ import com.salty.protos.LoginResp;
 import com.salty.protos.RegisterResp;
 import com.salty.protos.ResetPasswordResp;
 import com.salty.protos.UserProfile;
+
 import me.zhixingye.im.listener.RequestCallback;
 
 /**
@@ -20,11 +21,11 @@ public interface AccountService extends BasicService {
 
     void resetLoginPasswordByEmail(String email, String newPassword, RequestCallback<ResetPasswordResp> callback);
 
-    void loginByTelephone(String telephone, String password, RequestCallback<LoginResp> callback);
+    void loginByTelephone(String telephone, String password, RequestCallback<UserProfile> callback);
 
-    void loginByEmail(String email, String password, RequestCallback<LoginResp> callback);
+    void loginByEmail(String email, String password, RequestCallback<UserProfile> callback);
 
-    void loginByLastLoginInfo(RequestCallback<LoginResp> callback);
+    void loginByLastLoginInfo(RequestCallback<UserProfile> callback);
 
     void logout();
 

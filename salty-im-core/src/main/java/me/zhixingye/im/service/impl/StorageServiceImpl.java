@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.protobuf.MessageLite;
@@ -49,25 +50,10 @@ public class StorageServiceImpl extends BasicServiceImpl implements StorageServi
 
     @Override
     public void putStringToStorage(String name, String key, String value) {
-        String encryptedKey = getEncryptedKey(key);
-        if (TextUtils.isEmpty(encryptedKey)) {
+        if (TextUtils.isEmpty(value)) {
             return;
         }
-        SharedPreferences sp = getSharedPreferences(name);
-        if (sp == null) {
-            return;
-        }
-        if (TextUtils.isEmpty(encryptedKey) || mAESKey == null) {
-            sp.edit().putString(encryptedKey, value).apply();
-            return;
-        }
-        byte[] data = AESUtil.encrypt(value.getBytes(StandardCharsets.UTF_8), mAESKey, IV);
-        if (data == null || data.length <= 0) {
-            Logger.e(TAG, "Encrypt fail,key=" + key);
-            return;
-        }
-        String saveValue = Base64Util.encodeToString(data);
-        sp.edit().putString(encryptedKey, saveValue).apply();
+        putByteArrayToStorage(name, key, value.getBytes());
     }
 
     @Override
@@ -87,10 +73,26 @@ public class StorageServiceImpl extends BasicServiceImpl implements StorageServi
 
     @Override
     public void putByteArrayToStorage(String name, String key, byte[] value) {
-        if (value == null) {
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(key) || value == null) {
             return;
         }
-        putByteArrayToStorage(name, key, Base64Util.encode(value));
+        SharedPreferences sp = getSharedPreferences(name);
+        if (sp == null) {
+            return;
+        }
+        String encryptedKey = getEncryptedKey(key);
+        String encryptedValue;
+        if (mAESKey == null) {
+            encryptedValue = Base64Util.encodeToString(value);
+        } else {
+            byte[] data = AESUtil.encrypt(value, mAESKey, IV);
+            if (data == null || data.length <= 0) {
+                Logger.e(TAG, "Encrypt fail,key=" + key);
+                return;
+            }
+            encryptedValue = Base64Util.encodeToString(data);
+        }
+        sp.edit().putString(encryptedKey, encryptedValue).apply();
     }
 
 
@@ -128,45 +130,48 @@ public class StorageServiceImpl extends BasicServiceImpl implements StorageServi
     }
 
     @Override
-    public byte[] getByteArrayFromStorage(String name, String key) {
-        String strValue = getStringFromStorage(name, key, null);
-        if (strValue == null) {
-            return null;
+    public String getStringFromStorage(String name, String key, String defValue) {
+        byte[] value = getByteArrayFromStorage(name, key);
+        if (value == null) {
+            return defValue;
         }
-        return Base64Util.decode(key);
+        return new String(value);
     }
 
     @Override
-    public String getStringFromStorage(String name, String key, String defValue) {
-        String encryptedKey = getEncryptedKey(key);
-        if (TextUtils.isEmpty(encryptedKey)) {
-            return defValue;
+    public byte[] getByteArrayFromStorage(String name, String key) {
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(key)) {
+            return null;
         }
         SharedPreferences sp = getSharedPreferences(name);
         if (sp == null) {
-            return defValue;
+            return null;
         }
-        String encryptedValue = sp.getString(encryptedKey, defValue);
-        if (TextUtils.isEmpty(encryptedValue) || TextUtils.equals(encryptedValue, defValue) || mAESKey == null) {
-            return encryptedValue;
+        String encryptedKey = getEncryptedKey(key);
+        if (!sp.contains(encryptedKey)) {
+            return null;
+        }
+        String encryptedValue = sp.getString(encryptedKey, null);
+        if (encryptedValue == null || mAESKey == null) {
+            return null;
         }
         byte[] data = AESUtil.decrypt(Base64Util.decode(encryptedValue), mAESKey, IV);
         if (data == null || data.length <= 0) {
             Logger.e(TAG, "decrypt fail,key=" + key);
-            return defValue;
+            return null;
         }
-        return new String(data, StandardCharsets.UTF_8);
+        return data;
     }
 
 
     @Override
     public void removeFromStorage(String name, String key) {
-        String encryptedKey = getEncryptedKey(key);
-        if (TextUtils.isEmpty(encryptedKey)) {
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(key)) {
             return;
         }
+        String encryptedKey = getEncryptedKey(key);
         SharedPreferences sp = getSharedPreferences(name);
-        if (sp == null) {
+        if (sp == null || !sp.contains(encryptedKey)) {
             return;
         }
         sp.edit().remove(encryptedKey).apply();
@@ -238,10 +243,7 @@ public class StorageServiceImpl extends BasicServiceImpl implements StorageServi
         return IMCore.getAppContext().getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 
-    private String getEncryptedKey(String key) {
-        if (TextUtils.isEmpty(key)) {
-            return key;
-        }
+    private String getEncryptedKey(@NonNull String key) {
         return MD5Util.encrypt16(key);
     }
 

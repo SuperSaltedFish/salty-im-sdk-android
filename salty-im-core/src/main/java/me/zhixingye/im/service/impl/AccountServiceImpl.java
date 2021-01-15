@@ -74,17 +74,17 @@ public class AccountServiceImpl extends BasicServiceImpl implements AccountServi
     }
 
     @Override
-    public void loginByTelephone(String telephone, String password, RequestCallback<LoginResp> callback) {
+    public void loginByTelephone(String telephone, String password, RequestCallback<UserProfile> callback) {
         login(telephone, null, password, callback);
     }
 
     @Override
-    public void loginByEmail(String email, String password, RequestCallback<LoginResp> callback) {
+    public void loginByEmail(String email, String password, RequestCallback<UserProfile> callback) {
         login(null, email, password, callback);
     }
 
     @Override
-    public void loginByLastLoginInfo(final RequestCallback<LoginResp> callback) {
+    public void loginByLastLoginInfo(final RequestCallback<UserProfile> callback) {
         try {
             mLoginLock.acquire();
         } catch (InterruptedException e) {
@@ -105,7 +105,7 @@ public class AccountServiceImpl extends BasicServiceImpl implements AccountServi
                         return;
                     }
                     if (tryInitLoginInfo(loginResp)) {
-                        CallbackHelper.callCompleted(loginResp, callback);
+                        CallbackHelper.callCompleted(loginResp.getProfile(), callback);
                     } else {
                         CallbackHelper.callFailure(ResponseCode.INTERNAL_UNKNOWN, callback);
                     }
@@ -117,7 +117,7 @@ public class AccountServiceImpl extends BasicServiceImpl implements AccountServi
         });
     }
 
-    private void login(String telephone, String email, String password, final RequestCallback<LoginResp> callback) {
+    private void login(String telephone, String email, String password, final RequestCallback<UserProfile> callback) {
         try {
             mLoginLock.acquire();
         } catch (InterruptedException e) {
@@ -132,7 +132,7 @@ public class AccountServiceImpl extends BasicServiceImpl implements AccountServi
             public void onCompleted(LoginResp loginResp) {
                 try {
                     if (tryInitLoginInfo(loginResp)) {
-                        CallbackHelper.callCompleted(loginResp, callback);
+                        CallbackHelper.callCompleted(loginResp.getProfile(), callback);
                     } else {
                         CallbackHelper.callFailure(ResponseCode.INTERNAL_UNKNOWN, callback);
                     }
@@ -218,6 +218,7 @@ public class AccountServiceImpl extends BasicServiceImpl implements AccountServi
         } else {
             ServiceAccessor.get(StorageService.class).putByteArrayToStorage(TAG, STORAGE_KEY_LOGIN_INFO, loginResp.toByteArray());
         }
+        ServiceAccessor.get(StorageService.class).getByteArrayFromStorage(TAG, STORAGE_KEY_LOGIN_INFO);
     }
 
     @Nullable

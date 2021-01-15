@@ -3,7 +3,6 @@ package me.zhixingye.im.sdk.handle;
 
 import android.os.RemoteException;
 
-import com.salty.protos.LoginResp;
 import com.salty.protos.RegisterResp;
 import com.salty.protos.ResetPasswordResp;
 import com.salty.protos.UserProfile;
@@ -59,7 +58,7 @@ public class AccountServiceHandle extends IAccountServiceHandle.Stub {
         IMCore.get().getAccountService().loginByTelephone(
                 telephone,
                 password,
-                new ByteRemoteCallback<LoginResp>(callback));
+                new ByteRemoteCallback<UserProfile>(callback));
     }
 
     @Override
@@ -67,13 +66,13 @@ public class AccountServiceHandle extends IAccountServiceHandle.Stub {
         IMCore.get().getAccountService().loginByEmail(
                 email,
                 password,
-                new ByteRemoteCallback<LoginResp>(callback));
+                new ByteRemoteCallback<UserProfile>(callback));
     }
 
     @Override
     public void loginByLastLoginInfo(IRemoteCallback callback) {
         IMCore.get().getAccountService().loginByLastLoginInfo(
-                new ByteRemoteCallback<LoginResp>(callback));
+                new ByteRemoteCallback<UserProfile>(callback));
     }
 
     @Override
