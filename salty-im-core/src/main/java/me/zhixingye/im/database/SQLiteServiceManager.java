@@ -1,15 +1,13 @@
-package me.zhixingye.im.service.impl;
+package me.zhixingye.im.database;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import me.zhixingye.im.database.AbstractDao;
-import me.zhixingye.im.database.SQLiteOpenHelperImpl;
-import me.zhixingye.im.service.SQLiteService;
 
 
 /**
@@ -17,13 +15,28 @@ import me.zhixingye.im.service.SQLiteService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class SQLiteServiceImpl implements SQLiteService {
+public class SQLiteServiceManager {
 
+    private static SQLiteServiceManager sManager;
+
+    public static SQLiteServiceManager get() {
+        if (sManager == null) {
+            synchronized (SQLiteServiceManager.class) {
+                if (sManager == null) {
+                    sManager = new SQLiteServiceManager();
+                }
+            }
+        }
+        return sManager;
+    }
 
     private ReadWriteHelper mReadWriteHelper;
     private SQLiteOpenHelper mOpenHelper;
 
-    public SQLiteServiceImpl(Context context, String name, int version) {
+    public void open(Context context, String name, int version) {
+        if (mOpenHelper != null) {
+            throw new RuntimeException("SQLiteServiceManager already open");
+        }
         mOpenHelper = new SQLiteOpenHelperImpl(context, name, version);
         mReadWriteHelper = new ReadWriteHelperImpl(mOpenHelper);
     }
@@ -35,8 +48,7 @@ public class SQLiteServiceImpl implements SQLiteService {
         }
     }
 
-    @Override
-    public <T extends AbstractDao> T createDao(Class<T> c) {
+    public <T extends AbstractDao<?>> T createDao(Class<T> c) {
         if (mReadWriteHelper == null) {
             return null;
         }
@@ -51,7 +63,7 @@ public class SQLiteServiceImpl implements SQLiteService {
 
     private class ReadWriteHelperImpl implements ReadWriteHelper {
 
-        private SQLiteOpenHelper mOpenHelper;
+        private final SQLiteOpenHelper mOpenHelper;
         private SQLiteDatabase mReadableDatabase;
         private SQLiteDatabase mWritableDatabase;
 
@@ -105,7 +117,7 @@ public class SQLiteServiceImpl implements SQLiteService {
 
     private class ReadableDatabaseImpl implements ReadableDatabase {
 
-        private ReadWriteHelperImpl mReadWriteHelper;
+        private final ReadWriteHelperImpl mReadWriteHelper;
         private SQLiteDatabase mReadableDatabase;
 
         ReadableDatabaseImpl(ReadWriteHelperImpl readWriteHelper) {
@@ -132,7 +144,7 @@ public class SQLiteServiceImpl implements SQLiteService {
 
     private class WritableDatabaseImpl implements WritableDatabase {
 
-        private ReadWriteHelperImpl mReadWriteHelper;
+        private final ReadWriteHelperImpl mReadWriteHelper;
         private SQLiteDatabase mWritableDatabase;
 
         WritableDatabaseImpl(ReadWriteHelperImpl readWriteHelper) {
@@ -203,4 +215,33 @@ public class SQLiteServiceImpl implements SQLiteService {
         }
     }
 
+
+    interface ReadWriteHelper {
+        ReadableDatabase openReadableDatabase();
+
+        WritableDatabase openWritableDatabase();
+    }
+
+    interface ReadableDatabase extends AutoCloseable {
+        Cursor query(String table, String[] columns, String selection, String[] selectionArgs,
+                     String groupBy, String having, String orderBy, String limit);
+    }
+
+    interface WritableDatabase extends AutoCloseable {
+        long insert(String table, String nullColumnHack, ContentValues values);
+
+        int delete(String table, String whereClause, String[] whereArgs);
+
+        int update(String table, ContentValues values, String whereClause, String[] whereArgs);
+
+        long replace(String table, String nullColumnHack, ContentValues initialValues);
+
+        void beginTransaction();
+
+        void beginTransactionNonExclusive();
+
+        void setTransactionSuccessful();
+
+        void endTransaction();
+    }
 }

@@ -18,6 +18,7 @@ import me.zhixingye.im.constant.ResponseCode;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.AccountService;
 import me.zhixingye.im.service.DeviceService;
+import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.service.impl.ServiceAccessor;
 import me.zhixingye.im.tool.Logger;
 import me.zhixingye.im.util.StringUtil;
@@ -40,14 +41,14 @@ public abstract class BasicApi {
                 .build();
 
         DeviceService deviceService = ServiceAccessor.get(DeviceService.class);
-        AccountService accountService = ServiceAccessor.get(AccountService.class);
+        UserService userService = ServiceAccessor.get(UserService.class);
 
         GrpcReq req = GrpcReq.newBuilder()
                 .setDeviceId(StringUtil.checkNull(deviceService.getDeviceId()))
                 .setOs(GrpcReq.OS.ANDROID)
                 .setLanguage(GrpcReq.Language.CHINESE)
                 .setVersion(StringUtil.checkNull(deviceService.getAppVersion()))
-                .setToken(StringUtil.checkNull(accountService.getCurrentUserToken()))
+                .setToken(StringUtil.checkNull(userService.getCurrentUserToken()))
                 .setData(data)
                 .build();
 

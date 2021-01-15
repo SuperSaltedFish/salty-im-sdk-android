@@ -16,6 +16,12 @@ import me.zhixingye.im.listener.RequestCallback;
  */
 public interface UserService extends BasicService {
     @Nullable
+    String getCurrentUserId();
+
+    @Nullable
+    String getCurrentUserToken();
+
+    @Nullable
     UserProfile getCurrentUserProfile();
 
     @Nullable

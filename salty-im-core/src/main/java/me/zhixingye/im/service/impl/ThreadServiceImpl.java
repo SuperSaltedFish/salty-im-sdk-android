@@ -1,6 +1,8 @@
 package me.zhixingye.im.service.impl;
 
 import android.os.Handler;
+import android.os.Looper;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -14,9 +16,9 @@ import me.zhixingye.im.service.ThreadService;
  */
 public class ThreadServiceImpl implements ThreadService {
 
-    private Handler mUIHandler = new Handler();
+    private final Handler mUIHandler = new Handler(Looper.getMainLooper());
 
-    private Executor mWorkExecutor = new ThreadPoolExecutor(
+    private final Executor mWorkExecutor = new ThreadPoolExecutor(
             1,
             Runtime.getRuntime().availableProcessors() + 1,
             30, TimeUnit.SECONDS,

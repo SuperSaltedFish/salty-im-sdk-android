@@ -94,7 +94,7 @@ public class AccountServiceProxy implements AccountService, RemoteProxy {
     }
 
     @Override
-    public void loginByLastLoginInfo(RequestCallback<UserProfile> callback) {
+    public void loginByLastLoginInfo(RequestCallback<LoginResp> callback) {
         try {
             mAccountHandle.loginByLastLoginInfo(new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
@@ -120,30 +120,5 @@ public class AccountServiceProxy implements AccountService, RemoteProxy {
             Logger.e(TAG, "远程调用失败", e);
         }
         return false;
-    }
-
-    @Override
-    public String getCurrentUserId() {
-        try {
-            return mAccountHandle.getCurrentUserId();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-        }
-        return "";
-    }
-
-    @Override
-    public String getCurrentUserToken() {
-        try {
-            return mAccountHandle.getCurrentUserToken();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-        }
-        return "";
-    }
-
-    @Override
-    public UserProfile getCurrentUserProfile() {
-        return null;
     }
 }

@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import com.salty.protos.GroupMemberProfile;
 import com.salty.protos.GroupProfile;
 import java.util.List;
-import me.zhixingye.im.service.impl.SQLiteServiceImpl;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
@@ -38,7 +37,7 @@ public class GroupDao extends AbstractDao<GroupProfile> {
 
     private GroupMemberDao mGroupMemberDao;
 
-    public GroupDao(SQLiteServiceImpl.ReadWriteHelper readWriteHelper) {
+    public GroupDao(SQLiteServiceManager.ReadWriteHelper readWriteHelper) {
         super(readWriteHelper);
         mGroupMemberDao = new GroupMemberDao(readWriteHelper);
     }
@@ -79,7 +78,7 @@ public class GroupDao extends AbstractDao<GroupProfile> {
     }
 
     @Override
-    protected boolean insertToDatabase(GroupProfile entity, SQLiteServiceImpl.WritableDatabase database, ContentValues values) {
+    protected boolean insertToDatabase(GroupProfile entity, SQLiteServiceManager.WritableDatabase database, ContentValues values) {
         database.beginTransactionNonExclusive();
         try {
             List<GroupMemberProfile> list = entity.getMembersList();
@@ -94,7 +93,7 @@ public class GroupDao extends AbstractDao<GroupProfile> {
     }
 
     @Override
-    protected boolean replaceFromDatabase(GroupProfile entity, SQLiteServiceImpl.WritableDatabase database, ContentValues values) {
+    protected boolean replaceFromDatabase(GroupProfile entity, SQLiteServiceManager.WritableDatabase database, ContentValues values) {
         database.beginTransactionNonExclusive();
         try {
             List<GroupMemberProfile> list = entity.getMembersList();
@@ -109,7 +108,7 @@ public class GroupDao extends AbstractDao<GroupProfile> {
     }
 
     @Override
-    protected boolean updateFromDatabase(GroupProfile entity, SQLiteServiceImpl.WritableDatabase database, ContentValues values) {
+    protected boolean updateFromDatabase(GroupProfile entity, SQLiteServiceManager.WritableDatabase database, ContentValues values) {
         database.beginTransactionNonExclusive();
         try {
             List<GroupMemberProfile> list = entity.getMembersList();
@@ -124,7 +123,7 @@ public class GroupDao extends AbstractDao<GroupProfile> {
     }
 
     @Override
-    protected boolean deleteFromDatabase(GroupProfile entity, SQLiteServiceImpl.WritableDatabase database) {
+    protected boolean deleteFromDatabase(GroupProfile entity, SQLiteServiceManager.WritableDatabase database) {
         database.beginTransactionNonExclusive();
         try {
             List<GroupMemberProfile> list = entity.getMembersList();

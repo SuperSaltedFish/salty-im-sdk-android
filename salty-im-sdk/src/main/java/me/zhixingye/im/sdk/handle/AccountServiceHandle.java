@@ -73,7 +73,7 @@ public class AccountServiceHandle extends IAccountServiceHandle.Stub {
     @Override
     public void loginByLastLoginInfo(IRemoteCallback callback) {
         IMCore.get().getAccountService().loginByLastLoginInfo(
-                new ByteRemoteCallback<UserProfile>(callback));
+                new ByteRemoteCallback<LoginResp>(callback));
     }
 
     @Override
@@ -88,17 +88,17 @@ public class AccountServiceHandle extends IAccountServiceHandle.Stub {
 
     @Override
     public String getCurrentUserId() {
-        return IMCore.get().getAccountService().getCurrentUserId();
+        return IMCore.get().getUserService().getCurrentUserId();
     }
 
     @Override
     public String getCurrentUserToken() {
-        return IMCore.get().getAccountService().getCurrentUserToken();
+        return IMCore.get().getUserService().getCurrentUserToken();
     }
 
     @Override
     public byte[] getCurrentUserProfile() {
-        UserProfile profile = IMCore.get().getAccountService().getCurrentUserProfile();
+        UserProfile profile = IMCore.get().getUserService().getCurrentUserProfile();
         if (profile == null) {
             return null;
         } else {

@@ -5,6 +5,9 @@ package me.zhixingye.im.sdk;
 import me.zhixingye.im.sdk.IRemoteCallback;
 
 interface IUserServiceHandle {
+    String getCurrentUserId();
+
+    String getCurrentUserToken();
 
     byte[] getCurrentUserProfile();
 

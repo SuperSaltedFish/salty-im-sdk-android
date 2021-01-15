@@ -18,6 +18,16 @@ import me.zhixingye.im.sdk.IUserServiceHandle;
 public class UserServiceHandle extends IUserServiceHandle.Stub {
 
     @Override
+    public String getCurrentUserId() {
+        return IMCore.get().getUserService().getCurrentUserId();
+    }
+
+    @Override
+    public String getCurrentUserToken() {
+        return IMCore.get().getUserService().getCurrentUserToken();
+    }
+
+    @Override
     public byte[] getCurrentUserProfile() {
         UserProfile profile = IMCore.get().getUserService().getCurrentUserProfile();
         if (profile == null) {

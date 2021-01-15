@@ -57,10 +57,13 @@ dependencies {
     androidTestImplementation Deps.test.androidEspresso
 
     implementation Deps.androidx.appcompat
+    implementation Deps.androidx.datastore
+
     implementation Deps.grpc.javaxAnnotation
     implementation Deps.grpc.grpcAndroid
     implementation Deps.grpc.grpcStud
     implementation Deps.grpc.grpcOKHttp
+    
     api Deps.grpc.grpcProtobufLite
 
 }

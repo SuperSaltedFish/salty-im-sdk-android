@@ -1,21 +1,28 @@
 package me.zhixingye.im.service.impl;
 
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
+
+import com.google.protobuf.ByteString;
 import com.salty.protos.LoginResp;
 import com.salty.protos.RegisterResp;
 import com.salty.protos.ResetPasswordResp;
 import com.salty.protos.UserProfile;
+
 import java.util.concurrent.Semaphore;
+
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.api.UserApi;
 import me.zhixingye.im.constant.ResponseCode;
+import me.zhixingye.im.database.SQLiteServiceManager;
 import me.zhixingye.im.database.UserDao;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.AccountService;
 import me.zhixingye.im.service.ApiService;
-import me.zhixingye.im.service.SQLiteService;
 import me.zhixingye.im.service.StorageService;
 import me.zhixingye.im.service.ThreadService;
+import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.Logger;
 import me.zhixingye.im.util.MD5Util;
@@ -31,14 +38,9 @@ public class AccountServiceImpl implements AccountService {
 
     private static final int DATABASE_VERSION = 1;
 
-    private static final String STORAGE_KEY_USER_ID = TAG + ".UserId";
-    private static final String STORAGE_KEY_TOKEN = TAG + ".Token";
+    private static final String STORAGE_KEY_LOGIN_INFO = TAG + ".LoginInfo";
 
-    private String mUserId;
-    private String mToken;
-    private UserProfile mUserProfile;
-
-    private Semaphore mLoginLock;
+    private final Semaphore mLoginLock;
 
     private volatile boolean isLogged;
 
@@ -85,7 +87,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void loginByLastLoginInfo(final RequestCallback<UserProfile> callback) {
+    public void loginByLastLoginInfo(final RequestCallback<LoginResp> callback) {
         try {
             mLoginLock.acquire();
         } catch (InterruptedException e) {
@@ -100,39 +102,16 @@ public class AccountServiceImpl implements AccountService {
                     @Override
                     public void run() {
                         try {
-                            String userId = ServiceAccessor.get(StorageService.class)
-                                    .getFromConfigurationPreferences(STORAGE_KEY_USER_ID);
-
-                            String token = ServiceAccessor.get(StorageService.class)
-                                    .getFromConfigurationPreferences(STORAGE_KEY_TOKEN);
-
-                            if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(token)) {
+                            LoginResp loginResp = getLoginRespFromLocal();
+                            if (loginResp == null) {
                                 CallbackHelper.callFailure(ResponseCode.INTERNAL_USER_NOT_LOGGED_IN, callback);
                                 return;
                             }
-
-                            SQLiteServiceImpl service = new SQLiteServiceImpl(
-                                    IMCore.getAppContext(),
-                                    MD5Util.encrypt16(userId),
-                                    DATABASE_VERSION);
-
-                            UserProfile profile = UserProfile.newBuilder()
-                                    .setUserId(userId)
-                                    .build();
-                            profile = service.createDao(UserDao.class).loadBy(profile);
-
-                            if (profile == null) {
-                                CallbackHelper.callFailure(ResponseCode.INTERNAL_USER_NOT_LOGGED_IN, callback);
-                                return;
+                            if (tryInitLoginInfo(loginResp)) {
+                                CallbackHelper.callCompleted(loginResp, callback);
+                            } else {
+                                CallbackHelper.callFailure(ResponseCode.INTERNAL_UNKNOWN, callback);
                             }
-
-                            ServiceAccessor.register(SQLiteService.class, service);
-
-                            mUserId = userId;
-                            mToken = token;
-                            mUserProfile = profile;
-
-                            CallbackHelper.callCompleted(profile, callback);
                         } finally {
                             mLoginLock.release();
                         }
@@ -155,42 +134,14 @@ public class AccountServiceImpl implements AccountService {
             @Override
             public void onCompleted(LoginResp loginResp) {
                 try {
-                    UserProfile profile = loginResp.getProfile();
-                    String userId = profile.getUserId();
-                    String token = loginResp.getToken();
-
-                    ServiceAccessor.get(StorageService.class)
-                            .putToConfigurationPreferences(STORAGE_KEY_USER_ID, userId);
-
-                    ServiceAccessor.get(StorageService.class)
-                            .putToConfigurationPreferences(STORAGE_KEY_TOKEN, token);
-
-                    SQLiteServiceImpl service = new SQLiteServiceImpl(
-                            IMCore.getAppContext(),
-                            MD5Util.encrypt16(userId),
-                            DATABASE_VERSION);
-
-                    UserDao dao = service.createDao(UserDao.class);
-                    if (!dao.replace(profile)) {
-                        Logger.e(TAG, "login fail:replace fail");
-                        service.close();
-                        onFailure(
-                                ResponseCode.INTERNAL_UNKNOWN.getCode(),
-                                ResponseCode.INTERNAL_UNKNOWN.getMsg());
-                        return;
+                    if (tryInitLoginInfo(loginResp)) {
+                        CallbackHelper.callCompleted(loginResp, callback);
+                    } else {
+                        CallbackHelper.callFailure(ResponseCode.INTERNAL_UNKNOWN, callback);
                     }
-                    ServiceAccessor.register(SQLiteService.class, service);
-
-                    mUserId = userId;
-                    mToken = token;
-                    mUserProfile = profile;
-
-                    isLogged = true;
                 } finally {
                     mLoginLock.release();
                 }
-
-                CallbackHelper.callCompleted(loginResp, callback);
             }
 
             @Override
@@ -218,40 +169,74 @@ public class AccountServiceImpl implements AccountService {
                 .createApi(UserApi.class)
                 .logout(null);
 
-        ServiceAccessor.get(StorageService.class)
-                .putToConfigurationPreferences(STORAGE_KEY_USER_ID, null);
+        saveLoginRespToLocal(null);
 
-        ServiceAccessor.get(StorageService.class)
-                .putToConfigurationPreferences(STORAGE_KEY_TOKEN, null);
-
-        SQLiteServiceImpl service = (SQLiteServiceImpl) ServiceAccessor.get(SQLiteService.class);
-        if (service != null) {
-            service.close();
-            ServiceAccessor.register(SQLiteService.class, null);
-        }
+        SQLiteServiceManager.get().close();
 
         isLogged = false;
-        mUserId = null;
-        mToken = null;
+
     }
 
     @Override
     public boolean isLogged() {
-        return !TextUtils.isEmpty(mUserId) && !TextUtils.isEmpty(mToken);
+        return isLogged;
     }
 
-    @Override
-    public String getCurrentUserId() {
-        return mUserId;
+    private boolean tryInitLoginInfo(LoginResp loginResp) {
+        if (loginResp == null) {
+            return false;
+        }
+        UserProfile profile = loginResp.getProfile();
+        String userId = profile.getUserId();
+        String token = loginResp.getToken();
+        if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(token)) {
+            Logger.e(TAG, "trySaveLoginInfo: TextUtils.isEmpty(userId) || TextUtils.isEmpty(token)");
+            return false;
+        }
+
+        SQLiteServiceManager.get().open(
+                IMCore.getAppContext(),
+                MD5Util.encrypt16(userId),
+                DATABASE_VERSION
+        );
+
+
+        if (!UserDao.saveUserProfile(profile)) {
+            Logger.e(TAG, "trySaveLoginInfo:replace fail");
+            SQLiteServiceManager.get().close();
+            return false;
+        }
+
+        saveLoginRespToLocal(loginResp);
+
+        isLogged = true;
+
+
+
+
+        return true;
     }
 
-    @Override
-    public String getCurrentUserToken() {
-        return mToken;
+    private void saveLoginRespToLocal(@Nullable LoginResp loginResp) {
+        if (loginResp == null) {
+            ServiceAccessor.get(StorageService.class).removeFromStorage(TAG, STORAGE_KEY_LOGIN_INFO);
+        } else {
+            ServiceAccessor.get(StorageService.class).putByteArrayToStorage(TAG, STORAGE_KEY_LOGIN_INFO, loginResp.toByteArray());
+        }
     }
 
-    @Override
-    public UserProfile getCurrentUserProfile() {
-        return mUserProfile;
+    @Nullable
+    private LoginResp getLoginRespFromLocal() {
+        byte[] data = ServiceAccessor.get(StorageService.class).getByteArrayFromStorage(TAG, STORAGE_KEY_LOGIN_INFO);
+        if (data == null || data.length == 0) {
+            return null;
+        }
+        try {
+            return LoginResp.parseFrom(data);
+        } catch (Exception e) {
+            Logger.i(TAG, "tryInitLoginInfoByLocalData", e);
+            return null;
+        }
     }
+
 }

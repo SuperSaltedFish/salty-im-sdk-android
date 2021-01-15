@@ -34,6 +34,28 @@ public class UserServiceProxy implements UserService, RemoteProxy {
         }
     }
 
+    @Nullable
+    @Override
+    public String getCurrentUserId() {
+        try {
+            return mUserHandle.getCurrentUserId();
+        } catch (Exception e) {
+            Logger.e(TAG, "远程调用失败", e);
+            return null;
+        }
+    }
+
+    @Nullable
+    @Override
+    public String getCurrentUserToken() {
+        try {
+            return mUserHandle.getCurrentUserToken();
+        } catch (Exception e) {
+            Logger.e(TAG, "远程调用失败", e);
+            return null;
+        }
+    }
+
     @Override
     public UserProfile getCurrentUserProfile() {
         try {
