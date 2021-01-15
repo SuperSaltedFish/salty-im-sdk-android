@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import com.google.protobuf.ByteString;
 import com.salty.protos.LoginResp;
 import com.salty.protos.RegisterResp;
 import com.salty.protos.ResetPasswordResp;
@@ -21,8 +20,6 @@ import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.AccountService;
 import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.StorageService;
-import me.zhixingye.im.service.ThreadService;
-import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.Logger;
 import me.zhixingye.im.util.MD5Util;
@@ -32,7 +29,7 @@ import me.zhixingye.im.util.MD5Util;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl extends BasicServiceImpl implements AccountService {
 
     private static final String TAG = "AccountServiceImpl";
 
@@ -97,27 +94,27 @@ public class AccountServiceImpl implements AccountService {
             mLoginLock.release();
             throw new RuntimeException("The user has already logged in, please do not log in again！");
         }
-        ServiceAccessor.get(ThreadService.class)
-                .runOnWorkThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            LoginResp loginResp = getLoginRespFromLocal();
-                            if (loginResp == null) {
-                                CallbackHelper.callFailure(ResponseCode.INTERNAL_USER_NOT_LOGGED_IN, callback);
-                                return;
-                            }
-                            if (tryInitLoginInfo(loginResp)) {
-                                CallbackHelper.callCompleted(loginResp, callback);
-                            } else {
-                                CallbackHelper.callFailure(ResponseCode.INTERNAL_UNKNOWN, callback);
-                            }
-                        } finally {
-                            mLoginLock.release();
-                        }
 
+        runOnWorkThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    LoginResp loginResp = getLoginRespFromLocal();
+                    if (loginResp == null) {
+                        CallbackHelper.callFailure(ResponseCode.INTERNAL_USER_NOT_LOGGED_IN, callback);
+                        return;
                     }
-                });
+                    if (tryInitLoginInfo(loginResp)) {
+                        CallbackHelper.callCompleted(loginResp, callback);
+                    } else {
+                        CallbackHelper.callFailure(ResponseCode.INTERNAL_UNKNOWN, callback);
+                    }
+                } finally {
+                    mLoginLock.release();
+                }
+
+            }
+        });
     }
 
     private void login(String telephone, String email, String password, final RequestCallback<LoginResp> callback) {
@@ -210,8 +207,6 @@ public class AccountServiceImpl implements AccountService {
         saveLoginRespToLocal(loginResp);
 
         isLogged = true;
-
-
 
 
         return true;

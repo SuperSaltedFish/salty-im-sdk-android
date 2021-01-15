@@ -13,7 +13,7 @@ import me.zhixingye.im.service.DeviceService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class DeviceServiceImpl implements DeviceService {
+public class DeviceServiceImpl extends BasicServiceImpl implements DeviceService {
     @Override
     public String getAppVersion() {
         Context context = IMCore.getAppContext();

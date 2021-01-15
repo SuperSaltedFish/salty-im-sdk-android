@@ -27,7 +27,7 @@ import me.zhixingye.im.util.MD5Util;
  */
 
 @SuppressLint("ApplySharedPref")
-public class StorageServiceImpl implements StorageService {
+public class StorageServiceImpl extends BasicServiceImpl implements StorageService {
 
     private static final String TAG = "StorageServiceImpl";
 

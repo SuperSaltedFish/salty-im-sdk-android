@@ -7,7 +7,7 @@ import me.zhixingye.im.service.MessageService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl extends BasicServiceImpl implements MessageService {
 
 
     public MessageServiceImpl() {

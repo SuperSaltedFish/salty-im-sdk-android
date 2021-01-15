@@ -3,12 +3,14 @@ package me.zhixingye.im.service.impl;
 
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import com.salty.protos.GetUserInfoResp;
+import com.salty.protos.LoginResp;
 import com.salty.protos.QueryUserInfoResp;
 import com.salty.protos.UpdateUserInfoResp;
 import com.salty.protos.UserProfile;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,6 +21,10 @@ import me.zhixingye.im.database.UserDao;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.UserService;
+import me.zhixingye.im.service.event.OnEventListener;
+import me.zhixingye.im.service.event.OnLoggedInEvent;
+import me.zhixingye.im.service.event.OnLoggedOutEvent;
+import me.zhixingye.im.service.event.RequestSaveUserProfileEvent;
 import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.Logger;
 
@@ -27,7 +33,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BasicServiceImpl implements UserService {
 
     private static final String TAG = "UserServiceImpl";
 
@@ -39,6 +45,10 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl() {
         mUserProfileCache = new ConcurrentHashMap<>();
+
+        listenerOnLoggedInEvent();
+        listenerOnLoggedOutEvent();
+        listenerRequestSaveUserProfileEvent();
     }
 
     @Nullable
@@ -65,23 +75,6 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return mUserProfileCache.get(userId);
-    }
-
-    private void saveUserProfileToCache(UserProfile profile) {
-        if (profile == null || TextUtils.isEmpty(profile.getUserId())) {
-            return;
-        }
-        mUserProfileCache.put(profile.getUserId(), profile);
-    }
-
-    private void saveUserProfileToLocal(UserProfile profile) {
-        if (profile == null || TextUtils.isEmpty(profile.getUserId())) {
-            return;
-        }
-        saveUserProfileToCache(profile);
-        if (!UserDao.saveUserProfile(profile)) {
-            Logger.i(TAG, "saveUserProfileToLocalCache error");
-        }
     }
 
     @Override
@@ -144,6 +137,50 @@ public class UserServiceImpl implements UserService {
                         CallbackHelper.callFailure(code, error, callback);
                     }
                 });
+    }
+
+    private void saveUserProfileToCache(UserProfile profile) {
+        saveUserProfileToCache(profile, false);
+    }
+
+    private void saveUserProfileToCache(UserProfile profile, boolean isNeedSaveToLocal) {
+        if (profile == null || TextUtils.isEmpty(profile.getUserId())) {
+            return;
+        }
+        mUserProfileCache.put(profile.getUserId(), profile);
+        if (isNeedSaveToLocal && !UserDao.saveUserProfile(profile)) {
+            Logger.i(TAG, "saveUserProfileToCache saveLocal error");
+        }
+    }
+
+    private void listenerOnLoggedInEvent() {
+        addOnEventListener(OnLoggedInEvent.class, new OnEventListener<OnLoggedInEvent>() {
+            @Override
+            public void onEvent(@NonNull OnLoggedInEvent eventData) {
+                LoginResp resp = eventData.requireEventData();
+                mToken = resp.getToken();
+                mUserProfile = resp.getProfile();
+            }
+        });
+    }
+
+    private void listenerOnLoggedOutEvent() {
+        addOnEventListener(OnLoggedInEvent.class, new OnEventListener<OnLoggedInEvent>() {
+            @Override
+            public void onEvent(@NonNull OnLoggedInEvent eventData) {
+                mToken = null;
+                mUserProfile = null;
+            }
+        });
+    }
+
+    private void listenerRequestSaveUserProfileEvent() {
+        addOnEventListener(RequestSaveUserProfileEvent.class, new OnEventListener<RequestSaveUserProfileEvent>() {
+            @Override
+            public void onEvent(@NonNull RequestSaveUserProfileEvent eventData) {
+                saveUserProfileToCache(eventData.requireEventData(), eventData.isNeedSaveToLocal());
+            }
+        });
     }
 
 

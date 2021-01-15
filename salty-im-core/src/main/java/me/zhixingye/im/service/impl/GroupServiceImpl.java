@@ -19,7 +19,7 @@ import me.zhixingye.im.service.GroupService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class GroupServiceImpl implements GroupService {
+public class GroupServiceImpl extends BasicServiceImpl implements GroupService {
 
 
     public GroupServiceImpl() {

@@ -13,7 +13,7 @@ import me.zhixingye.im.service.SMSService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class SMSServiceImpl implements SMSService {
+public class SMSServiceImpl extends BasicServiceImpl implements SMSService {
 
 
     public SMSServiceImpl() {

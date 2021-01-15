@@ -14,7 +14,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class ApiServiceImpl implements ApiService {
+public class ApiServiceImpl extends BasicServiceImpl implements ApiService {
 
     private static final String TAG = "ApiServiceImpl";
 

@@ -18,7 +18,7 @@ import me.zhixingye.im.service.ConversationService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class ConversationServiceImpl implements ConversationService {
+public class ConversationServiceImpl extends BasicServiceImpl implements ConversationService {
 
 
     public ConversationServiceImpl() {

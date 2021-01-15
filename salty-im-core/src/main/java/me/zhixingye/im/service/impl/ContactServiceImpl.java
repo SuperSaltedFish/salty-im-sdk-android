@@ -16,7 +16,7 @@ import me.zhixingye.im.service.ContactService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class ContactServiceImpl implements ContactService {
+public class ContactServiceImpl extends BasicServiceImpl implements ContactService {
 
 
     public ContactServiceImpl() {

@@ -6,25 +6,21 @@ import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.ContactService;
 import me.zhixingye.im.service.ConversationService;
 import me.zhixingye.im.service.DeviceService;
-import me.zhixingye.im.service.EventService;
 import me.zhixingye.im.service.GroupService;
 import me.zhixingye.im.service.MessageService;
 import me.zhixingye.im.service.SMSService;
 import me.zhixingye.im.service.StorageService;
-import me.zhixingye.im.service.ThreadService;
 import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.service.impl.AccountServiceImpl;
 import me.zhixingye.im.service.impl.ApiServiceImpl;
 import me.zhixingye.im.service.impl.ContactServiceImpl;
 import me.zhixingye.im.service.impl.ConversationServiceImpl;
 import me.zhixingye.im.service.impl.DeviceServiceImpl;
-import me.zhixingye.im.service.impl.EventServiceImpl;
 import me.zhixingye.im.service.impl.GroupServiceImpl;
 import me.zhixingye.im.service.impl.MessageServiceImpl;
 import me.zhixingye.im.service.impl.SMSServiceImpl;
 import me.zhixingye.im.service.impl.ServiceAccessor;
 import me.zhixingye.im.service.impl.StorageServiceImpl;
-import me.zhixingye.im.service.impl.ThreadServiceImpl;
 import me.zhixingye.im.service.impl.UserServiceImpl;
 
 /**
@@ -72,8 +68,6 @@ public class IMCore {
         ServiceAccessor.register(SMSService.class, new SMSServiceImpl());
         ServiceAccessor.register(StorageService.class, new StorageServiceImpl());
         ServiceAccessor.register(UserService.class, new UserServiceImpl());
-        ServiceAccessor.register(ThreadService.class, new ThreadServiceImpl());
-        ServiceAccessor.register(EventService.class, new EventServiceImpl());
     }
 
     public AccountService getAccountService() {
