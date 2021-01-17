@@ -8,4 +8,8 @@ import com.salty.protos.LoginResp;
  * @author zhixingye , 2021年01月15日.
  */
 public class OnLoggedInEvent extends BasicEvent<LoginResp> {
+    public OnLoggedInEvent(LoginResp eventData) {
+        super(eventData);
+    }
+
 }

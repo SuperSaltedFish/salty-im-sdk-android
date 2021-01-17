@@ -20,6 +20,8 @@ import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.AccountService;
 import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.StorageService;
+import me.zhixingye.im.service.event.OnLoggedInEvent;
+import me.zhixingye.im.service.event.OnLoggedOutEvent;
 import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.Logger;
 import me.zhixingye.im.util.MD5Util;
@@ -172,6 +174,9 @@ public class AccountServiceImpl extends BasicServiceImpl implements AccountServi
 
         isLogged = false;
 
+
+        sendEvent(new OnLoggedOutEvent());
+
     }
 
     @Override
@@ -207,6 +212,8 @@ public class AccountServiceImpl extends BasicServiceImpl implements AccountServi
         saveLoginRespToLocal(loginResp);
 
         isLogged = true;
+
+        sendEvent(new OnLoggedInEvent(loginResp));
 
         return true;
     }

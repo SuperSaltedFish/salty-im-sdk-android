@@ -157,6 +157,7 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
         addOnEventListener(OnLoggedInEvent.class, new OnEventListener<OnLoggedInEvent>() {
             @Override
             public void onEvent(@NonNull OnLoggedInEvent eventData) {
+                Logger.i(TAG, "listenerOnLoggedInEvent onEvent");
                 LoginResp resp = eventData.requireEventData();
                 mToken = resp.getToken();
                 mUserProfile = resp.getProfile();
@@ -165,9 +166,10 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
     }
 
     private void listenerOnLoggedOutEvent() {
-        addOnEventListener(OnLoggedInEvent.class, new OnEventListener<OnLoggedInEvent>() {
+        addOnEventListener(OnLoggedOutEvent.class, new OnEventListener<OnLoggedOutEvent>() {
             @Override
-            public void onEvent(@NonNull OnLoggedInEvent eventData) {
+            public void onEvent(@NonNull OnLoggedOutEvent eventData) {
+                Logger.i(TAG, "listenerOnLoggedOutEvent onEvent");
                 mToken = null;
                 mUserProfile = null;
             }
@@ -178,6 +180,7 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
         addOnEventListener(RequestSaveUserProfileEvent.class, new OnEventListener<RequestSaveUserProfileEvent>() {
             @Override
             public void onEvent(@NonNull RequestSaveUserProfileEvent eventData) {
+                Logger.i(TAG, "listenerRequestSaveUserProfileEvent onEvent");
                 saveUserProfileToCache(eventData.requireEventData(), eventData.isNeedSaveToLocal());
             }
         });
