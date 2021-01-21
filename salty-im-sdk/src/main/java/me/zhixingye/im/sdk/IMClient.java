@@ -7,14 +7,18 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.text.TextUtils;
 
-import me.zhixingye.im.sdk.proxy.AccountServiceProxy;
+import me.zhixingye.im.sdk.proxy.LoginServiceProxy;
+import me.zhixingye.im.sdk.proxy.PasswordServiceProxy;
 import me.zhixingye.im.sdk.proxy.ProxyHelper;
+import me.zhixingye.im.sdk.proxy.RegisterServiceProxy;
 import me.zhixingye.im.sdk.proxy.SMSServiceProxy;
-import me.zhixingye.im.service.AccountService;
 import me.zhixingye.im.service.ContactService;
 import me.zhixingye.im.service.ConversationService;
 import me.zhixingye.im.service.GroupService;
+import me.zhixingye.im.service.LoginService;
 import me.zhixingye.im.service.MessageService;
+import me.zhixingye.im.service.PasswordService;
+import me.zhixingye.im.service.RegisterService;
 import me.zhixingye.im.service.SMSService;
 import me.zhixingye.im.service.StorageService;
 import me.zhixingye.im.service.UserService;
@@ -26,6 +30,7 @@ import me.zhixingye.im.sdk.proxy.MessageServiceProxy;
 import me.zhixingye.im.sdk.proxy.StorageServiceProxy;
 import me.zhixingye.im.sdk.proxy.UserServiceProxy;
 import me.zhixingye.im.sdk.util.SystemUtils;
+import me.zhixingye.im.service.impl.ServiceAccessor;
 import me.zhixingye.im.tool.Logger;
 
 /**
@@ -58,7 +63,8 @@ public class IMClient {
         return sIMClient;
     }
 
-    private AccountService mAccountServiceProxy;
+    private LoginService mLoginServiceProxy;
+    private RegisterService mRegisterServiceProxy;
     private ContactService mContactServiceProxy;
     private ConversationService mConversationServiceProxy;
     private GroupService mGroupServiceProxy;
@@ -66,6 +72,7 @@ public class IMClient {
     private SMSService mSMSServiceProxy;
     private StorageService mStorageServiceProxy;
     private UserService mUserServiceProxy;
+    private PasswordService mPasswordServiceProxy;
 
     private IRemoteService mIRemoteService;
 
@@ -75,7 +82,8 @@ public class IMClient {
     }
 
     private void initProxyService() {
-        mAccountServiceProxy = ProxyHelper.createProxy(new AccountServiceProxy());
+        mLoginServiceProxy = ProxyHelper.createProxy(new LoginServiceProxy());
+        mRegisterServiceProxy = ProxyHelper.createProxy(new RegisterServiceProxy());
         mContactServiceProxy = ProxyHelper.createProxy(new ContactServiceProxy());
         mConversationServiceProxy = ProxyHelper.createProxy(new ConversationServiceProxy());
         mGroupServiceProxy = ProxyHelper.createProxy(new GroupServiceProxy());
@@ -83,7 +91,7 @@ public class IMClient {
         mSMSServiceProxy = ProxyHelper.createProxy(new SMSServiceProxy());
         mStorageServiceProxy = ProxyHelper.createProxy(new StorageServiceProxy());
         mUserServiceProxy = ProxyHelper.createProxy(new UserServiceProxy());
-
+        mPasswordServiceProxy = ProxyHelper.createProxy(new PasswordServiceProxy());
     }
 
     private void autoBindRemoteService(Context context) {
@@ -94,7 +102,8 @@ public class IMClient {
                     public void onServiceConnected(ComponentName name, IBinder service) {
                         Logger.i(TAG, "onServiceConnected");
                         mIRemoteService = IRemoteService.Stub.asInterface(service);
-                        ((RemoteProxy) mAccountServiceProxy).onBindHandle(mIRemoteService);
+                        ((RemoteProxy) mLoginServiceProxy).onBindHandle(mIRemoteService);
+                        ((RemoteProxy) mRegisterServiceProxy).onBindHandle(mIRemoteService);
                         ((RemoteProxy) mContactServiceProxy).onBindHandle(mIRemoteService);
                         ((RemoteProxy) mConversationServiceProxy).onBindHandle(mIRemoteService);
                         ((RemoteProxy) mGroupServiceProxy).onBindHandle(mIRemoteService);
@@ -102,6 +111,7 @@ public class IMClient {
                         ((RemoteProxy) mSMSServiceProxy).onBindHandle(mIRemoteService);
                         ((RemoteProxy) mStorageServiceProxy).onBindHandle(mIRemoteService);
                         ((RemoteProxy) mUserServiceProxy).onBindHandle(mIRemoteService);
+                        ((RemoteProxy) mPasswordServiceProxy).onBindHandle(mIRemoteService);
                     }
 
                     @Override
@@ -119,8 +129,12 @@ public class IMClient {
                 }, Context.BIND_AUTO_CREATE);
     }
 
-    public AccountService getAccountService() {
-        return mAccountServiceProxy;
+    public LoginService getLoginService() {
+        return mLoginServiceProxy;
+    }
+
+    public RegisterService getRegisterService() {
+        return mRegisterServiceProxy;
     }
 
     public ContactService getContactService() {
@@ -151,4 +165,7 @@ public class IMClient {
         return mUserServiceProxy;
     }
 
+    public PasswordService getPasswordService() {
+        return mPasswordServiceProxy;
+    }
 }

@@ -1,4 +1,4 @@
-package me.zhixingye.im.sdk.handle;
+package me.zhixingye.im.sdk.service;
 
 import com.salty.protos.AddGroupMemberResp;
 import com.salty.protos.CreateGroupResp;
@@ -10,7 +10,7 @@ import com.salty.protos.UpdateGroupNameResp;
 import java.util.List;
 
 import me.zhixingye.im.IMCore;
-import me.zhixingye.im.sdk.IGroupServiceHandle;
+import me.zhixingye.im.sdk.IGroupRemoteService;
 import me.zhixingye.im.sdk.IRemoteCallback;
 
 /**
@@ -18,7 +18,7 @@ import me.zhixingye.im.sdk.IRemoteCallback;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class GroupServiceHandle extends IGroupServiceHandle.Stub {
+public class GroupRemoteService extends IGroupRemoteService.Stub {
     @Override
     public void createGroup(String groupName, List<String> memberUserIdArr, IRemoteCallback callback) {
         IMCore.get().getGroupService()

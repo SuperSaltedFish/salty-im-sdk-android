@@ -1,4 +1,4 @@
-package me.zhixingye.im.sdk.handle;
+package me.zhixingye.im.sdk.service;
 
 import android.os.RemoteException;
 

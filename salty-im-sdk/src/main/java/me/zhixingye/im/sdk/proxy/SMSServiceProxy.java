@@ -6,7 +6,7 @@ import com.salty.protos.VerifyTelephoneSMSCodeResp;
 
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.IRemoteService;
-import me.zhixingye.im.sdk.ISMSServiceHandle;
+import me.zhixingye.im.sdk.ISMSRemoteService;
 import me.zhixingye.im.service.SMSService;
 import me.zhixingye.im.tool.Logger;
 
@@ -19,22 +19,22 @@ public class SMSServiceProxy implements SMSService, RemoteProxy {
 
     private static final String TAG = "ContactServiceProxy";
 
-    private ISMSServiceHandle mISMSHandle;
+    private ISMSRemoteService mRemoteService;
 
     @Override
     public void onBindHandle(IRemoteService service) {
         try {
-            mISMSHandle = service.getSMSServiceHandle();
+            mRemoteService = service.getSMSRemoteService();
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            mISMSHandle = null;
+            mRemoteService = null;
         }
     }
 
     @Override
     public void verifyTelephoneSMSCode(String telephone, String smsCode, SMSOperationType type, RequestCallback<VerifyTelephoneSMSCodeResp> callback) {
         try {
-            mISMSHandle.verifyTelephoneSMSCode(telephone, smsCode, type.getNumber(), new RemoteCallbackWrapper<>(callback));
+            mRemoteService.verifyTelephoneSMSCode(telephone, smsCode, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -44,7 +44,7 @@ public class SMSServiceProxy implements SMSService, RemoteProxy {
     @Override
     public void obtainVerificationCodeForTelephoneType(String telephone, SMSOperationType type, RequestCallback<ObtainTelephoneSMSCodeResp> callback) {
         try {
-            mISMSHandle.obtainVerificationCodeForTelephoneType(telephone, type.getNumber(), new RemoteCallbackWrapper<>(callback));
+            mRemoteService.obtainVerificationCodeForTelephoneType(telephone, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);

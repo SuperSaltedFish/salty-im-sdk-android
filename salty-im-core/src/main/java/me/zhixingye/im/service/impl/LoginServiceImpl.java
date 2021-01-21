@@ -5,8 +5,6 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 
 import com.salty.protos.LoginResp;
-import com.salty.protos.RegisterResp;
-import com.salty.protos.ResetPasswordResp;
 import com.salty.protos.UserProfile;
 
 import java.util.concurrent.Semaphore;
@@ -17,8 +15,8 @@ import me.zhixingye.im.constant.ResponseCode;
 import me.zhixingye.im.database.SQLiteServiceManager;
 import me.zhixingye.im.database.UserDao;
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.service.AccountService;
 import me.zhixingye.im.service.ApiService;
+import me.zhixingye.im.service.LoginService;
 import me.zhixingye.im.service.StorageService;
 import me.zhixingye.im.service.event.OnLoggedInEvent;
 import me.zhixingye.im.service.event.OnLoggedOutEvent;
@@ -29,51 +27,19 @@ import me.zhixingye.im.util.MD5Util;
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
  *
- * @author zhixingye , 2020年05月01日.
+ * @author zhixingye , 2021年01月21日.
  */
-public class AccountServiceImpl extends BasicServiceImpl implements AccountService {
+public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
-    private static final String TAG = "AccountServiceImpl";
+    private static final String TAG = "LoginServiceImpl";
 
     private static final int DATABASE_VERSION = 1;
 
     private static final String STORAGE_KEY_LOGIN_INFO = TAG + ".LoginInfo";
 
-    private final Semaphore mLoginLock;
+    private final Semaphore mLoginLock = new Semaphore(1);
 
     private volatile boolean isLogged;
-
-    public AccountServiceImpl() {
-        mLoginLock = new Semaphore(1);
-    }
-
-    @Override
-    public void registerByTelephone(String telephone, String password, RequestCallback<RegisterResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .registerByTelephone(telephone, password, callback);
-    }
-
-    @Override
-    public void registerByEmail(String email, String password, RequestCallback<RegisterResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .registerByEmail(email, password, callback);
-    }
-
-    @Override
-    public void resetLoginPasswordByTelephone(String telephone, String newPassword, RequestCallback<ResetPasswordResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .resetLoginPasswordByTelephone(telephone, newPassword, callback);
-    }
-
-    @Override
-    public void resetLoginPasswordByEmail(String telephone, String newPassword, RequestCallback<ResetPasswordResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .resetLoginPasswordByTelephone(telephone, newPassword, callback);
-    }
 
     @Override
     public void loginByTelephone(String telephone, String password, RequestCallback<UserProfile> callback) {

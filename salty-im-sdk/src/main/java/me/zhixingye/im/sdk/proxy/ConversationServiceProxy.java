@@ -10,7 +10,7 @@ import com.salty.protos.UpdateConversationTopResp;
 import com.salty.protos.UpdateNotificationStatusResp;
 
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.sdk.IConversationServiceHandle;
+import me.zhixingye.im.sdk.IConversationRemoteService;
 import me.zhixingye.im.sdk.IRemoteService;
 import me.zhixingye.im.service.ConversationService;
 import me.zhixingye.im.tool.Logger;
@@ -24,22 +24,22 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
 
     private static final String TAG = "ContactServiceProxy";
 
-    private IConversationServiceHandle mConversationHandle;
+    private IConversationRemoteService mRemoteService;
 
     @Override
     public void onBindHandle(IRemoteService service) {
         try {
-            mConversationHandle = service.getConversationServiceHandle();
+            mRemoteService = service.getConversationRemoteService();
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            mConversationHandle = null;
+            mRemoteService = null;
         }
     }
 
     @Override
     public void getAllConversations(RequestCallback<GetAllConversationResp> callback) {
         try {
-            mConversationHandle.getAllConversations(new RemoteCallbackWrapper<>(callback));
+            mRemoteService.getAllConversations(new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -49,7 +49,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
     @Override
     public void getConversationDetail(String conversationId, Conversation.ConversationType type, RequestCallback<GetConversationDetailResp> callback) {
         try {
-            mConversationHandle.getConversationDetail(conversationId, type.getNumber(), new RemoteCallbackWrapper<>(callback));
+            mRemoteService.getConversationDetail(conversationId, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -59,7 +59,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
     @Override
     public void removeConversation(String conversationId, Conversation.ConversationType type, RequestCallback<RemoveConversationResp> callback) {
         try {
-            mConversationHandle.removeConversation(conversationId, type.getNumber(), new RemoteCallbackWrapper<>(callback));
+            mRemoteService.removeConversation(conversationId, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -69,7 +69,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
     @Override
     public void clearConversationMessage(String conversationId, Conversation.ConversationType type, RequestCallback<ClearConversationMessageResp> callback) {
         try {
-            mConversationHandle.clearConversationMessage(conversationId, type.getNumber(), new RemoteCallbackWrapper<>(callback));
+            mRemoteService.clearConversationMessage(conversationId, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -79,7 +79,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
     @Override
     public void updateConversationTitle(String conversationId, Conversation.ConversationType type, String title, RequestCallback<UpdateConversationTitleResp> callback) {
         try {
-            mConversationHandle.updateConversationTitle(conversationId, type.getNumber(), title, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.updateConversationTitle(conversationId, type.getNumber(), title, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -89,7 +89,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
     @Override
     public void updateConversationTop(String conversationId, Conversation.ConversationType type, boolean isTop, RequestCallback<UpdateConversationTopResp> callback) {
         try {
-            mConversationHandle.updateConversationTop(conversationId, type.getNumber(), isTop, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.updateConversationTop(conversationId, type.getNumber(), isTop, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -99,7 +99,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
     @Override
     public void updateNotificationStatus(String conversationId, Conversation.ConversationType type, Conversation.NotificationStatus status, RequestCallback<UpdateNotificationStatusResp> callback) {
         try {
-            mConversationHandle.updateNotificationStatus(conversationId, type.getNumber(), status.getNumber(), new RemoteCallbackWrapper<>(callback));
+            mRemoteService.updateNotificationStatus(conversationId, type.getNumber(), status.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);

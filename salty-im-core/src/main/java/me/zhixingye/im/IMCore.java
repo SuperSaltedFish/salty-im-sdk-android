@@ -1,23 +1,28 @@
 package me.zhixingye.im;
 
 import android.content.Context;
-import me.zhixingye.im.service.AccountService;
+
 import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.ContactService;
 import me.zhixingye.im.service.ConversationService;
 import me.zhixingye.im.service.DeviceService;
 import me.zhixingye.im.service.GroupService;
+import me.zhixingye.im.service.LoginService;
 import me.zhixingye.im.service.MessageService;
+import me.zhixingye.im.service.PasswordService;
+import me.zhixingye.im.service.RegisterService;
 import me.zhixingye.im.service.SMSService;
 import me.zhixingye.im.service.StorageService;
 import me.zhixingye.im.service.UserService;
-import me.zhixingye.im.service.impl.AccountServiceImpl;
 import me.zhixingye.im.service.impl.ApiServiceImpl;
 import me.zhixingye.im.service.impl.ContactServiceImpl;
 import me.zhixingye.im.service.impl.ConversationServiceImpl;
 import me.zhixingye.im.service.impl.DeviceServiceImpl;
 import me.zhixingye.im.service.impl.GroupServiceImpl;
+import me.zhixingye.im.service.impl.LoginServiceImpl;
 import me.zhixingye.im.service.impl.MessageServiceImpl;
+import me.zhixingye.im.service.impl.PasswordServiceImpl;
+import me.zhixingye.im.service.impl.RegisterServiceImpl;
 import me.zhixingye.im.service.impl.SMSServiceImpl;
 import me.zhixingye.im.service.impl.ServiceAccessor;
 import me.zhixingye.im.service.impl.StorageServiceImpl;
@@ -58,7 +63,8 @@ public class IMCore {
     }
 
     private IMCore() {
-        ServiceAccessor.register(AccountService.class, new AccountServiceImpl());
+        ServiceAccessor.register(LoginService.class, new LoginServiceImpl());
+        ServiceAccessor.register(RegisterService.class, new RegisterServiceImpl());
         ServiceAccessor.register(ApiService.class, new ApiServiceImpl());
         ServiceAccessor.register(ContactService.class, new ContactServiceImpl());
         ServiceAccessor.register(ConversationService.class, new ConversationServiceImpl());
@@ -68,10 +74,15 @@ public class IMCore {
         ServiceAccessor.register(SMSService.class, new SMSServiceImpl());
         ServiceAccessor.register(StorageService.class, new StorageServiceImpl());
         ServiceAccessor.register(UserService.class, new UserServiceImpl());
+        ServiceAccessor.register(PasswordService.class, new PasswordServiceImpl());
     }
 
-    public AccountService getAccountService() {
-        return ServiceAccessor.get(AccountService.class);
+    public LoginService getLoginService() {
+        return ServiceAccessor.get(LoginService.class);
+    }
+
+    public RegisterService getRegisterService() {
+        return ServiceAccessor.get(RegisterService.class);
     }
 
     public ContactService getContactService() {
@@ -102,4 +113,7 @@ public class IMCore {
         return ServiceAccessor.get(UserService.class);
     }
 
+    public PasswordService getPasswordService() {
+        return ServiceAccessor.get(PasswordService.class);
+    }
 }

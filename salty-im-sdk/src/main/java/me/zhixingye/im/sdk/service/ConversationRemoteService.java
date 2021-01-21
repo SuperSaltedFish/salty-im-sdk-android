@@ -1,4 +1,4 @@
-package me.zhixingye.im.sdk.handle;
+package me.zhixingye.im.sdk.service;
 
 import com.salty.protos.ClearConversationMessageResp;
 import com.salty.protos.Conversation;
@@ -10,7 +10,7 @@ import com.salty.protos.UpdateConversationTopResp;
 import com.salty.protos.UpdateNotificationStatusResp;
 
 import me.zhixingye.im.IMCore;
-import me.zhixingye.im.sdk.IConversationServiceHandle;
+import me.zhixingye.im.sdk.IConversationRemoteService;
 import me.zhixingye.im.sdk.IRemoteCallback;
 
 /**
@@ -18,7 +18,7 @@ import me.zhixingye.im.sdk.IRemoteCallback;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class ConversationServiceHandle extends IConversationServiceHandle.Stub {
+public class ConversationRemoteService extends IConversationRemoteService.Stub {
     @Override
     public void getAllConversations(IRemoteCallback callback) {
         IMCore.get().getConversationService()

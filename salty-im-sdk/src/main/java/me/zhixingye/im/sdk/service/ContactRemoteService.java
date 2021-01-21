@@ -1,4 +1,4 @@
-package me.zhixingye.im.sdk.handle;
+package me.zhixingye.im.sdk.service;
 
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
@@ -8,7 +8,7 @@ import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
 import me.zhixingye.im.IMCore;
-import me.zhixingye.im.sdk.IContactServiceHandle;
+import me.zhixingye.im.sdk.IContactRemoteService;
 import me.zhixingye.im.sdk.IRemoteCallback;
 
 /**
@@ -16,7 +16,7 @@ import me.zhixingye.im.sdk.IRemoteCallback;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class ContactServiceHandle extends IContactServiceHandle.Stub {
+public class ContactRemoteService extends IContactRemoteService.Stub {
     @Override
     public void requestContact(String userId, String reason, IRemoteCallback callback) {
         IMCore.get().getContactService().requestContact(

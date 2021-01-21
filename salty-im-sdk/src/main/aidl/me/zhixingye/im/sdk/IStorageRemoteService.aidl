@@ -1,10 +1,10 @@
-// IStorageServiceHandle.aidl
+// IStorageRemoteService.aidl
 package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
 import me.zhixingye.im.sdk.IRemoteCallback;
 
-interface IStorageServiceHandle {
+interface IStorageRemoteService {
     void putBooleanToStorage(String name, String key, boolean value);
 
     void putFloatToStorage(String name, String key, float value);

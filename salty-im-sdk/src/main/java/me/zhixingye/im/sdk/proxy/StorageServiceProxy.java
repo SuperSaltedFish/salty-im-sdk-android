@@ -2,9 +2,9 @@ package me.zhixingye.im.sdk.proxy;
 
 import android.annotation.SuppressLint;
 
+import me.zhixingye.im.sdk.IStorageRemoteService;
 import me.zhixingye.im.service.StorageService;
 import me.zhixingye.im.sdk.IRemoteService;
-import me.zhixingye.im.sdk.IStorageServiceHandle;
 import me.zhixingye.im.tool.Logger;
 
 
@@ -19,15 +19,15 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
 
     private static final String TAG = "ContactServiceProxy";
 
-    private IStorageServiceHandle mStorageHandle;
+    private IStorageRemoteService mRemoteService;
 
     @Override
     public void onBindHandle(IRemoteService service) {
         try {
-            mStorageHandle = service.getStorageServiceHandle();
+            mRemoteService = service.getStorageRemoteService();
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            mStorageHandle = null;
+            mRemoteService = null;
         }
     }
 
@@ -35,7 +35,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putBooleanToStorage(String name, String key, boolean value) {
         try {
-            mStorageHandle.putBooleanToStorage(name, key, value);
+            mRemoteService.putBooleanToStorage(name, key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -44,7 +44,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putFloatToStorage(String name, String key, float value) {
         try {
-            mStorageHandle.putFloatToStorage(name, key, value);
+            mRemoteService.putFloatToStorage(name, key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -53,7 +53,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putLongToStorage(String name, String key, long value) {
         try {
-            mStorageHandle.putLongToStorage(name, key, value);
+            mRemoteService.putLongToStorage(name, key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -62,7 +62,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putByteArrayToStorage(String name, String key, byte[] value) {
         try {
-            mStorageHandle.putByteArrayToStorage(name, key, value);
+            mRemoteService.putByteArrayToStorage(name, key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -71,7 +71,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putStringToStorage(String name, String key, String value) {
         try {
-            mStorageHandle.putStringToStorage(name, key, value);
+            mRemoteService.putStringToStorage(name, key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -80,7 +80,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public String getStringFromStorage(String name, String key, String defValue) {
         try {
-            return mStorageHandle.getStringFromStorage(name, key, defValue);
+            return mRemoteService.getStringFromStorage(name, key, defValue);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return defValue;
@@ -90,7 +90,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public boolean getBooleanFromStorage(String name, String key, boolean defValue) {
         try {
-            return mStorageHandle.getBooleanFromStorage(name, key, defValue);
+            return mRemoteService.getBooleanFromStorage(name, key, defValue);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return defValue;
@@ -100,7 +100,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public float getFloatFromStorage(String name, String key, float defValue) {
         try {
-            return mStorageHandle.getFloatFromStorage(name, key, defValue);
+            return mRemoteService.getFloatFromStorage(name, key, defValue);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return defValue;
@@ -110,7 +110,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public long getLongFromStorage(String name, String key, long defValue) {
         try {
-            return mStorageHandle.getLongFromStorage(name, key, defValue);
+            return mRemoteService.getLongFromStorage(name, key, defValue);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return defValue;
@@ -120,7 +120,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public byte[] getByteArrayFromStorage(String name, String key) {
         try {
-            return mStorageHandle.getByteArrayFromStorage(name, key);
+            return mRemoteService.getByteArrayFromStorage(name, key);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return null;
@@ -130,7 +130,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void removeFromStorage(String name, String key) {
         try {
-            mStorageHandle.removeFromStorage(name, key);
+            mRemoteService.removeFromStorage(name, key);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -139,7 +139,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putStringToUserStorage(String key, String value) {
         try {
-            mStorageHandle.putStringToUserStorage(key, value);
+            mRemoteService.putStringToUserStorage(key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -148,7 +148,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putBooleanToUserStorage(String key, boolean value) {
         try {
-            mStorageHandle.putBooleanToUserStorage(key, value);
+            mRemoteService.putBooleanToUserStorage(key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -157,7 +157,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putFloatToUserStorage(String key, float value) {
         try {
-            mStorageHandle.putFloatToUserStorage(key, value);
+            mRemoteService.putFloatToUserStorage(key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -166,7 +166,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putLongToUserStorage(String key, long value) {
         try {
-            mStorageHandle.putLongToUserStorage(key, value);
+            mRemoteService.putLongToUserStorage(key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -175,7 +175,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public void putByteArrayToUserStorage(String key, byte[] value) {
         try {
-            mStorageHandle.putByteArrayToUserStorage(key, value);
+            mRemoteService.putByteArrayToUserStorage(key, value);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
         }
@@ -184,7 +184,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public String getStringFromUserStorage(String key, String defValue) {
         try {
-            return mStorageHandle.getStringFromUserStorage(key, defValue);
+            return mRemoteService.getStringFromUserStorage(key, defValue);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return defValue;
@@ -194,7 +194,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public boolean getBooleanFromUserStorage(String key, boolean defValue) {
         try {
-            return mStorageHandle.getBooleanFromUserStorage(key, defValue);
+            return mRemoteService.getBooleanFromUserStorage(key, defValue);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return defValue;
@@ -204,7 +204,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public float getFloatFromUserStorage(String key, float defValue) {
         try {
-            return mStorageHandle.getFloatFromUserStorage(key, defValue);
+            return mRemoteService.getFloatFromUserStorage(key, defValue);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return defValue;
@@ -214,7 +214,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public long getLongFromUserStorage(String key, long defValue) {
         try {
-            return mStorageHandle.getLongFromUserStorage(key, defValue);
+            return mRemoteService.getLongFromUserStorage(key, defValue);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return defValue;
@@ -224,7 +224,7 @@ public class StorageServiceProxy implements StorageService, RemoteProxy {
     @Override
     public byte[] getByteArrayFromUserStorage(String key) {
         try {
-            return mStorageHandle.getByteArrayFromUserStorage(key);
+            return mRemoteService.getByteArrayFromUserStorage(key);
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return null;

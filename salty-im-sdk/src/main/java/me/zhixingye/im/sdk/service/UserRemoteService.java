@@ -1,4 +1,4 @@
-package me.zhixingye.im.sdk.handle;
+package me.zhixingye.im.sdk.service;
 
 
 import com.salty.protos.GetUserInfoResp;
@@ -8,14 +8,14 @@ import com.salty.protos.UserProfile;
 
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IRemoteCallback;
-import me.zhixingye.im.sdk.IUserServiceHandle;
+import me.zhixingye.im.sdk.IUserRemoteService;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class UserServiceHandle extends IUserServiceHandle.Stub {
+public class UserRemoteService extends IUserRemoteService.Stub {
 
     @Override
     public String getCurrentUserId() {

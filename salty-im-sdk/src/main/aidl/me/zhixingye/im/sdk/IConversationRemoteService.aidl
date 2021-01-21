@@ -1,10 +1,10 @@
-// IConversationServiceHandle.aidl
+// IConversationRemoteService.aidl
 package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
 import me.zhixingye.im.sdk.IRemoteCallback;
 
-interface IConversationServiceHandle {
+interface IConversationRemoteService {
     void getAllConversations(IRemoteCallback callback);
 
     void getConversationDetail(String conversationId, int type, IRemoteCallback callback);

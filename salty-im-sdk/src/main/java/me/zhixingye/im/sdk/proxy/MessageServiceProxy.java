@@ -1,6 +1,6 @@
 package me.zhixingye.im.sdk.proxy;
 
-import me.zhixingye.im.sdk.IMessageServiceHandle;
+import me.zhixingye.im.sdk.IMessageRemoteService;
 import me.zhixingye.im.service.MessageService;
 import me.zhixingye.im.sdk.IRemoteService;
 import me.zhixingye.im.tool.Logger;
@@ -14,15 +14,15 @@ public class MessageServiceProxy implements MessageService, RemoteProxy {
 
     private static final String TAG = "ContactServiceProxy";
 
-    private IMessageServiceHandle mMessageHandle;
+    private IMessageRemoteService mRemoteService;
 
     @Override
     public void onBindHandle(IRemoteService service) {
         try {
-            mMessageHandle = service.getMessageServiceHandle();
+            mRemoteService = service.getMessageRemoteService();
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            mMessageHandle = null;
+            mRemoteService = null;
         }
     }
 

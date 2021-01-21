@@ -1,10 +1,10 @@
-// IGroupServiceHandle.aidl
+// IGroupRemoteService.aidl
 package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
 import me.zhixingye.im.sdk.IRemoteCallback;
 
-interface IGroupServiceHandle {
+interface IGroupRemoteService {
     void createGroup(String groupName, out List<String> memberUserIdArr, IRemoteCallback callback);
 
     void joinGroup(String groupId, String reason, IRemoteCallback callback);

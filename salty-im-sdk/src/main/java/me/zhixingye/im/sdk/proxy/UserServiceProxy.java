@@ -8,9 +8,9 @@ import com.salty.protos.UserProfile;
 import javax.annotation.Nullable;
 
 import me.zhixingye.im.listener.RequestCallback;
+import me.zhixingye.im.sdk.IUserRemoteService;
 import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.sdk.IRemoteService;
-import me.zhixingye.im.sdk.IUserServiceHandle;
 import me.zhixingye.im.tool.Logger;
 
 /**
@@ -22,15 +22,15 @@ public class UserServiceProxy implements UserService, RemoteProxy {
 
     private static final String TAG = "ContactServiceProxy";
 
-    private IUserServiceHandle mUserHandle;
+    private IUserRemoteService mRemoteService;
 
     @Override
     public void onBindHandle(IRemoteService service) {
         try {
-            mUserHandle = service.getUserServiceHandle();
+            mRemoteService = service.getUserRemoteService();
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            mUserHandle = null;
+            mRemoteService = null;
         }
     }
 
@@ -38,7 +38,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
     @Override
     public String getCurrentUserId() {
         try {
-            return mUserHandle.getCurrentUserId();
+            return mRemoteService.getCurrentUserId();
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return null;
@@ -49,7 +49,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
     @Override
     public String getCurrentUserToken() {
         try {
-            return mUserHandle.getCurrentUserToken();
+            return mRemoteService.getCurrentUserToken();
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             return null;
@@ -59,7 +59,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
     @Override
     public UserProfile getCurrentUserProfile() {
         try {
-            byte[] data = mUserHandle.getCurrentUserProfile();
+            byte[] data = mRemoteService.getCurrentUserProfile();
             if (data == null) {
                 return null;
             }
@@ -74,7 +74,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
     @Override
     public UserProfile getUserProfileFromLocal(String userId) {
         try {
-            byte[] data = mUserHandle.getUserProfileFromLocal(userId);
+            byte[] data = mRemoteService.getUserProfileFromLocal(userId);
             if (data == null) {
                 return null;
             }
@@ -88,7 +88,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
     @Override
     public void updateUserInfo(String nickname, String description, UserProfile.Sex sex, long birthday, String location, RequestCallback<UpdateUserInfoResp> callback) {
         try {
-            mUserHandle.updateUserInfo(nickname, description, sex.getNumber(), birthday, location, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.updateUserInfo(nickname, description, sex.getNumber(), birthday, location, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -98,7 +98,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
     @Override
     public void getUserInfoByUserId(String userId, RequestCallback<GetUserInfoResp> callback) {
         try {
-            mUserHandle.getUserInfoByUserId(userId, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.getUserInfoByUserId(userId, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -108,7 +108,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
     @Override
     public void queryUserInfoByTelephone(String telephone, RequestCallback<QueryUserInfoResp> callback) {
         try {
-            mUserHandle.queryUserInfoByTelephone(telephone, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.queryUserInfoByTelephone(telephone, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -118,7 +118,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
     @Override
     public void queryUserInfoByEmail(String email, RequestCallback<QueryUserInfoResp> callback) {
         try {
-            mUserHandle.queryUserInfoByEmail(email, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.queryUserInfoByEmail(email, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);

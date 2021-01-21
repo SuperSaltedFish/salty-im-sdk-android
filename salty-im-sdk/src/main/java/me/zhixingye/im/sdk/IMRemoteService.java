@@ -7,14 +7,16 @@ import android.os.Process;
 import android.os.RemoteException;
 
 import me.zhixingye.im.IMCore;
-import me.zhixingye.im.sdk.handle.AccountServiceHandle;
-import me.zhixingye.im.sdk.handle.ContactServiceHandle;
-import me.zhixingye.im.sdk.handle.ConversationServiceHandle;
-import me.zhixingye.im.sdk.handle.GroupServiceHandle;
-import me.zhixingye.im.sdk.handle.MessageServiceHandle;
-import me.zhixingye.im.sdk.handle.SMSServiceHandle;
-import me.zhixingye.im.sdk.handle.StorageServiceHandle;
-import me.zhixingye.im.sdk.handle.UserServiceHandle;
+import me.zhixingye.im.sdk.service.ContactRemoteService;
+import me.zhixingye.im.sdk.service.ConversationRemoteService;
+import me.zhixingye.im.sdk.service.GroupRemoteService;
+import me.zhixingye.im.sdk.service.LoginRemoteService;
+import me.zhixingye.im.sdk.service.MessageRemoteService;
+import me.zhixingye.im.sdk.service.PasswordRemoteService;
+import me.zhixingye.im.sdk.service.RegisterRemoteService;
+import me.zhixingye.im.sdk.service.SMSRemoteService;
+import me.zhixingye.im.sdk.service.StorageRemoteService;
+import me.zhixingye.im.sdk.service.UserRemoteService;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
@@ -43,43 +45,53 @@ public class IMRemoteService extends Service {
     private final IBinder mIMServiceBinder = new IRemoteService.Stub() {
 
         @Override
-        public IAccountServiceHandle getAccountServiceHandle() throws RemoteException {
-            return new AccountServiceHandle();
+        public ILoginRemoteService getLoginRemoteService() {
+            return new LoginRemoteService();
         }
 
         @Override
-        public IContactServiceHandle getContactServiceHandle() throws RemoteException {
-            return new ContactServiceHandle();
+        public IRegisterRemoteService getRegisterRemoteService() {
+            return new RegisterRemoteService();
         }
 
         @Override
-        public IConversationServiceHandle getConversationServiceHandle() throws RemoteException {
-            return new ConversationServiceHandle();
+        public IContactRemoteService getContactRemoteService() {
+            return new ContactRemoteService();
         }
 
         @Override
-        public IGroupServiceHandle getGroupServiceHandle() throws RemoteException {
-            return new GroupServiceHandle();
+        public IConversationRemoteService getConversationRemoteService() {
+            return new ConversationRemoteService();
         }
 
         @Override
-        public IMessageServiceHandle getMessageServiceHandle() throws RemoteException {
-            return new MessageServiceHandle();
+        public IGroupRemoteService getGroupRemoteService() {
+            return new GroupRemoteService();
         }
 
         @Override
-        public ISMSServiceHandle getSMSServiceHandle() throws RemoteException {
-            return new SMSServiceHandle();
+        public IMessageRemoteService getMessageRemoteService() {
+            return new MessageRemoteService();
         }
 
         @Override
-        public IStorageServiceHandle getStorageServiceHandle() throws RemoteException {
-            return new StorageServiceHandle();
+        public ISMSRemoteService getSMSRemoteService() {
+            return new SMSRemoteService();
         }
 
         @Override
-        public IUserServiceHandle getUserServiceHandle() throws RemoteException {
-            return new UserServiceHandle();
+        public IStorageRemoteService getStorageRemoteService() {
+            return new StorageRemoteService();
+        }
+
+        @Override
+        public IUserRemoteService getUserRemoteService() {
+            return new UserRemoteService();
+        }
+
+        @Override
+        public IPasswordRemoteService getPasswordRemoteService() {
+            return new PasswordRemoteService();
         }
     };
 }

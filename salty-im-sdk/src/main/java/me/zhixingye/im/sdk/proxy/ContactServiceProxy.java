@@ -10,7 +10,7 @@ import com.salty.protos.RequestContactResp;
 import javax.annotation.Nullable;
 
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.sdk.IContactServiceHandle;
+import me.zhixingye.im.sdk.IContactRemoteService;
 import me.zhixingye.im.sdk.IRemoteService;
 import me.zhixingye.im.service.ContactService;
 import me.zhixingye.im.tool.Logger;
@@ -24,15 +24,15 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
 
     private static final String TAG = "ContactServiceProxy";
 
-    private IContactServiceHandle mContactHandle;
+    private IContactRemoteService mRemoteService;
 
     @Override
     public void onBindHandle(IRemoteService service) {
         try {
-            mContactHandle = service.getContactServiceHandle();
+            mRemoteService = service.getContactRemoteService();
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            mContactHandle = null;
+            mRemoteService = null;
         }
     }
 
@@ -40,7 +40,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     @Override
     public void requestContact(String userId, String reason, RequestCallback<RequestContactResp> callback) {
         try {
-            mContactHandle.requestContact(userId, reason, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.requestContact(userId, reason, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -50,7 +50,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     @Override
     public void refusedContact(String userId, String reason, RequestCallback<RefusedContactResp> callback) {
         try {
-            mContactHandle.refusedContact(userId, reason, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.refusedContact(userId, reason, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -60,7 +60,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     @Override
     public void acceptContact(String userId, RequestCallback<AcceptContactResp> callback) {
         try {
-            mContactHandle.acceptContact(userId, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.acceptContact(userId, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -70,7 +70,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     @Override
     public void deleteContact(String userId, RequestCallback<DeleteContactResp> callback) {
         try {
-            mContactHandle.deleteContact(userId, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.deleteContact(userId, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -80,7 +80,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     @Override
     public void getContactOperationMessageList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
         try {
-            mContactHandle.getContactOperationMessageList(maxMessageTime, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.getContactOperationMessageList(maxMessageTime, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -91,7 +91,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     @Override
     public ContactOperationMessage getContactOperationFromLocal(String targetUserId) {
         try {
-            byte[] data = mContactHandle.getContactOperationFromLocal(targetUserId);
+            byte[] data = mRemoteService.getContactOperationFromLocal(targetUserId);
             if (data == null) {
                 return null;
             }

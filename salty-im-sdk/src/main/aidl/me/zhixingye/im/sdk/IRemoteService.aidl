@@ -2,31 +2,36 @@
 package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
-import me.zhixingye.im.sdk.IAccountServiceHandle;
-import me.zhixingye.im.sdk.IContactServiceHandle;
-import me.zhixingye.im.sdk.IConversationServiceHandle;
-import me.zhixingye.im.sdk.IGroupServiceHandle;
-import me.zhixingye.im.sdk.IMessageServiceHandle;
-import me.zhixingye.im.sdk.ISMSServiceHandle;
-import me.zhixingye.im.sdk.IStorageServiceHandle;
-import me.zhixingye.im.sdk.IUserServiceHandle;
+import me.zhixingye.im.sdk.ILoginRemoteService;
+import me.zhixingye.im.sdk.IRegisterRemoteService;
+import me.zhixingye.im.sdk.IContactRemoteService;
+import me.zhixingye.im.sdk.IConversationRemoteService;
+import me.zhixingye.im.sdk.IGroupRemoteService;
+import me.zhixingye.im.sdk.IMessageRemoteService;
+import me.zhixingye.im.sdk.ISMSRemoteService;
+import me.zhixingye.im.sdk.IStorageRemoteService;
+import me.zhixingye.im.sdk.IUserRemoteService;
+import me.zhixingye.im.sdk.IPasswordRemoteService;
 import me.zhixingye.im.sdk.IRemoteCallback;
 
 interface IRemoteService {
-    IAccountServiceHandle getAccountServiceHandle();
+    ILoginRemoteService getLoginRemoteService();
 
-    IContactServiceHandle getContactServiceHandle();
+    IRegisterRemoteService getRegisterRemoteService();
 
-    IConversationServiceHandle getConversationServiceHandle();
+    IContactRemoteService getContactRemoteService();
 
-    IGroupServiceHandle getGroupServiceHandle();
+    IConversationRemoteService getConversationRemoteService();
 
-    IMessageServiceHandle getMessageServiceHandle();
+    IGroupRemoteService getGroupRemoteService();
 
-    ISMSServiceHandle getSMSServiceHandle();
+    IMessageRemoteService getMessageRemoteService();
 
-    IStorageServiceHandle getStorageServiceHandle();
+    ISMSRemoteService getSMSRemoteService();
 
-    IUserServiceHandle getUserServiceHandle();
+    IStorageRemoteService getStorageRemoteService();
 
+    IUserRemoteService getUserRemoteService();
+
+    IPasswordRemoteService getPasswordRemoteService();
 }
