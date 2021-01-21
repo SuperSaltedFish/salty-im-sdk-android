@@ -20,13 +20,13 @@ public class PasswordServiceImpl extends BasicServiceImpl implements PasswordSer
     public void resetLoginPasswordByTelephone(String telephone, String newPassword, RequestCallback<ResetPasswordResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(UserApi.class)
-                .resetLoginPasswordByTelephone(telephone, newPassword, callback);
+                .resetLoginPasswordByTelephone(telephone, newPassword,  new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void resetLoginPasswordByEmail(String telephone, String newPassword, RequestCallback<ResetPasswordResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(UserApi.class)
-                .resetLoginPasswordByTelephone(telephone, newPassword, callback);
+                .resetLoginPasswordByTelephone(telephone, newPassword,  new RequestCallbackWrapper<>(callback));
     }
 }

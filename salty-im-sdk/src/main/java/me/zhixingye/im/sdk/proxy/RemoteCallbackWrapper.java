@@ -8,7 +8,7 @@ import java.lang.reflect.ParameterizedType;
 
 import me.zhixingye.im.constant.ResponseCode;
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 import me.zhixingye.im.tool.Logger;
 
 /**
@@ -16,7 +16,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class RemoteCallbackWrapper<T> extends IRemoteCallback.Stub {
+public class RemoteCallbackWrapper<T> extends IRemoteRequestCallback.Stub {
 
     private static final String TAG = "ResultCallbackWrapper";
 

@@ -2,22 +2,22 @@
 package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 
 interface IGroupRemoteService {
-    void createGroup(String groupName, out List<String> memberUserIdArr, IRemoteCallback callback);
+    void createGroup(String groupName, out List<String> memberUserIdArr, IRemoteRequestCallback callback);
 
-    void joinGroup(String groupId, String reason, IRemoteCallback callback);
+    void joinGroup(String groupId, String reason, IRemoteRequestCallback callback);
 
-    void quitGroup(String groupId, IRemoteCallback callback);
+    void quitGroup(String groupId, IRemoteRequestCallback callback);
 
-    void addGroupMember(String groupId, out List<String> memberUserIdArr, IRemoteCallback callback);
+    void addGroupMember(String groupId, out List<String> memberUserIdArr, IRemoteRequestCallback callback);
 
-    void kickGroupMember(String groupId, String memberUserId, IRemoteCallback callback);
+    void kickGroupMember(String groupId, String memberUserId, IRemoteRequestCallback callback);
 
-    void updateGroupName(String groupId, String groupName, IRemoteCallback callback);
+    void updateGroupName(String groupId, String groupName, IRemoteRequestCallback callback);
 
-    void updateGroupNotice(String groupId, String notice, IRemoteCallback callback);
+    void updateGroupNotice(String groupId, String notice, IRemoteRequestCallback callback);
 
-    void updateMemberNickname(String groupId, String memberNickname, IRemoteCallback callback);
+    void updateMemberNickname(String groupId, String memberNickname, IRemoteRequestCallback callback);
 }

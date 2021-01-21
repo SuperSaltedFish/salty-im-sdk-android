@@ -2,7 +2,7 @@
 package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 
 interface IStorageRemoteService {
     void putBooleanToStorage(String name, String key, boolean value);

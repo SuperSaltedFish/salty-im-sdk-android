@@ -80,4 +80,14 @@ public class LoginServiceProxy implements LoginService, RemoteProxy {
         return false;
     }
 
+    @Override
+    public void addOnLoginListener(OnLoginListener listener) {
+
+    }
+
+    @Override
+    public void removeOnLoginListener(OnLoginListener listener) {
+
+    }
+
 }

@@ -20,13 +20,13 @@ public class RegisterServiceImpl extends BasicServiceImpl implements RegisterSer
     public void registerByTelephone(String telephone, String password, RequestCallback<RegisterResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(UserApi.class)
-                .registerByTelephone(telephone, password, callback);
+                .registerByTelephone(telephone, password,  new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void registerByEmail(String email, String password, RequestCallback<RegisterResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(UserApi.class)
-                .registerByEmail(email, password, callback);
+                .registerByEmail(email, password,  new RequestCallbackWrapper<>(callback));
     }
 }

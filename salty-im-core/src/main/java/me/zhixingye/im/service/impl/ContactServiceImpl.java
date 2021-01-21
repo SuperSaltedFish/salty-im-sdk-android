@@ -6,6 +6,7 @@ import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationMessageListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
+
 import me.zhixingye.im.api.ContactApi;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.ApiService;
@@ -27,35 +28,35 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
     public void requestContact(String userId, String reason, RequestCallback<RequestContactResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
-                .requestContact(userId, reason, callback);
+                .requestContact(userId, reason, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void refusedContact(String userId, String reason, RequestCallback<RefusedContactResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
-                .refusedContact(userId, reason, callback);
+                .refusedContact(userId, reason, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void acceptContact(String userId, RequestCallback<AcceptContactResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
-                .acceptContact(userId, callback);
+                .acceptContact(userId, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void deleteContact(String userId, RequestCallback<DeleteContactResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
-                .deleteContact(userId, callback);
+                .deleteContact(userId, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void getContactOperationMessageList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
-                .getContactOperationMessageList(maxMessageTime, callback);
+                .getContactOperationMessageList(maxMessageTime, new RequestCallbackWrapper<>(callback));
     }
 
     @Override

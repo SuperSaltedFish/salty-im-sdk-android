@@ -2,14 +2,14 @@
 package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 
 interface ILoginRemoteService {
-    void loginByTelephone(String telephone, String password, IRemoteCallback callback);
+    void loginByTelephone(String telephone, String password, IRemoteRequestCallback callback);
 
-    void loginByEmail(String email, String password, IRemoteCallback callback);
+    void loginByEmail(String email, String password, IRemoteRequestCallback callback);
 
-    void loginByLastLoginInfo(IRemoteCallback callback);
+    void loginByLastLoginInfo(IRemoteRequestCallback callback);
 
     void logout();
 

@@ -2,7 +2,7 @@
 package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 
 interface IUserRemoteService {
     String getCurrentUserId();
@@ -13,11 +13,11 @@ interface IUserRemoteService {
 
     byte[] getUserProfileFromLocal(String userId);
 
-    void updateUserInfo(String nickname, String description, int sex, long birthday, String location, IRemoteCallback callback);
+    void updateUserInfo(String nickname, String description, int sex, long birthday, String location, IRemoteRequestCallback callback);
 
-    void getUserInfoByUserId(String userId, IRemoteCallback callback);
+    void getUserInfoByUserId(String userId, IRemoteRequestCallback callback);
 
-    void queryUserInfoByTelephone(String telephone, IRemoteCallback callback);
+    void queryUserInfoByTelephone(String telephone, IRemoteRequestCallback callback);
 
-    void queryUserInfoByEmail(String email, IRemoteCallback callback);
+    void queryUserInfoByEmail(String email, IRemoteRequestCallback callback);
 }

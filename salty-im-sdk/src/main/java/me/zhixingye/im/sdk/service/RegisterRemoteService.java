@@ -5,7 +5,7 @@ import com.salty.protos.ResetPasswordResp;
 
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IRegisterRemoteService;
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
@@ -15,7 +15,7 @@ import me.zhixingye.im.sdk.IRemoteCallback;
 public class RegisterRemoteService extends IRegisterRemoteService.Stub {
 
     @Override
-    public void registerByTelephone(String telephone, String password, IRemoteCallback callback) {
+    public void registerByTelephone(String telephone, String password, IRemoteRequestCallback callback) {
         IMCore.get().getRegisterService()
                 .registerByTelephone(
                         telephone,
@@ -24,7 +24,7 @@ public class RegisterRemoteService extends IRegisterRemoteService.Stub {
     }
 
     @Override
-    public void registerByEmail(String email, String password, IRemoteCallback callback) {
+    public void registerByEmail(String email, String password, IRemoteRequestCallback callback) {
         IMCore.get().getRegisterService()
                 .registerByEmail(
                         email,

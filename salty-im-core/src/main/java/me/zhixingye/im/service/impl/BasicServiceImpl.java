@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.ArraySet;
 
+import androidx.annotation.CallSuper;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -12,8 +14,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.event.BasicEvent;
 import me.zhixingye.im.service.event.OnEventListener;
+import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.Logger;
 
 /**
@@ -99,4 +103,29 @@ public class BasicServiceImpl {
     }
 
 
+    protected static class RequestCallbackWrapper<Resp> implements RequestCallback<Resp> {
+
+        private final RequestCallback<Resp> mCallback;
+
+        public RequestCallbackWrapper(RequestCallback<Resp> mCallback) {
+            this.mCallback = mCallback;
+        }
+
+        @CallSuper
+        @Override
+        public void onCompleted(Resp response) {
+            CallbackHelper.callCompleted(response, mCallback);
+        }
+
+        @CallSuper
+        @Override
+        public void onFailure(int code, String error) {
+            CallbackHelper.callFailure(code, error, mCallback);
+            handlerErrorCodeIfNeed(code);
+        }
+
+        private void handlerErrorCodeIfNeed(int code) {
+
+        }
+    }
 }

@@ -19,4 +19,16 @@ public interface LoginService extends BasicService {
     void logout();
 
     boolean isLogged();
+
+    void addOnLoginListener(OnLoginListener listener);
+
+    void removeOnLoginListener(OnLoginListener listener);
+
+    interface OnLoginListener {
+        void onLoggedOut();
+
+        void onLoggedIn();
+
+        void onLoginExpired();
+    }
 }

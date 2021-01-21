@@ -27,13 +27,13 @@ public class SMSServiceImpl extends BasicServiceImpl implements SMSService {
     public void obtainVerificationCodeForTelephoneType(String telephone, SMSOperationType type, RequestCallback<ObtainTelephoneSMSCodeResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(SMSApi.class)
-                .obtainTelephoneSMSCode(telephone, type, callback);
+                .obtainTelephoneSMSCode(telephone, type,  new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void verifyTelephoneSMSCode(String telephone, String smsCode, SMSOperationType type, RequestCallback<VerifyTelephoneSMSCodeResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(SMSApi.class)
-                .verifyTelephoneSMSCode(telephone, smsCode, type, callback);
+                .verifyTelephoneSMSCode(telephone, smsCode, type,  new RequestCallbackWrapper<>(callback));
     }
 }

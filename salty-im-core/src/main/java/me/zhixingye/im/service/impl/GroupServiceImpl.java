@@ -29,55 +29,55 @@ public class GroupServiceImpl extends BasicServiceImpl implements GroupService {
     public void createGroup(String groupName, List<String> memberUserIdArr, RequestCallback<CreateGroupResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(GroupApi.class)
-                .createGroup(groupName, memberUserIdArr, callback);
+                .createGroup(groupName, memberUserIdArr, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void joinGroup(String groupId, String reason, RequestCallback<JoinGroupResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(GroupApi.class)
-                .joinGroup(groupId, reason, callback);
+                .joinGroup(groupId, reason, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void quitGroup(String groupId, RequestCallback<QuitGroupResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(GroupApi.class)
-                .quitGroup(groupId, callback);
+                .quitGroup(groupId, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void addGroupMember(String groupId, List<String> memberUserIdArr, RequestCallback<AddGroupMemberResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(GroupApi.class)
-                .addGroupMember(groupId, memberUserIdArr, callback);
+                .addGroupMember(groupId, memberUserIdArr, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void kickGroupMember(String groupId, String memberUserId, RequestCallback<KickGroupMemberResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(GroupApi.class)
-                .kickGroupMember(groupId, memberUserId, callback);
+                .kickGroupMember(groupId, memberUserId, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void updateGroupName(String groupId, String groupName, RequestCallback<UpdateGroupNameResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(GroupApi.class)
-                .updateGroupName(groupId, groupName, callback);
+                .updateGroupName(groupId, groupName, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void updateGroupNotice(String groupId, String notice, RequestCallback<UpdateGroupNoticeResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(GroupApi.class)
-                .updateGroupNotice(groupId, notice, callback);
+                .updateGroupNotice(groupId, notice, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void updateMemberNickname(String groupId, String memberNickname, RequestCallback<UpdateMemberNicknameResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(GroupApi.class)
-                .updateMemberNickname(groupId, memberNickname, callback);
+                .updateMemberNickname(groupId, memberNickname, new RequestCallbackWrapper<>(callback));
     }
 }

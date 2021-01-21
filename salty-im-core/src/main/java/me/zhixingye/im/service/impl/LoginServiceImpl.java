@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import com.salty.protos.LoginResp;
 import com.salty.protos.UserProfile;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 import me.zhixingye.im.IMCore;
@@ -39,7 +41,9 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
     private final Semaphore mLoginLock = new Semaphore(1);
 
-    private volatile boolean isLogged;
+    private volatile boolean isLogged = false;
+
+    private final Set<OnLoginListener> mOnLoginListeners = new HashSet<>();
 
     @Override
     public void loginByTelephone(String telephone, String password, RequestCallback<UserProfile> callback) {
@@ -95,7 +99,7 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
             mLoginLock.release();
             throw new RuntimeException("The user has already logged in, please do not log in again！");
         }
-        RequestCallback<LoginResp> callbackWrapper = new RequestCallback<LoginResp>() {
+        RequestCallback<LoginResp> callbackWrapper = new RequestCallbackWrapper<LoginResp>(null) {
             @Override
             public void onCompleted(LoginResp loginResp) {
                 try {
@@ -107,12 +111,14 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
                 } finally {
                     mLoginLock.release();
                 }
+                super.onCompleted(loginResp);
             }
 
             @Override
             public void onFailure(int code, String error) {
                 mLoginLock.release();
                 CallbackHelper.callFailure(code, error, callback);
+                super.onFailure(code,error);
             }
 
         };
@@ -140,14 +146,68 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
         isLogged = false;
 
-
         sendEvent(new OnLoggedOutEvent());
 
+        callOnLoggedOutListener();
     }
 
     @Override
     public boolean isLogged() {
         return isLogged;
+    }
+
+    @Override
+    public void addOnLoginListener(OnLoginListener listener) {
+        synchronized (mOnLoginListeners) {
+            mOnLoginListeners.add(listener);
+        }
+
+    }
+
+    @Override
+    public void removeOnLoginListener(OnLoginListener listener) {
+        synchronized (mOnLoginListeners) {
+            mOnLoginListeners.remove(listener);
+        }
+    }
+
+    private void callOnLoggedInListener() {
+        runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mOnLoginListeners) {
+                    for (OnLoginListener listener : mOnLoginListeners) {
+                        listener.onLoggedIn();
+                    }
+                }
+            }
+        });
+    }
+
+    private void callOnLoginExpiredListener() {
+        runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mOnLoginListeners) {
+                    for (OnLoginListener listener : mOnLoginListeners) {
+                        listener.onLoginExpired();
+                    }
+                }
+            }
+        });
+    }
+
+    private void callOnLoggedOutListener() {
+        runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mOnLoginListeners) {
+                    for (OnLoginListener listener : mOnLoginListeners) {
+                        listener.onLoggedOut();
+                    }
+                }
+            }
+        });
     }
 
     private boolean tryInitLoginInfo(LoginResp loginResp) {
@@ -180,6 +240,8 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
         isLogged = true;
 
         sendEvent(new OnLoggedInEvent(loginResp));
+
+        callOnLoggedInListener();
 
         return true;
     }

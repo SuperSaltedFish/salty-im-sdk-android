@@ -4,7 +4,7 @@ import com.salty.protos.UserProfile;
 
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.ILoginRemoteService;
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
@@ -13,7 +13,7 @@ import me.zhixingye.im.sdk.IRemoteCallback;
  */
 public class LoginRemoteService extends ILoginRemoteService.Stub {
     @Override
-    public void loginByTelephone(String telephone, String password, IRemoteCallback callback) {
+    public void loginByTelephone(String telephone, String password, IRemoteRequestCallback callback) {
         IMCore.get().getLoginService().loginByTelephone(
                 telephone,
                 password,
@@ -21,7 +21,7 @@ public class LoginRemoteService extends ILoginRemoteService.Stub {
     }
 
     @Override
-    public void loginByEmail(String email, String password, IRemoteCallback callback) {
+    public void loginByEmail(String email, String password, IRemoteRequestCallback callback) {
         IMCore.get().getLoginService().loginByEmail(
                 email,
                 password,
@@ -29,7 +29,7 @@ public class LoginRemoteService extends ILoginRemoteService.Stub {
     }
 
     @Override
-    public void loginByLastLoginInfo(IRemoteCallback callback) {
+    public void loginByLastLoginInfo(IRemoteRequestCallback callback) {
         IMCore.get().getLoginService().loginByLastLoginInfo(
                 new ByteRemoteCallback<UserProfile>(callback));
     }

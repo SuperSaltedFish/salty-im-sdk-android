@@ -81,24 +81,19 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
     public void updateUserInfo(String nickname, String description, UserProfile.Sex sex, long birthday, String location, RequestCallback<UpdateUserInfoResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(UserApi.class)
-                .updateUserInfo(nickname, description, sex, birthday, location, callback);
+                .updateUserInfo(nickname, description, sex, birthday, location,  new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void getUserInfoByUserId(String userId, final RequestCallback<GetUserInfoResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(UserApi.class)
-                .getUserInfoByUserId(userId, new RequestCallback<GetUserInfoResp>() {
+                .getUserInfoByUserId(userId, new RequestCallbackWrapper<GetUserInfoResp>(callback) {
                     @Override
                     public void onCompleted(GetUserInfoResp response) {
                         saveUserProfileToCache(response.getProfile());
-                        CallbackHelper.callCompleted(response, callback);
+                        super.onCompleted(response);
 
-                    }
-
-                    @Override
-                    public void onFailure(int code, String error) {
-                        CallbackHelper.callFailure(code, error, callback);
                     }
                 });
     }
@@ -107,16 +102,11 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
     public void queryUserInfoByTelephone(String telephone, final RequestCallback<QueryUserInfoResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(UserApi.class)
-                .queryUserInfoByTelephone(telephone, new RequestCallback<QueryUserInfoResp>() {
+                .queryUserInfoByTelephone(telephone, new RequestCallbackWrapper<QueryUserInfoResp>(callback) {
                     @Override
                     public void onCompleted(QueryUserInfoResp response) {
                         saveUserProfileToCache(response.getProfile());
-                        CallbackHelper.callCompleted(response, callback);
-                    }
-
-                    @Override
-                    public void onFailure(int code, String error) {
-                        CallbackHelper.callFailure(code, error, callback);
+                        super.onCompleted(response);
                     }
                 });
     }
@@ -125,16 +115,11 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
     public void queryUserInfoByEmail(String email, final RequestCallback<QueryUserInfoResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(UserApi.class)
-                .queryUserInfoByEmail(email, new RequestCallback<QueryUserInfoResp>() {
+                .queryUserInfoByEmail(email, new RequestCallbackWrapper<QueryUserInfoResp>(callback) {
                     @Override
                     public void onCompleted(QueryUserInfoResp response) {
                         saveUserProfileToCache(response.getProfile());
-                        CallbackHelper.callCompleted(response, callback);
-                    }
-
-                    @Override
-                    public void onFailure(int code, String error) {
-                        CallbackHelper.callFailure(code, error, callback);
+                        super.onCompleted(response);
                     }
                 });
     }

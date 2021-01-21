@@ -12,7 +12,7 @@ import me.zhixingye.im.sdk.ISMSRemoteService;
 import me.zhixingye.im.sdk.IStorageRemoteService;
 import me.zhixingye.im.sdk.IUserRemoteService;
 import me.zhixingye.im.sdk.IPasswordRemoteService;
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 
 interface IRemoteService {
     ILoginRemoteService getLoginRemoteService();

@@ -6,7 +6,7 @@ import com.salty.protos.SMSOperationType;
 import com.salty.protos.VerifyTelephoneSMSCodeResp;
 
 import me.zhixingye.im.IMCore;
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 import me.zhixingye.im.sdk.ISMSRemoteService;
 
 /**
@@ -16,7 +16,7 @@ import me.zhixingye.im.sdk.ISMSRemoteService;
  */
 public class SMSRemoteService extends ISMSRemoteService.Stub {
     @Override
-    public void obtainVerificationCodeForTelephoneType(String telephone, int codeType, IRemoteCallback callback) {
+    public void obtainVerificationCodeForTelephoneType(String telephone, int codeType, IRemoteRequestCallback callback) {
         IMCore.get().getSMSService()
                 .obtainVerificationCodeForTelephoneType(
                         telephone,
@@ -25,7 +25,7 @@ public class SMSRemoteService extends ISMSRemoteService.Stub {
     }
 
     @Override
-    public void verifyTelephoneSMSCode(String telephone, String smsCode, int codeType, IRemoteCallback callback) {
+    public void verifyTelephoneSMSCode(String telephone, String smsCode, int codeType, IRemoteRequestCallback callback) {
         IMCore.get().getSMSService()
                 .verifyTelephoneSMSCode(
                         telephone,

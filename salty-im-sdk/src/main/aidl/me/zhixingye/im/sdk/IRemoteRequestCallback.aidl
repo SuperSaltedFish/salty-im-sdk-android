@@ -1,9 +1,9 @@
-// IRemoteCallback.aidl
+// IRemoteRequestCallback.aidl
 package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
 
-interface IRemoteCallback {
+interface IRemoteRequestCallback {
 
     void onCompleted(in byte[] protoData);
 

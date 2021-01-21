@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
 import me.zhixingye.im.BuildConfig;
 import me.zhixingye.im.constant.ResponseCode;
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.service.AccountService;
 import me.zhixingye.im.service.DeviceService;
 import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.service.impl.ServiceAccessor;
@@ -59,9 +58,9 @@ public abstract class BasicApi {
     @SuppressWarnings("unchecked")
     static class DefaultStreamObserver<T extends GeneratedMessageLite> implements StreamObserver<GrpcResp> {
 
-        private RequestCallback<T> mCallback;
+        private final RequestCallback<T> mCallback;
         private GrpcResp mResponse;
-        private T mDefaultInstance;
+        private final T mDefaultInstance;
 
         DefaultStreamObserver(T defaultInstance, RequestCallback<T> callback) {
             mCallback = callback;

@@ -11,7 +11,7 @@ import java.util.List;
 
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IGroupRemoteService;
-import me.zhixingye.im.sdk.IRemoteCallback;
+import me.zhixingye.im.sdk.IRemoteRequestCallback;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
@@ -20,7 +20,7 @@ import me.zhixingye.im.sdk.IRemoteCallback;
  */
 public class GroupRemoteService extends IGroupRemoteService.Stub {
     @Override
-    public void createGroup(String groupName, List<String> memberUserIdArr, IRemoteCallback callback) {
+    public void createGroup(String groupName, List<String> memberUserIdArr, IRemoteRequestCallback callback) {
         IMCore.get().getGroupService()
                 .createGroup(
                         groupName,
@@ -29,7 +29,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
     }
 
     @Override
-    public void joinGroup(String groupId, String reason, IRemoteCallback callback) {
+    public void joinGroup(String groupId, String reason, IRemoteRequestCallback callback) {
         IMCore.get().getGroupService()
                 .joinGroup(
                         groupId,
@@ -37,7 +37,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
     }
 
     @Override
-    public void quitGroup(String groupId, IRemoteCallback callback) {
+    public void quitGroup(String groupId, IRemoteRequestCallback callback) {
         IMCore.get().getGroupService()
                 .quitGroup(
                         groupId,
@@ -45,7 +45,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
     }
 
     @Override
-    public void addGroupMember(String groupId, List<String> memberUserIdArr, IRemoteCallback callback) {
+    public void addGroupMember(String groupId, List<String> memberUserIdArr, IRemoteRequestCallback callback) {
         IMCore.get().getGroupService()
                 .addGroupMember(
                         groupId,
@@ -54,7 +54,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
     }
 
     @Override
-    public void kickGroupMember(String groupId, String memberUserId, IRemoteCallback callback) {
+    public void kickGroupMember(String groupId, String memberUserId, IRemoteRequestCallback callback) {
         IMCore.get().getGroupService()
                 .kickGroupMember(
                         groupId,
@@ -63,7 +63,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
     }
 
     @Override
-    public void updateGroupName(String groupId, String groupName, IRemoteCallback callback) {
+    public void updateGroupName(String groupId, String groupName, IRemoteRequestCallback callback) {
         IMCore.get().getGroupService()
                 .updateGroupName(
                         groupId,
@@ -72,7 +72,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
     }
 
     @Override
-    public void updateGroupNotice(String groupId, String notice, IRemoteCallback callback) {
+    public void updateGroupNotice(String groupId, String notice, IRemoteRequestCallback callback) {
         IMCore.get().getGroupService()
                 .updateGroupName(
                         groupId,
@@ -81,7 +81,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
     }
 
     @Override
-    public void updateMemberNickname(String groupId, String memberNickname, IRemoteCallback callback) {
+    public void updateMemberNickname(String groupId, String memberNickname, IRemoteRequestCallback callback) {
         IMCore.get().getGroupService()
                 .updateGroupName(
                         groupId,
