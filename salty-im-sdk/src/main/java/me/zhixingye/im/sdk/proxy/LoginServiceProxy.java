@@ -1,11 +1,18 @@
 package me.zhixingye.im.sdk.proxy;
 
+import android.os.RemoteException;
+
 import androidx.annotation.Nullable;
 
 import com.salty.protos.UserProfile;
 
+
+import java.util.HashSet;
+import java.util.Set;
+
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.ILoginRemoteService;
+import me.zhixingye.im.sdk.IOnLoginListener;
 import me.zhixingye.im.sdk.IRemoteService;
 import me.zhixingye.im.service.LoginService;
 import me.zhixingye.im.tool.Logger;
@@ -20,11 +27,13 @@ public class LoginServiceProxy implements LoginService, RemoteProxy {
     private static final String TAG = "AccountServiceProxy";
 
     private ILoginRemoteService mRemoteService;
+    private Set<OnLoginListener> mOnLoginListeners = new HashSet<>();
 
     @Override
     public void onBindHandle(IRemoteService service) {
         try {
             mRemoteService = service.getLoginRemoteService();
+            setupRemoteListener();
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             mRemoteService = null;
@@ -80,14 +89,47 @@ public class LoginServiceProxy implements LoginService, RemoteProxy {
         return false;
     }
 
-    @Override
-    public void addOnLoginListener(OnLoginListener listener) {
 
+    @Override
+    public synchronized void addOnLoginListener(final OnLoginListener listener) {
+        if (listener == null) {
+            return;
+        }
+        mOnLoginListeners.add(listener);
     }
 
     @Override
-    public void removeOnLoginListener(OnLoginListener listener) {
-
+    public synchronized void removeOnLoginListener(OnLoginListener listener) {
+        if (listener == null) {
+            return;
+        }
+        mOnLoginListeners.remove(listener);
     }
+
+    public void setupRemoteListener() throws RemoteException {
+        mRemoteService.setOnLoginListener(new IOnLoginListener.Stub() {
+            @Override
+            public void onLoggedOut() {
+                for (OnLoginListener listener : mOnLoginListeners) {
+                    listener.onLoggedOut();
+                }
+            }
+
+            @Override
+            public void onLoggedIn() {
+                for (OnLoginListener listener : mOnLoginListeners) {
+                    listener.onLoggedIn();
+                }
+            }
+
+            @Override
+            public void onLoginExpired() {
+                for (OnLoginListener listener : mOnLoginListeners) {
+                    listener.onLoginExpired();
+                }
+            }
+        });
+    }
+
 
 }
