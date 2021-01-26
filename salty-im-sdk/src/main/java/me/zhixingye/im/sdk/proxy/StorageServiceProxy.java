@@ -1,6 +1,9 @@
 package me.zhixingye.im.sdk.proxy;
 
 import android.annotation.SuppressLint;
+import android.os.RemoteException;
+
+import androidx.annotation.WorkerThread;
 
 import me.zhixingye.im.sdk.IStorageRemoteService;
 import me.zhixingye.im.service.StorageService;
@@ -14,21 +17,21 @@ import me.zhixingye.im.tool.Logger;
  * @author zhixingye , 2020年05月01日.
  */
 
-@SuppressLint("ApplySharedPref")
 public class StorageServiceProxy implements StorageService, RemoteProxy {
 
     private static final String TAG = "ContactServiceProxy";
 
     private IStorageRemoteService mRemoteService;
 
+    @WorkerThread
     @Override
-    public void onBindHandle(IRemoteService service) {
-        try {
-            mRemoteService = service.getStorageRemoteService();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-            mRemoteService = null;
-        }
+    public void onBind(IRemoteService service) throws RemoteException {
+        mRemoteService = service.getStorageRemoteService();
+    }
+
+    @Override
+    public void onUnbind() {
+
     }
 
 

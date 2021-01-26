@@ -1,5 +1,9 @@
 package me.zhixingye.im.sdk.proxy;
 
+import android.os.RemoteException;
+
+import androidx.annotation.WorkerThread;
+
 import com.salty.protos.GetUserInfoResp;
 import com.salty.protos.QueryUserInfoResp;
 import com.salty.protos.UpdateUserInfoResp;
@@ -24,14 +28,15 @@ public class UserServiceProxy implements UserService, RemoteProxy {
 
     private IUserRemoteService mRemoteService;
 
+    @WorkerThread
     @Override
-    public void onBindHandle(IRemoteService service) {
-        try {
-            mRemoteService = service.getUserRemoteService();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-            mRemoteService = null;
-        }
+    public void onBind(IRemoteService service) throws RemoteException {
+        mRemoteService = service.getUserRemoteService();
+    }
+
+    @Override
+    public void onUnbind() {
+
     }
 
     @Nullable

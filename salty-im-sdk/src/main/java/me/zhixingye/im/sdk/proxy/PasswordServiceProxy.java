@@ -1,5 +1,9 @@
 package me.zhixingye.im.sdk.proxy;
 
+import android.os.RemoteException;
+
+import androidx.annotation.WorkerThread;
+
 import com.salty.protos.ResetPasswordResp;
 
 import me.zhixingye.im.listener.RequestCallback;
@@ -19,14 +23,15 @@ public class PasswordServiceProxy implements PasswordService, RemoteProxy {
 
     private IPasswordRemoteService mRemoteService;
 
+    @WorkerThread
     @Override
-    public void onBindHandle(IRemoteService service) {
-        try {
-            mRemoteService = service.getPasswordRemoteService();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-            mRemoteService = null;
-        }
+    public void onBind(IRemoteService service) throws RemoteException {
+        mRemoteService = service.getPasswordRemoteService();
+    }
+
+    @Override
+    public void onUnbind() {
+
     }
 
     @Override

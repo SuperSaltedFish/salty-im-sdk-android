@@ -1,5 +1,9 @@
 package me.zhixingye.im.sdk.proxy;
 
+import android.os.RemoteException;
+
+import androidx.annotation.WorkerThread;
+
 import me.zhixingye.im.sdk.IRemoteService;
 
 /**
@@ -8,5 +12,9 @@ import me.zhixingye.im.sdk.IRemoteService;
  * @author zhixingye , 2020年05月01日.
  */
 public interface RemoteProxy {
-    void onBindHandle(IRemoteService service);
+    @WorkerThread
+    void onBind(IRemoteService service) throws RemoteException;
+
+    @WorkerThread
+    void onUnbind();
 }

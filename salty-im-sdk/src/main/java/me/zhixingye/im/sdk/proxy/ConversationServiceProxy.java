@@ -1,5 +1,9 @@
 package me.zhixingye.im.sdk.proxy;
 
+import android.os.RemoteException;
+
+import androidx.annotation.WorkerThread;
+
 import com.salty.protos.ClearConversationMessageResp;
 import com.salty.protos.Conversation;
 import com.salty.protos.GetAllConversationResp;
@@ -26,14 +30,15 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
 
     private IConversationRemoteService mRemoteService;
 
+    @WorkerThread
     @Override
-    public void onBindHandle(IRemoteService service) {
-        try {
-            mRemoteService = service.getConversationRemoteService();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-            mRemoteService = null;
-        }
+    public void onBind(IRemoteService service) throws RemoteException {
+        mRemoteService = service.getConversationRemoteService();
+    }
+
+    @Override
+    public void onUnbind() {
+
     }
 
     @Override

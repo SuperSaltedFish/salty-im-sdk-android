@@ -1,5 +1,9 @@
 package me.zhixingye.im.sdk.proxy;
 
+import android.os.RemoteException;
+
+import androidx.annotation.WorkerThread;
+
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.DeleteContactResp;
@@ -26,14 +30,15 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
 
     private IContactRemoteService mRemoteService;
 
+    @WorkerThread
     @Override
-    public void onBindHandle(IRemoteService service) {
-        try {
-            mRemoteService = service.getContactRemoteService();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-            mRemoteService = null;
-        }
+    public void onBind(IRemoteService service) throws RemoteException {
+        mRemoteService = service.getContactRemoteService();
+    }
+
+    @Override
+    public void onUnbind() {
+
     }
 
 

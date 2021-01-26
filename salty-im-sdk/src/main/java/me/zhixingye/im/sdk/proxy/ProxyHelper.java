@@ -41,8 +41,8 @@ public class ProxyHelper {
 
         private final Object mOriginal;
 
-        NullStringHandler(Object Original) {
-            mOriginal = Original;
+        NullStringHandler(Object original) {
+            mOriginal = original;
         }
 
         @Override

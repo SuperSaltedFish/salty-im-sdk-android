@@ -1,5 +1,9 @@
 package me.zhixingye.im.sdk.proxy;
 
+import android.os.RemoteException;
+
+import androidx.annotation.WorkerThread;
+
 import com.salty.protos.ObtainTelephoneSMSCodeResp;
 import com.salty.protos.SMSOperationType;
 import com.salty.protos.VerifyTelephoneSMSCodeResp;
@@ -21,14 +25,15 @@ public class SMSServiceProxy implements SMSService, RemoteProxy {
 
     private ISMSRemoteService mRemoteService;
 
+    @WorkerThread
     @Override
-    public void onBindHandle(IRemoteService service) {
-        try {
-            mRemoteService = service.getSMSRemoteService();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-            mRemoteService = null;
-        }
+    public void onBind(IRemoteService service) throws RemoteException {
+        mRemoteService = service.getSMSRemoteService();
+    }
+
+    @Override
+    public void onUnbind() {
+
     }
 
     @Override

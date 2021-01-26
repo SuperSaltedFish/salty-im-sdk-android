@@ -3,6 +3,7 @@ package me.zhixingye.im.sdk.proxy;
 import android.os.RemoteException;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import com.salty.protos.UserProfile;
 
@@ -27,17 +28,18 @@ public class LoginServiceProxy implements LoginService, RemoteProxy {
     private static final String TAG = "AccountServiceProxy";
 
     private ILoginRemoteService mRemoteService;
-    private Set<OnLoginListener> mOnLoginListeners = new HashSet<>();
+    private final Set<OnLoginListener> mOnLoginListeners = new HashSet<>();
+
+    @WorkerThread
+    @Override
+    public void onBind(IRemoteService service) throws RemoteException {
+        mRemoteService = service.getLoginRemoteService();
+        setupRemoteListener();
+    }
 
     @Override
-    public void onBindHandle(IRemoteService service) {
-        try {
-            mRemoteService = service.getLoginRemoteService();
-            setupRemoteListener();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-            mRemoteService = null;
-        }
+    public void onUnbind() {
+
     }
 
     @Override

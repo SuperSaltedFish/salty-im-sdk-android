@@ -1,5 +1,9 @@
 package me.zhixingye.im.sdk.proxy;
 
+import android.os.RemoteException;
+
+import androidx.annotation.WorkerThread;
+
 import com.salty.protos.AddGroupMemberResp;
 import com.salty.protos.CreateGroupResp;
 import com.salty.protos.JoinGroupResp;
@@ -28,14 +32,15 @@ public class GroupServiceProxy implements GroupService, RemoteProxy {
 
     private IGroupRemoteService mRemoteService;
 
+    @WorkerThread
     @Override
-    public void onBindHandle(IRemoteService service) {
-        try {
-            mRemoteService = service.getGroupRemoteService();
-        } catch (Exception e) {
-            Logger.e(TAG, "远程调用失败", e);
-            mRemoteService = null;
-        }
+    public void onBind(IRemoteService service) throws RemoteException {
+        mRemoteService = service.getGroupRemoteService();
+    }
+
+    @Override
+    public void onUnbind() {
+
     }
 
     @Override
