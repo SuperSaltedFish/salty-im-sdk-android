@@ -22,10 +22,6 @@ public class LoginRemoteService extends ILoginRemoteService.Stub {
     private LoginService.OnLoginListener mOnLoginListener;
     private IOnLoginListener mRemoteOnLoginListener;
 
-    public LoginRemoteService() {
-        IMCore.get().getLoginService().addOnLoginListener(mOnLoginListener);
-    }
-
     @Override
     public void loginByTelephone(String telephone, String password, IRemoteRequestCallback callback) {
         IMCore.get().getLoginService().loginByTelephone(
@@ -98,7 +94,7 @@ public class LoginRemoteService extends ILoginRemoteService.Stub {
                 public void onLoggedIn() {
                     if (mRemoteOnLoginListener != null) {
                         try {
-                            mRemoteOnLoginListener.onLoggedOut();
+                            mRemoteOnLoginListener.onLoggedIn();
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
@@ -109,7 +105,7 @@ public class LoginRemoteService extends ILoginRemoteService.Stub {
                 public void onLoginExpired() {
                     if (mRemoteOnLoginListener != null) {
                         try {
-                            mRemoteOnLoginListener.onLoggedOut();
+                            mRemoteOnLoginListener.onLoginExpired();
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }

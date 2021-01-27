@@ -48,7 +48,7 @@ public class IMClient {
 
     private static IMClient sIMClient;
 
-    synchronized static void init(Context context) {
+    public synchronized static void init(Context context) {
         String currentProcess = SystemUtils.getCurrentProcessName(context);
         String mainProcess = context.getPackageName();
         if (TextUtils.equals(currentProcess, mainProcess)) {
@@ -89,16 +89,16 @@ public class IMClient {
     }
 
     private void initProxyService() {
-        mLoginServiceProxy = ProxyHelper.createProxy(new LoginServiceProxy());
-        mRegisterServiceProxy = ProxyHelper.createProxy(new RegisterServiceProxy());
-        mContactServiceProxy = ProxyHelper.createProxy(new ContactServiceProxy());
-        mConversationServiceProxy = ProxyHelper.createProxy(new ConversationServiceProxy());
-        mGroupServiceProxy = ProxyHelper.createProxy(new GroupServiceProxy());
-        mMessageServiceProxy = ProxyHelper.createProxy(new MessageServiceProxy());
-        mSMSServiceProxy = ProxyHelper.createProxy(new SMSServiceProxy());
-        mStorageServiceProxy = ProxyHelper.createProxy(new StorageServiceProxy());
-        mUserServiceProxy = ProxyHelper.createProxy(new UserServiceProxy());
-        mPasswordServiceProxy = ProxyHelper.createProxy(new PasswordServiceProxy());
+        mLoginServiceProxy = new LoginServiceProxy();
+        mRegisterServiceProxy = new RegisterServiceProxy();
+        mContactServiceProxy = new ContactServiceProxy();
+        mConversationServiceProxy = new ConversationServiceProxy();
+        mGroupServiceProxy = new GroupServiceProxy();
+        mMessageServiceProxy = new MessageServiceProxy();
+        mSMSServiceProxy = new SMSServiceProxy();
+        mStorageServiceProxy = new StorageServiceProxy();
+        mUserServiceProxy = new UserServiceProxy();
+        mPasswordServiceProxy = new PasswordServiceProxy();
     }
 
     private void initWorkerHandler() {

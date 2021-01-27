@@ -118,7 +118,7 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
             public void onFailure(int code, String error) {
                 mLoginLock.release();
                 CallbackHelper.callFailure(code, error, callback);
-                super.onFailure(code,error);
+                super.onFailure(code, error);
             }
 
         };
@@ -158,6 +158,9 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
     @Override
     public void addOnLoginListener(OnLoginListener listener) {
+        if (listener == null) {
+            return;
+        }
         synchronized (mOnLoginListeners) {
             mOnLoginListeners.add(listener);
         }
@@ -166,6 +169,9 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
     @Override
     public void removeOnLoginListener(OnLoginListener listener) {
+        if (listener == null) {
+            return;
+        }
         synchronized (mOnLoginListeners) {
             mOnLoginListeners.remove(listener);
         }
