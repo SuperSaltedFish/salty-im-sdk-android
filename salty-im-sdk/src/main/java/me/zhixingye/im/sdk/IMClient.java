@@ -10,11 +10,15 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 import me.zhixingye.im.sdk.proxy.LoginServiceProxy;
 import me.zhixingye.im.sdk.proxy.PasswordServiceProxy;
-import me.zhixingye.im.sdk.proxy.ProxyHelper;
 import me.zhixingye.im.sdk.proxy.RegisterServiceProxy;
 import me.zhixingye.im.sdk.proxy.SMSServiceProxy;
 import me.zhixingye.im.service.ContactService;
@@ -27,7 +31,6 @@ import me.zhixingye.im.service.RegisterService;
 import me.zhixingye.im.service.SMSService;
 import me.zhixingye.im.service.StorageService;
 import me.zhixingye.im.service.UserService;
-import me.zhixingye.im.sdk.proxy.RemoteProxy;
 import me.zhixingye.im.sdk.proxy.ContactServiceProxy;
 import me.zhixingye.im.sdk.proxy.ConversationServiceProxy;
 import me.zhixingye.im.sdk.proxy.GroupServiceProxy;
@@ -67,38 +70,29 @@ public class IMClient {
         return sIMClient;
     }
 
-    private LoginServiceProxy mLoginServiceProxy;
-    private RegisterServiceProxy mRegisterServiceProxy;
-    private ContactServiceProxy mContactServiceProxy;
-    private ConversationServiceProxy mConversationServiceProxy;
-    private GroupServiceProxy mGroupServiceProxy;
-    private MessageServiceProxy mMessageServiceProxy;
-    private SMSServiceProxy mSMSServiceProxy;
-    private StorageServiceProxy mStorageServiceProxy;
-    private UserServiceProxy mUserServiceProxy;
-    private PasswordServiceProxy mPasswordServiceProxy;
+    private final LoginServiceProxy mLoginServiceProxy = new LoginServiceProxy();
+    private final RegisterServiceProxy mRegisterServiceProxy = new RegisterServiceProxy();
+    private final ContactServiceProxy mContactServiceProxy = new ContactServiceProxy();
+    private final ConversationServiceProxy mConversationServiceProxy = new ConversationServiceProxy();
+    private final GroupServiceProxy mGroupServiceProxy = new GroupServiceProxy();
+    private final MessageServiceProxy mMessageServiceProxy = new MessageServiceProxy();
+    private final SMSServiceProxy mSMSServiceProxy = new SMSServiceProxy();
+    private final StorageServiceProxy mStorageServiceProxy = new StorageServiceProxy();
+    private final UserServiceProxy mUserServiceProxy = new UserServiceProxy();
+    private final PasswordServiceProxy mPasswordServiceProxy = new PasswordServiceProxy();
+
+    private final Set<OnInitFinishListener> mOnInitFinishListeners = new HashSet<>();
 
     private IRemoteService mIRemoteService;
 
     private Handler mInitWorkerHandler;
 
+    private boolean isConnectedRemote;
+
+
     private IMClient(Context context) {
-        initProxyService();
         initWorkerHandler();
         autoBindRemoteService(context.getApplicationContext());
-    }
-
-    private void initProxyService() {
-        mLoginServiceProxy = new LoginServiceProxy();
-        mRegisterServiceProxy = new RegisterServiceProxy();
-        mContactServiceProxy = new ContactServiceProxy();
-        mConversationServiceProxy = new ConversationServiceProxy();
-        mGroupServiceProxy = new GroupServiceProxy();
-        mMessageServiceProxy = new MessageServiceProxy();
-        mSMSServiceProxy = new SMSServiceProxy();
-        mStorageServiceProxy = new StorageServiceProxy();
-        mUserServiceProxy = new UserServiceProxy();
-        mPasswordServiceProxy = new PasswordServiceProxy();
     }
 
     private void initWorkerHandler() {
@@ -139,7 +133,6 @@ public class IMClient {
                 });
     }
 
-
     private void bindRemote(IBinder service) {
         mIRemoteService = IRemoteService.Stub.asInterface(service);
         try {
@@ -153,6 +146,8 @@ public class IMClient {
             mStorageServiceProxy.onBind(mIRemoteService);
             mUserServiceProxy.onBind(mIRemoteService);
             mPasswordServiceProxy.onBind(mIRemoteService);
+            isConnectedRemote = true;
+            callInitFinishIfNeed();
         } catch (RemoteException e) {
             e.printStackTrace();
             unbindRemote();
@@ -171,6 +166,38 @@ public class IMClient {
         mUserServiceProxy.onUnbind();
         mPasswordServiceProxy.onUnbind();
         mIRemoteService = null;
+        isConnectedRemote = false;
+    }
+
+    public void waitInitFinish(@NonNull OnInitFinishListener listener) {
+        synchronized (mOnInitFinishListeners) {
+            if (listener == null) {
+                throw new NullPointerException("listener == null");
+            }
+            if (mOnInitFinishListeners.contains(listener)) {
+                return;
+            }
+            mOnInitFinishListeners.add(listener);
+            callInitFinishIfNeed();
+        }
+
+    }
+
+    private void callInitFinishIfNeed() {
+        mInitWorkerHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mOnInitFinishListeners) {
+                    if (!isConnectedRemote) {
+                        return;
+                    }
+                    for (OnInitFinishListener listener : mOnInitFinishListeners) {
+                        listener.onFinish();
+                    }
+                    mOnInitFinishListeners.clear();
+                }
+            }
+        });
     }
 
 
@@ -212,5 +239,10 @@ public class IMClient {
 
     public PasswordService getPasswordService() {
         return mPasswordServiceProxy;
+    }
+
+    public interface OnInitFinishListener {
+        @WorkerThread
+        void onFinish();
     }
 }
