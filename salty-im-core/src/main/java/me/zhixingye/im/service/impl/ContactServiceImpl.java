@@ -2,10 +2,14 @@ package me.zhixingye.im.service.impl;
 
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
+import com.salty.protos.ContactProfile;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationMessageListResp;
+import com.salty.protos.GetContactsResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
+
+import java.util.List;
 
 import me.zhixingye.im.api.ContactApi;
 import me.zhixingye.im.listener.RequestCallback;
@@ -50,6 +54,13 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
                 .deleteContact(userId, new RequestCallbackWrapper<>(callback));
+    }
+
+    @Override
+    public void getAllContact(RequestCallback<GetContactsResp> callback) {
+        ServiceAccessor.get(ApiService.class)
+                .createApi(ContactApi.class)
+                .getAllContact(new RequestCallbackWrapper<>(callback));
     }
 
     @Override

@@ -7,6 +7,8 @@ import com.salty.protos.DeleteContactReq;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationMessageListReq;
 import com.salty.protos.GetContactOperationMessageListResp;
+import com.salty.protos.GetContactsReq;
+import com.salty.protos.GetContactsResp;
 import com.salty.protos.RefusedContactReq;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactReq;
@@ -73,6 +75,16 @@ public class ContactApi extends BasicApi {
         mContactServiceStub.deleteContact(
                 createReq(req),
                 new DefaultStreamObserver<>(DeleteContactResp.getDefaultInstance(), callback));
+    }
+
+    public void getAllContact(RequestCallback<GetContactsResp> callback) {
+        GetContactsReq req = GetContactsReq.newBuilder()
+                .build();
+
+        mContactServiceStub.getContacts(
+                createReq(req),
+                new DefaultStreamObserver<>(GetContactsResp.getDefaultInstance(), callback)
+        );
     }
 
     public void getContactOperationMessageList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
