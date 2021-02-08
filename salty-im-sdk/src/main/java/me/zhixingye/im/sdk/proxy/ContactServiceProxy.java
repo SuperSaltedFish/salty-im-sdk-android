@@ -8,6 +8,7 @@ import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationMessageListResp;
+import com.salty.protos.GetContactsResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
@@ -76,6 +77,16 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     public void deleteContact(String userId, RequestCallback<DeleteContactResp> callback) {
         try {
             mRemoteService.deleteContact(userId, new RemoteCallbackWrapper<>(callback));
+        } catch (Exception e) {
+            Logger.e(TAG, "远程调用失败", e);
+            ProxyHelper.callRemoteFail(callback);
+        }
+    }
+
+    @Override
+    public void getContacts(RequestCallback<GetContactsResp> callback) {
+        try {
+            mRemoteService.getContacts(new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);

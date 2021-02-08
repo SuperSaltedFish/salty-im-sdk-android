@@ -29,7 +29,7 @@ public interface ContactService extends BasicService {
 
     void deleteContact(String userId, RequestCallback<DeleteContactResp> callback);
 
-    void getAllContact(RequestCallback<GetContactsResp> callback);
+    void getContacts(RequestCallback<GetContactsResp> callback);
 
     void getContactOperationMessageList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback);
 

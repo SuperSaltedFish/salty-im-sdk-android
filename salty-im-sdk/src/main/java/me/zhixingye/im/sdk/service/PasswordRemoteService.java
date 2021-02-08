@@ -1,7 +1,5 @@
 package me.zhixingye.im.sdk.service;
 
-import com.salty.protos.ResetPasswordResp;
-
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IPasswordRemoteService;
 import me.zhixingye.im.sdk.IRemoteRequestCallback;
@@ -18,7 +16,7 @@ public class PasswordRemoteService extends IPasswordRemoteService.Stub {
                 .resetLoginPasswordByEmail(
                         email,
                         newPassword,
-                        new ByteRemoteCallback<ResetPasswordResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -27,6 +25,6 @@ public class PasswordRemoteService extends IPasswordRemoteService.Stub {
                 .resetLoginPasswordByTelephone(
                         telephone,
                         newPassword,
-                        new ByteRemoteCallback<ResetPasswordResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 }
