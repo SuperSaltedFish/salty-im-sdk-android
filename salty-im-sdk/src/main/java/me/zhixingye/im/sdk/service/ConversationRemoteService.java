@@ -1,13 +1,6 @@
 package me.zhixingye.im.sdk.service;
 
-import com.salty.protos.ClearConversationMessageResp;
 import com.salty.protos.Conversation;
-import com.salty.protos.GetAllConversationResp;
-import com.salty.protos.GetConversationDetailResp;
-import com.salty.protos.RemoveConversationResp;
-import com.salty.protos.UpdateConversationTitleResp;
-import com.salty.protos.UpdateConversationTopResp;
-import com.salty.protos.UpdateNotificationStatusResp;
 
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IConversationRemoteService;
@@ -23,7 +16,7 @@ public class ConversationRemoteService extends IConversationRemoteService.Stub {
     public void getAllConversations(IRemoteRequestCallback callback) {
         IMCore.get().getConversationService()
                 .getAllConversations(
-                        new ByteRemoteCallback<GetAllConversationResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -32,7 +25,7 @@ public class ConversationRemoteService extends IConversationRemoteService.Stub {
                 .getConversationDetail(
                         conversationId,
                         Conversation.ConversationType.forNumber(type),
-                        new ByteRemoteCallback<GetConversationDetailResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -41,7 +34,7 @@ public class ConversationRemoteService extends IConversationRemoteService.Stub {
                 .removeConversation(
                         conversationId,
                         Conversation.ConversationType.forNumber(type),
-                        new ByteRemoteCallback<RemoveConversationResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -50,7 +43,7 @@ public class ConversationRemoteService extends IConversationRemoteService.Stub {
                 .clearConversationMessage(
                         conversationId,
                         Conversation.ConversationType.forNumber(type),
-                        new ByteRemoteCallback<ClearConversationMessageResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -60,7 +53,7 @@ public class ConversationRemoteService extends IConversationRemoteService.Stub {
                         conversationId,
                         Conversation.ConversationType.forNumber(type),
                         title,
-                        new ByteRemoteCallback<UpdateConversationTitleResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -70,7 +63,7 @@ public class ConversationRemoteService extends IConversationRemoteService.Stub {
                         conversationId,
                         Conversation.ConversationType.forNumber(type),
                         isTop,
-                        new ByteRemoteCallback<UpdateConversationTopResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -80,6 +73,6 @@ public class ConversationRemoteService extends IConversationRemoteService.Stub {
                         conversationId,
                         Conversation.ConversationType.forNumber(type),
                         Conversation.NotificationStatus.forNumber(status),
-                        new ByteRemoteCallback<UpdateNotificationStatusResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 }

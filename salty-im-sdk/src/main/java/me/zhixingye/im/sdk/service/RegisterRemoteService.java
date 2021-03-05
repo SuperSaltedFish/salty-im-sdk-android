@@ -1,8 +1,5 @@
 package me.zhixingye.im.sdk.service;
 
-import com.salty.protos.RegisterResp;
-import com.salty.protos.ResetPasswordResp;
-
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IRegisterRemoteService;
 import me.zhixingye.im.sdk.IRemoteRequestCallback;
@@ -20,7 +17,7 @@ public class RegisterRemoteService extends IRegisterRemoteService.Stub {
                 .registerByTelephone(
                         telephone,
                         password,
-                        new ByteRemoteCallback<RegisterResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -29,6 +26,6 @@ public class RegisterRemoteService extends IRegisterRemoteService.Stub {
                 .registerByEmail(
                         email,
                         password,
-                        new ByteRemoteCallback<RegisterResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 }

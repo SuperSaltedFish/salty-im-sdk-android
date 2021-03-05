@@ -27,7 +27,7 @@ public class LoginRemoteService extends ILoginRemoteService.Stub {
         IMCore.get().getLoginService().loginByTelephone(
                 telephone,
                 password,
-                new ByteRemoteCallback<UserProfile>(callback));
+                new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -35,13 +35,13 @@ public class LoginRemoteService extends ILoginRemoteService.Stub {
         IMCore.get().getLoginService().loginByEmail(
                 email,
                 password,
-                new ByteRemoteCallback<UserProfile>(callback));
+                new ByteRemoteCallback<>(callback));
     }
 
     @Override
     public void loginByLastLoginInfo(IRemoteRequestCallback callback) {
         IMCore.get().getLoginService().loginByLastLoginInfo(
-                new ByteRemoteCallback<UserProfile>(callback));
+                new ByteRemoteCallback<>(callback));
     }
 
     @Override

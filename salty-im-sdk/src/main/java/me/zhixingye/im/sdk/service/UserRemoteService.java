@@ -1,9 +1,5 @@
 package me.zhixingye.im.sdk.service;
 
-
-import com.salty.protos.GetUserInfoResp;
-import com.salty.protos.QueryUserInfoResp;
-import com.salty.protos.UpdateUserInfoResp;
 import com.salty.protos.UserProfile;
 
 import me.zhixingye.im.IMCore;
@@ -46,34 +42,35 @@ public class UserRemoteService extends IUserRemoteService.Stub {
     }
 
     @Override
-    public void updateUserInfo(String nickname, String description, int sex, long birthday, String location, IRemoteRequestCallback callback) {
+    public void updateUserInfo(String nickname, String description, int sex, long birthday, String location,
+            IRemoteRequestCallback callback) {
         IMCore.get().getUserService().updateUserInfo(
                 nickname,
                 description,
                 UserProfile.Sex.forNumber(sex),
                 birthday,
                 location,
-                new ByteRemoteCallback<UpdateUserInfoResp>(callback));
+                new ByteRemoteCallback<>(callback));
     }
 
     @Override
     public void getUserInfoByUserId(String userId, IRemoteRequestCallback callback) {
         IMCore.get().getUserService().getUserInfoByUserId(
                 userId,
-                new ByteRemoteCallback<GetUserInfoResp>(callback));
+                new ByteRemoteCallback<>(callback));
     }
 
     @Override
     public void queryUserInfoByTelephone(String telephone, IRemoteRequestCallback callback) {
         IMCore.get().getUserService().queryUserInfoByTelephone(
                 telephone,
-                new ByteRemoteCallback<QueryUserInfoResp>(callback));
+                new ByteRemoteCallback<>(callback));
     }
 
     @Override
     public void queryUserInfoByEmail(String email, IRemoteRequestCallback callback) {
         IMCore.get().getUserService().queryUserInfoByEmail(
                 email,
-                new ByteRemoteCallback<QueryUserInfoResp>(callback));
+                new ByteRemoteCallback<>(callback));
     }
 }

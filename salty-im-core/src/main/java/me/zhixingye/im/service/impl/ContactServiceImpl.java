@@ -57,7 +57,7 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
     }
 
     @Override
-    public void getAllContact(RequestCallback<GetContactsResp> callback) {
+    public void getContacts(RequestCallback<GetContactsResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
                 .getAllContact(new RequestCallbackWrapper<>(callback));

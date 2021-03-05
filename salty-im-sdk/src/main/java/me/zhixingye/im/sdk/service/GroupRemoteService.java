@@ -1,12 +1,5 @@
 package me.zhixingye.im.sdk.service;
 
-import com.salty.protos.AddGroupMemberResp;
-import com.salty.protos.CreateGroupResp;
-import com.salty.protos.JoinGroupResp;
-import com.salty.protos.KickGroupMemberResp;
-import com.salty.protos.QuitGroupResp;
-import com.salty.protos.UpdateGroupNameResp;
-
 import java.util.List;
 
 import me.zhixingye.im.IMCore;
@@ -25,7 +18,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
                 .createGroup(
                         groupName,
                         memberUserIdArr,
-                        new ByteRemoteCallback<CreateGroupResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -33,7 +26,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
         IMCore.get().getGroupService()
                 .joinGroup(
                         groupId,
-                        reason, new ByteRemoteCallback<JoinGroupResp>(callback));
+                        reason, new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -41,7 +34,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
         IMCore.get().getGroupService()
                 .quitGroup(
                         groupId,
-                        new ByteRemoteCallback<QuitGroupResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -50,7 +43,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
                 .addGroupMember(
                         groupId,
                         memberUserIdArr,
-                        new ByteRemoteCallback<AddGroupMemberResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -59,7 +52,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
                 .kickGroupMember(
                         groupId,
                         memberUserId,
-                        new ByteRemoteCallback<KickGroupMemberResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -68,7 +61,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
                 .updateGroupName(
                         groupId,
                         groupName,
-                        new ByteRemoteCallback<UpdateGroupNameResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -77,7 +70,7 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
                 .updateGroupName(
                         groupId,
                         notice,
-                        new ByteRemoteCallback<UpdateGroupNameResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -86,6 +79,6 @@ public class GroupRemoteService extends IGroupRemoteService.Stub {
                 .updateGroupName(
                         groupId,
                         memberNickname,
-                        new ByteRemoteCallback<UpdateGroupNameResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 }

@@ -1,9 +1,6 @@
 package me.zhixingye.im.sdk.service;
 
-
-import com.salty.protos.ObtainTelephoneSMSCodeResp;
 import com.salty.protos.SMSOperationType;
-import com.salty.protos.VerifyTelephoneSMSCodeResp;
 
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IRemoteRequestCallback;
@@ -21,7 +18,7 @@ public class SMSRemoteService extends ISMSRemoteService.Stub {
                 .obtainVerificationCodeForTelephoneType(
                         telephone,
                         SMSOperationType.forNumber(codeType),
-                        new ByteRemoteCallback<ObtainTelephoneSMSCodeResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 
     @Override
@@ -31,6 +28,6 @@ public class SMSRemoteService extends ISMSRemoteService.Stub {
                         telephone,
                         smsCode,
                         SMSOperationType.forNumber(codeType),
-                        new ByteRemoteCallback<VerifyTelephoneSMSCodeResp>(callback));
+                        new ByteRemoteCallback<>(callback));
     }
 }
