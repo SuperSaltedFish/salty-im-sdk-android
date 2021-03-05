@@ -8,8 +8,10 @@ import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
@@ -35,11 +37,13 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Calendar;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NullCipher;
 import javax.security.auth.x500.X500Principal;
+
 import me.zhixingye.im.tool.Logger;
 
 
@@ -48,13 +52,14 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
+@SuppressLint("ObsoleteSdkInt")
 public class ECCUtil {
 
     private static final String TAG = "ECCUtil";
 
     private static final String ECC = Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? "EC" : KeyProperties.KEY_ALGORITHM_EC;
-    private static final String DEFAULT_DIGEST_ALGORITHM = "SHA1withECDSA";
     private static final String PROVIDER_ANDROID_KEY_STORE = "AndroidKeyStore";
+    public static final String DEFAULT_DIGEST_ALGORITHM = "SHA1withECDSA";
     private static KeyStore sKeyStore;
 
     @Nullable
@@ -274,16 +279,22 @@ public class ECCUtil {
 
 
     public static Signature loadSignature(PrivateKey privateKey) {
-        return loadSignature(privateKey, null);
+        return loadSignature(privateKey, DEFAULT_DIGEST_ALGORITHM);
     }
 
-    public static Signature loadSignature(PrivateKey privateKey, String provider) {
+
+    public static Signature loadSignature(PrivateKey privateKey, String algorithm) {
+        return loadSignature(privateKey, algorithm, null);
+    }
+
+
+    public static Signature loadSignature(PrivateKey privateKey, String algorithm, String provider) {
         Signature signature;
         try {
             if (TextUtils.isEmpty(provider)) {
-                signature = Signature.getInstance(DEFAULT_DIGEST_ALGORITHM);
+                signature = Signature.getInstance(algorithm);
             } else {
-                signature = Signature.getInstance(DEFAULT_DIGEST_ALGORITHM, provider);
+                signature = Signature.getInstance(algorithm, provider);
             }
             signature.initSign(privateKey);
             return signature;
@@ -295,16 +306,21 @@ public class ECCUtil {
 
 
     public static Signature loadSignature(PublicKey publicKey) {
-        return loadSignature(publicKey, null);
+        return loadSignature(publicKey, DEFAULT_DIGEST_ALGORITHM);
     }
 
-    public static Signature loadSignature(PublicKey publicKey, String provider) {
+    public static Signature loadSignature(PublicKey publicKey, String algorithm) {
+        return loadSignature(publicKey, algorithm, null);
+    }
+
+
+    public static Signature loadSignature(PublicKey publicKey, String algorithm, String provider) {
         Signature signature;
         try {
             if (TextUtils.isEmpty(provider)) {
-                signature = Signature.getInstance(DEFAULT_DIGEST_ALGORITHM);
+                signature = Signature.getInstance(algorithm);
             } else {
-                signature = Signature.getInstance(DEFAULT_DIGEST_ALGORITHM, provider);
+                signature = Signature.getInstance(algorithm, provider);
             }
             signature.initVerify(publicKey);
             return signature;
