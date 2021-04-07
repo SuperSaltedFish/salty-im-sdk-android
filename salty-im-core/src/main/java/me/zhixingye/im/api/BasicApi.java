@@ -1,19 +1,24 @@
 package me.zhixingye.im.api;
 
 import android.text.TextUtils;
+
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.GeneratedMessageLite;
 import com.google.protobuf.MessageLite;
 import com.salty.protos.GrpcReq;
 import com.salty.protos.GrpcResp;
+
 import io.grpc.ManagedChannel;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import me.zhixingye.im.BuildConfig;
+
+import javax.annotation.Nullable;
+
 import me.zhixingye.im.constant.ResponseCode;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.DeviceService;
@@ -88,7 +93,7 @@ public abstract class BasicApi {
             if (TextUtils.isEmpty(error) && status.getCause() != null) {
                 error = status.getCause().getMessage();
             }
-            callError(-status.getCode().value(), error);
+            callError(-status.getCode().value(), error, t);
         }
 
         @Override
@@ -101,7 +106,7 @@ public abstract class BasicApi {
             T resultMessage = null;
             try {
                 if (ResponseCode.isErrorCode(mResponse.getCode())) {
-                    callError(mResponse.getCode().getNumber(), mResponse.getMessage());
+                    callError(mResponse.getCode().getNumber(), mResponse.getMessage(), null);
                     return;
                 }
 
@@ -134,7 +139,8 @@ public abstract class BasicApi {
             }
         }
 
-        private void callError(int code, String error) {
+        private void callError(int code, String error, @Nullable Throwable t) {
+            printError(code, error, t, mDefaultInstance);
             if (mCallback != null) {
                 mCallback.onFailure(code, error);
             }
@@ -143,23 +149,28 @@ public abstract class BasicApi {
 
 
     private static void printRequest(GrpcReq req, MessageLite data) {
-        if (BuildConfig.DEBUG) {
-            String title = "发起请求：" + getRequestName(data);
-            printGrpcData(
-                    title,
-                    req.toString(),
-                    data.toString());
-        }
+        String title = "发起请求：" + getRequestName(data);
+        printGrpcData(
+                title,
+                req.toString(),
+                data.toString());
     }
 
     private static void printResponse(GrpcResp resp, MessageLite data, MessageLite defaultDataInstance) {
-        if (BuildConfig.DEBUG) {
-            String title = "收到响应：" + getRequestName(defaultDataInstance);
-            printGrpcData(
-                    title,
-                    resp.toString(),
-                    data == null ? "" : data.toString());
-        }
+        String title = "收到响应：" + getRequestName(defaultDataInstance);
+        printGrpcData(
+                title,
+                resp.toString(),
+                data == null ? "" : data.toString());
+    }
+
+    private static void printError(int code, String error, @Nullable Throwable t, MessageLite defaultDataInstance) {
+        Logger.d(TAG, String.format(Locale.getDefault(),
+                "\n请求异常：%s，code = %d，error = %s，exception = %s\n}",
+                getRequestName(defaultDataInstance),
+                code,
+                error,
+                t == null ? "null" : t.toString()));
     }
 
     private static void printGrpcData(String title, String grpcStr, String dataContent) {
@@ -183,7 +194,7 @@ public abstract class BasicApi {
         responseData = "  " + responseData;
         responseData = responseData.replace("\n", "\n  ");
 
-        Logger.e(TAG, String.format(Locale.getDefault(),
+        Logger.d(TAG, String.format(Locale.getDefault(),
                 "\n%s\n{\n%s\n}",
                 title,
                 responseData
