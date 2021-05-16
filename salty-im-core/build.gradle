@@ -22,13 +22,13 @@ android {
             minifyEnabled false
             zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', 'SERVER_ADDRESS', '"www.orline.cn:9090"'
+            buildConfigField 'String', 'SERVER_ADDRESS', '"47.102.149.231:9090"'
         }
         release {
             minifyEnabled true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', 'SERVER_ADDRESS', '"www.orline.cn:9090"'
+            buildConfigField 'String', 'SERVER_ADDRESS', '"47.102.149.231:9090"'
         }
     }
 
