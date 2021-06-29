@@ -5,9 +5,6 @@ protobuf {
         artifact = Deps.grpc.protoc
     }
     plugins {
-        javalite {
-            artifact = Deps.grpc.protocGenJavalite
-        }
         grpc {
             artifact = Deps.grpc.grpcProtocGenJava
         }
@@ -34,7 +31,7 @@ dependencies {
     implementation Deps.grpc.grpcAndroid
     implementation Deps.grpc.grpcStud
     implementation Deps.grpc.grpcOKHttp
-    implementation Deps.grpc.grpcProtobufLite
+    api Deps.grpc.grpcProtobufLite
 }
 
 
