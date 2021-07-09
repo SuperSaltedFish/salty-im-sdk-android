@@ -140,7 +140,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     public void setupRemoteListener() throws RemoteException {
         mRemoteService.setOnContactOperationChangeListener(new IOnContactOperationChangeListener.Stub() {
             @Override
-            public void onContactOperationChange(byte[] protoData) {
+            public void onContactOperationChange(final byte[] protoData, final int changeType) {
                 try {
                     final ContactOperationMessage message = ContactOperationMessage.parseFrom(protoData);
                     HandlerFactory.getMainHandler().post(new Runnable() {
@@ -148,7 +148,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
                         public void run() {
                             if (message != null) {
                                 for (OnContactOperationChangeListener listener : mOnContactOperationChangeListeners) {
-                                    listener.onContactOperationChange(message);
+                                    listener.onContactOperationChange(message, changeType);
                                 }
                             }
                         }

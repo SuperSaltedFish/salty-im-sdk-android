@@ -78,10 +78,10 @@ public class ContactServiceStub extends IContactRemoteService.Stub {
         if (mLocalOnContactOperationChangeListener == null) {
             mLocalOnContactOperationChangeListener = new ContactService.OnContactOperationChangeListener() {
                 @Override
-                public void onContactOperationChange(ContactOperationMessage message) {
+                public void onContactOperationChange(ContactOperationMessage message, @ChangeType int type) {
                     if (mRemoteOnContactOperationChangeListener != null) {
                         try {
-                            mRemoteOnContactOperationChangeListener.onContactOperationChange(message.toByteArray());
+                            mRemoteOnContactOperationChangeListener.onContactOperationChange(message.toByteArray(), type);
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }

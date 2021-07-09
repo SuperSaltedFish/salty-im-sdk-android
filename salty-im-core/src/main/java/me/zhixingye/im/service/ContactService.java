@@ -1,5 +1,7 @@
 package me.zhixingye.im.service;
 
+import androidx.annotation.IntDef;
+
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.ContactProfile;
@@ -9,6 +11,8 @@ import com.salty.protos.GetContactsResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -42,6 +46,18 @@ public interface ContactService extends BasicService {
     void removeOnContactOperationChangeListener(OnContactOperationChangeListener listener);
 
     interface OnContactOperationChangeListener {
-        void onContactOperationChange(ContactOperationMessage message);
+        int CHANGE_TYPE_RECEIVE = 1;
+        int CHANGE_TYPE_UPDATE = 2;
+        int CHANGE_TYPE_DELETE = 3;
+
+        @IntDef({
+                CHANGE_TYPE_RECEIVE,
+                CHANGE_TYPE_UPDATE,
+                CHANGE_TYPE_DELETE})
+        @Retention(RetentionPolicy.SOURCE)
+        @interface ChangeType {
+        }
+
+        void onContactOperationChange(ContactOperationMessage message, @ChangeType int type);
     }
 }
