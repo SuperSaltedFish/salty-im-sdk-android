@@ -11,7 +11,7 @@ import me.zhixingye.im.sdk.ISMSRemoteService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class SMSRemoteService extends ISMSRemoteService.Stub {
+public class SMSServiceStub extends ISMSRemoteService.Stub {
     @Override
     public void obtainVerificationCodeForTelephoneType(String telephone, int codeType, IRemoteRequestCallback callback) {
         IMCore.get().getSMSService()

@@ -1,17 +1,25 @@
 package me.zhixingye.im.sdk.service;
 
+import android.os.RemoteException;
+
 import com.salty.protos.ContactOperationMessage;
 
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IContactRemoteService;
+import me.zhixingye.im.sdk.IOnContactOperationChangeListener;
 import me.zhixingye.im.sdk.IRemoteRequestCallback;
+import me.zhixingye.im.service.ContactService;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class ContactRemoteService extends IContactRemoteService.Stub {
+public class ContactServiceStub extends IContactRemoteService.Stub {
+
+    private IOnContactOperationChangeListener mRemoteOnContactOperationChangeListener;
+    private ContactService.OnContactOperationChangeListener mLocalOnContactOperationChangeListener;
+
     @Override
     public void requestContact(String userId, String reason, IRemoteRequestCallback callback) {
         IMCore.get().getContactService().requestContact(
@@ -44,7 +52,7 @@ public class ContactRemoteService extends IContactRemoteService.Stub {
 
     @Override
     public void getContactOperationMessageList(long maxMessageTime, IRemoteRequestCallback callback) {
-        IMCore.get().getContactService().getContactOperationMessageList(
+        IMCore.get().getContactService().getContactOperationList(
                 maxMessageTime,
                 new ByteRemoteCallback<>(callback));
     }
@@ -62,5 +70,25 @@ public class ContactRemoteService extends IContactRemoteService.Stub {
             return null;
         }
         return operation.toByteArray();
+    }
+
+    @Override
+    public synchronized void setOnContactOperationChangeListener(IOnContactOperationChangeListener listener) {
+        mRemoteOnContactOperationChangeListener = listener;
+        if (mLocalOnContactOperationChangeListener == null) {
+            mLocalOnContactOperationChangeListener = new ContactService.OnContactOperationChangeListener() {
+                @Override
+                public void onContactOperationChange(ContactOperationMessage message) {
+                    if (mRemoteOnContactOperationChangeListener != null) {
+                        try {
+                            mRemoteOnContactOperationChangeListener.onContactOperationChange(message.toByteArray());
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+            IMCore.get().getContactService().addOnContactOperationChangeListener(mLocalOnContactOperationChangeListener);
+        }
     }
 }

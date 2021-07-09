@@ -21,6 +21,7 @@ import me.zhixingye.im.listener.RequestCallback;
  * @author zhixingye , 2020年05月01日.
  */
 public interface ContactService extends BasicService {
+
     void requestContact(String userId, String reason, RequestCallback<RequestContactResp> callback);
 
     void refusedContact(String userId, String reason, RequestCallback<RefusedContactResp> callback);
@@ -31,8 +32,16 @@ public interface ContactService extends BasicService {
 
     void getContacts(RequestCallback<GetContactsResp> callback);
 
-    void getContactOperationMessageList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback);
+    void getContactOperationList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback);
 
     @Nullable
     ContactOperationMessage getContactOperationFromLocal(String targetUserId);
+
+    void addOnContactOperationChangeListener(OnContactOperationChangeListener listener);
+
+    void removeOnContactOperationChangeListener(OnContactOperationChangeListener listener);
+
+    interface OnContactOperationChangeListener {
+        void onContactOperationChange(ContactOperationMessage message);
+    }
 }

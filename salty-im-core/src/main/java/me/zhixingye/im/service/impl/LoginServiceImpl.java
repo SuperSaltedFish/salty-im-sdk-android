@@ -9,6 +9,7 @@ import com.salty.protos.UserProfile;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Semaphore;
 
 import me.zhixingye.im.IMCore;
@@ -43,7 +44,7 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
     private volatile boolean isLogged = false;
 
-    private final Set<OnLoginListener> mOnLoginListeners = new HashSet<>();
+    private final Set<OnLoginListener> mOnLoginListeners = new CopyOnWriteArraySet<>();
 
     @Override
     public void loginByTelephone(String telephone, String password, RequestCallback<UserProfile> callback) {

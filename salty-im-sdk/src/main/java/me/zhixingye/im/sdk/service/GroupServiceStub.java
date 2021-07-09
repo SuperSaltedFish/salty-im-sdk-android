@@ -11,7 +11,7 @@ import me.zhixingye.im.sdk.IRemoteRequestCallback;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class GroupRemoteService extends IGroupRemoteService.Stub {
+public class GroupServiceStub extends IGroupRemoteService.Stub {
     @Override
     public void createGroup(String groupName, List<String> memberUserIdArr, IRemoteRequestCallback callback) {
         IMCore.get().getGroupService()

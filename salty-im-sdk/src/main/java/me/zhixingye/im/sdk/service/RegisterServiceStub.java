@@ -9,7 +9,7 @@ import me.zhixingye.im.sdk.IRemoteRequestCallback;
  *
  * @author zhixingye , 2021年01月21日.
  */
-public class RegisterRemoteService extends IRegisterRemoteService.Stub {
+public class RegisterServiceStub extends IRegisterRemoteService.Stub {
 
     @Override
     public void registerByTelephone(String telephone, String password, IRemoteRequestCallback callback) {

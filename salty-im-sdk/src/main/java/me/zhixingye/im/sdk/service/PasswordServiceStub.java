@@ -9,7 +9,7 @@ import me.zhixingye.im.sdk.IRemoteRequestCallback;
  *
  * @author zhixingye , 2021年01月21日.
  */
-public class PasswordRemoteService extends IPasswordRemoteService.Stub {
+public class PasswordServiceStub extends IPasswordRemoteService.Stub {
     @Override
     public void resetLoginPasswordByEmail(String email, String newPassword, IRemoteRequestCallback callback) {
         IMCore.get().getPasswordService()

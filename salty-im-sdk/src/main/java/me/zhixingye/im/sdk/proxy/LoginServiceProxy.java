@@ -10,11 +10,13 @@ import com.salty.protos.UserProfile;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.ILoginRemoteService;
 import me.zhixingye.im.sdk.IOnLoginListener;
 import me.zhixingye.im.sdk.IRemoteService;
+import me.zhixingye.im.sdk.tool.HandlerFactory;
 import me.zhixingye.im.service.LoginService;
 import me.zhixingye.im.tool.Logger;
 
@@ -28,7 +30,7 @@ public class LoginServiceProxy implements LoginService, RemoteProxy {
     private static final String TAG = "AccountServiceProxy";
 
     private ILoginRemoteService mRemoteService;
-    private final Set<OnLoginListener> mOnLoginListeners = new HashSet<>();
+    private final Set<OnLoginListener> mOnLoginListeners = new CopyOnWriteArraySet<>();
 
     @WorkerThread
     @Override
@@ -112,23 +114,38 @@ public class LoginServiceProxy implements LoginService, RemoteProxy {
         mRemoteService.setOnLoginListener(new IOnLoginListener.Stub() {
             @Override
             public void onLoggedOut() {
-                for (OnLoginListener listener : mOnLoginListeners) {
-                    listener.onLoggedOut();
-                }
+                HandlerFactory.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (OnLoginListener listener : mOnLoginListeners) {
+                            listener.onLoggedOut();
+                        }
+                    }
+                });
             }
 
             @Override
             public void onLoggedIn() {
-                for (OnLoginListener listener : mOnLoginListeners) {
-                    listener.onLoggedIn();
-                }
+                HandlerFactory.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (OnLoginListener listener : mOnLoginListeners) {
+                            listener.onLoggedIn();
+                        }
+                    }
+                });
             }
 
             @Override
             public void onLoginExpired() {
-                for (OnLoginListener listener : mOnLoginListeners) {
-                    listener.onLoginExpired();
-                }
+                HandlerFactory.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (OnLoginListener listener : mOnLoginListeners) {
+                            listener.onLoginExpired();
+                        }
+                    }
+                });
             }
         });
     }

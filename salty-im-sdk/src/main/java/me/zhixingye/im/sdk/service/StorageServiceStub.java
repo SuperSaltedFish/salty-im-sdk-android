@@ -8,7 +8,7 @@ import me.zhixingye.im.sdk.IStorageRemoteService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class StorageRemoteService extends IStorageRemoteService.Stub {
+public class StorageServiceStub extends IStorageRemoteService.Stub {
 
     @Override
     public void putBooleanToStorage(String name, String key, boolean value) {

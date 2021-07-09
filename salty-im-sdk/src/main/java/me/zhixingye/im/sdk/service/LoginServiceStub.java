@@ -15,11 +15,11 @@ import me.zhixingye.im.service.LoginService;
  *
  * @author zhixingye , 2021年01月21日.
  */
-public class LoginRemoteService extends ILoginRemoteService.Stub {
+public class LoginServiceStub extends ILoginRemoteService.Stub {
 
-    private static final String TAG = "LoginRemoteService";
+    private static final String TAG = "LoginServiceStub";
 
-    private LoginService.OnLoginListener mOnLoginListener;
+    private LoginService.OnLoginListener mLocalOnLoginListener;
     private IOnLoginListener mRemoteOnLoginListener;
 
     @Override
@@ -77,8 +77,8 @@ public class LoginRemoteService extends ILoginRemoteService.Stub {
     @Override
     public synchronized void setOnLoginListener(IOnLoginListener listener) {
         mRemoteOnLoginListener = listener;
-        if (mOnLoginListener == null) {
-            mOnLoginListener = new LoginService.OnLoginListener() {
+        if (mLocalOnLoginListener == null) {
+            mLocalOnLoginListener = new LoginService.OnLoginListener() {
                 @Override
                 public void onLoggedOut() {
                     if (mRemoteOnLoginListener != null) {
@@ -112,7 +112,7 @@ public class LoginRemoteService extends ILoginRemoteService.Stub {
                     }
                 }
             };
-            IMCore.get().getLoginService().addOnLoginListener(mOnLoginListener);
+            IMCore.get().getLoginService().addOnLoginListener(mLocalOnLoginListener);
         }
     }
 }

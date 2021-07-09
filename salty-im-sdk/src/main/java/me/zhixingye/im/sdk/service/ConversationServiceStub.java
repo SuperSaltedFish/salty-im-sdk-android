@@ -11,7 +11,7 @@ import me.zhixingye.im.sdk.IRemoteRequestCallback;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class ConversationRemoteService extends IConversationRemoteService.Stub {
+public class ConversationServiceStub extends IConversationRemoteService.Stub {
     @Override
     public void getAllConversations(IRemoteRequestCallback callback) {
         IMCore.get().getConversationService()

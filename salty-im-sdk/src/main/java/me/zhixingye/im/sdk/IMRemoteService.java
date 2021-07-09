@@ -4,19 +4,18 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.Process;
-import android.os.RemoteException;
 
 import me.zhixingye.im.IMCore;
-import me.zhixingye.im.sdk.service.ContactRemoteService;
-import me.zhixingye.im.sdk.service.ConversationRemoteService;
-import me.zhixingye.im.sdk.service.GroupRemoteService;
-import me.zhixingye.im.sdk.service.LoginRemoteService;
-import me.zhixingye.im.sdk.service.MessageRemoteService;
-import me.zhixingye.im.sdk.service.PasswordRemoteService;
-import me.zhixingye.im.sdk.service.RegisterRemoteService;
-import me.zhixingye.im.sdk.service.SMSRemoteService;
-import me.zhixingye.im.sdk.service.StorageRemoteService;
-import me.zhixingye.im.sdk.service.UserRemoteService;
+import me.zhixingye.im.sdk.service.ContactServiceStub;
+import me.zhixingye.im.sdk.service.ConversationServiceStub;
+import me.zhixingye.im.sdk.service.GroupServiceStub;
+import me.zhixingye.im.sdk.service.LoginServiceStub;
+import me.zhixingye.im.sdk.service.MessageServiceStub;
+import me.zhixingye.im.sdk.service.PasswordServiceStub;
+import me.zhixingye.im.sdk.service.RegisterServiceStub;
+import me.zhixingye.im.sdk.service.SMSServiceStub;
+import me.zhixingye.im.sdk.service.StorageServiceStub;
+import me.zhixingye.im.sdk.service.UserServiceStub;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
@@ -46,52 +45,52 @@ public class IMRemoteService extends Service {
 
         @Override
         public ILoginRemoteService getLoginRemoteService() {
-            return new LoginRemoteService();
+            return new LoginServiceStub();
         }
 
         @Override
         public IRegisterRemoteService getRegisterRemoteService() {
-            return new RegisterRemoteService();
+            return new RegisterServiceStub();
         }
 
         @Override
         public IContactRemoteService getContactRemoteService() {
-            return new ContactRemoteService();
+            return new ContactServiceStub();
         }
 
         @Override
         public IConversationRemoteService getConversationRemoteService() {
-            return new ConversationRemoteService();
+            return new ConversationServiceStub();
         }
 
         @Override
         public IGroupRemoteService getGroupRemoteService() {
-            return new GroupRemoteService();
+            return new GroupServiceStub();
         }
 
         @Override
         public IMessageRemoteService getMessageRemoteService() {
-            return new MessageRemoteService();
+            return new MessageServiceStub();
         }
 
         @Override
         public ISMSRemoteService getSMSRemoteService() {
-            return new SMSRemoteService();
+            return new SMSServiceStub();
         }
 
         @Override
         public IStorageRemoteService getStorageRemoteService() {
-            return new StorageRemoteService();
+            return new StorageServiceStub();
         }
 
         @Override
         public IUserRemoteService getUserRemoteService() {
-            return new UserRemoteService();
+            return new UserServiceStub();
         }
 
         @Override
         public IPasswordRemoteService getPasswordRemoteService() {
-            return new PasswordRemoteService();
+            return new PasswordServiceStub();
         }
     };
 }

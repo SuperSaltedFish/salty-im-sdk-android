@@ -4,6 +4,7 @@ import android.os.RemoteException;
 
 import androidx.annotation.WorkerThread;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.DeleteContactResp;
@@ -12,12 +13,18 @@ import com.salty.protos.GetContactsResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
 import javax.annotation.Nullable;
 
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.IContactRemoteService;
+import me.zhixingye.im.sdk.IOnContactOperationChangeListener;
 import me.zhixingye.im.sdk.IRemoteService;
+import me.zhixingye.im.sdk.tool.HandlerFactory;
 import me.zhixingye.im.service.ContactService;
+import me.zhixingye.im.service.LoginService;
 import me.zhixingye.im.tool.Logger;
 
 /**
@@ -30,11 +37,13 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     private static final String TAG = "ContactServiceProxy";
 
     private IContactRemoteService mRemoteService;
+    private final Set<OnContactOperationChangeListener> mOnContactOperationChangeListeners = new CopyOnWriteArraySet<>();
 
     @WorkerThread
     @Override
     public void onBind(IRemoteService service) throws RemoteException {
         mRemoteService = service.getContactRemoteService();
+        setupRemoteListener();
     }
 
     @Override
@@ -94,7 +103,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     }
 
     @Override
-    public void getContactOperationMessageList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
+    public void getContactOperationList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
         try {
             mRemoteService.getContactOperationMessageList(maxMessageTime, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
@@ -116,5 +125,39 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
             Logger.e(TAG, "远程调用失败", e);
             return null;
         }
+    }
+
+    @Override
+    public void addOnContactOperationChangeListener(OnContactOperationChangeListener listener) {
+
+    }
+
+    @Override
+    public void removeOnContactOperationChangeListener(OnContactOperationChangeListener listener) {
+
+    }
+
+    public void setupRemoteListener() throws RemoteException {
+        mRemoteService.setOnContactOperationChangeListener(new IOnContactOperationChangeListener.Stub() {
+            @Override
+            public void onContactOperationChange(byte[] protoData) {
+                try {
+                    final ContactOperationMessage message = ContactOperationMessage.parseFrom(protoData);
+                    HandlerFactory.getMainHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (message != null) {
+                                for (OnContactOperationChangeListener listener : mOnContactOperationChangeListeners) {
+                                    listener.onContactOperationChange(message);
+                                }
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    Logger.e(TAG, "远程调用失败", e);
+                }
+
+            }
+        });
     }
 }

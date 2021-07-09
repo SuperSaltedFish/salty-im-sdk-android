@@ -11,7 +11,7 @@ import me.zhixingye.im.sdk.IUserRemoteService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class UserRemoteService extends IUserRemoteService.Stub {
+public class UserServiceStub extends IUserRemoteService.Stub {
 
     @Override
     public String getCurrentUserId() {

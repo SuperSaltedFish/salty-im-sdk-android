@@ -202,15 +202,7 @@ public abstract class BasicApi {
     }
 
     private static String getRequestName(MessageLite message) {
-        String className = message.getClass().getSimpleName();
-        int endIndex = className.indexOf("Req");
-        if (endIndex < 0) {
-            endIndex = className.indexOf("Resp");
-        }
-        if (endIndex < 0) {
-            return "unknown";
-        }
-        return className.substring(0, endIndex);
+        return message.getClass().getSimpleName();
     }
 }
 

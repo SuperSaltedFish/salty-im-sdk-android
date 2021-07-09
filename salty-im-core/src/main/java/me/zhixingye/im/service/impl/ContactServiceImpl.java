@@ -10,11 +10,14 @@ import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import me.zhixingye.im.api.ContactApi;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.ContactService;
+import me.zhixingye.im.service.LoginService;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
@@ -23,6 +26,7 @@ import me.zhixingye.im.service.ContactService;
  */
 public class ContactServiceImpl extends BasicServiceImpl implements ContactService {
 
+    private final Set<OnContactOperationChangeListener> mOnContactOperationChangeListeners = new CopyOnWriteArraySet<>();
 
     public ContactServiceImpl() {
         super();
@@ -64,7 +68,7 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
     }
 
     @Override
-    public void getContactOperationMessageList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
+    public void getContactOperationList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
                 .getContactOperationMessageList(maxMessageTime, new RequestCallbackWrapper<>(callback));
@@ -73,6 +77,18 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
     @Override
     public ContactOperationMessage getContactOperationFromLocal(String targetUserId) {
         return null;
+    }
+
+    @Override
+    public synchronized void addOnContactOperationChangeListener(OnContactOperationChangeListener listener) {
+        if (listener != null) {
+            mOnContactOperationChangeListeners.add(listener);
+        }
+    }
+
+    @Override
+    public synchronized void removeOnContactOperationChangeListener(OnContactOperationChangeListener listener) {
+        mOnContactOperationChangeListeners.remove(listener);
     }
 
 

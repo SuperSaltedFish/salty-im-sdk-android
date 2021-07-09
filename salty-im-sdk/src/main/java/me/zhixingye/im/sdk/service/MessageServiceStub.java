@@ -8,5 +8,5 @@ import me.zhixingye.im.sdk.IMessageRemoteService;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class MessageRemoteService extends IMessageRemoteService.Stub {
+public class MessageServiceStub extends IMessageRemoteService.Stub {
 }
