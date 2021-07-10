@@ -8,8 +8,8 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.DeleteContactResp;
-import com.salty.protos.GetContactOperationMessageListResp;
-import com.salty.protos.GetContactsResp;
+import com.salty.protos.GetContactOperationListResp;
+import com.salty.protos.GetContactListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
@@ -93,9 +93,9 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     }
 
     @Override
-    public void getContacts(RequestCallback<GetContactsResp> callback) {
+    public void getContactList(RequestCallback<GetContactListResp> callback) {
         try {
-            mRemoteService.getContacts(new RemoteCallbackWrapper<>(callback));
+            mRemoteService.getContactList(new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);
@@ -103,9 +103,9 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     }
 
     @Override
-    public void getContactOperationList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
+    public void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback) {
         try {
-            mRemoteService.getContactOperationMessageList(maxMessageTime, new RemoteCallbackWrapper<>(callback));
+            mRemoteService.getContactOperationList(startDateTime, endDateTime, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);

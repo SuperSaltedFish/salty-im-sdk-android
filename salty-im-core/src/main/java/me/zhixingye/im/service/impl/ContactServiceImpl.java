@@ -4,8 +4,8 @@ import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.ContactProfile;
 import com.salty.protos.DeleteContactResp;
-import com.salty.protos.GetContactOperationMessageListResp;
-import com.salty.protos.GetContactsResp;
+import com.salty.protos.GetContactOperationListResp;
+import com.salty.protos.GetContactListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
@@ -61,17 +61,17 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
     }
 
     @Override
-    public void getContacts(RequestCallback<GetContactsResp> callback) {
+    public void getContactList(RequestCallback<GetContactListResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
                 .getAllContact(new RequestCallbackWrapper<>(callback));
     }
 
     @Override
-    public void getContactOperationList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
+    public void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback) {
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
-                .getContactOperationMessageList(maxMessageTime, new RequestCallbackWrapper<>(callback));
+                .getContactOperationList(startDateTime, endDateTime, new RequestCallbackWrapper<>(callback));
     }
 
     @Override

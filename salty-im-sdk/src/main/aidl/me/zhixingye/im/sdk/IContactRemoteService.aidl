@@ -14,9 +14,9 @@ interface IContactRemoteService {
 
     void deleteContact(String userId, IRemoteRequestCallback callback);
 
-    void getContactOperationMessageList(long maxMessageTime, IRemoteRequestCallback callback);
+    void getContactOperationList(long startDateTime, long endDateTime, IRemoteRequestCallback callback);
 
-    void getContacts(IRemoteRequestCallback callback);
+    void getContactList(IRemoteRequestCallback callback);
 
     byte[] getContactOperationFromLocal(String targetUserId);
 

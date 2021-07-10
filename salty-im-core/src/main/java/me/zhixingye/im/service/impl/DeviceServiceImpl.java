@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
+import java.util.Random;
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.service.DeviceService;
 
@@ -31,6 +32,6 @@ public class DeviceServiceImpl extends BasicServiceImpl implements DeviceService
     public String getDeviceId() {
         return Settings.Secure.getString(
                 IMCore.getAppContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
+                Settings.Secure.ANDROID_ID)+"1" + new Random().nextInt();
     }
 }

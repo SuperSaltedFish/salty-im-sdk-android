@@ -4,16 +4,14 @@ import androidx.annotation.IntDef;
 
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
-import com.salty.protos.ContactProfile;
 import com.salty.protos.DeleteContactResp;
-import com.salty.protos.GetContactOperationMessageListResp;
-import com.salty.protos.GetContactsResp;
+import com.salty.protos.GetContactOperationListResp;
+import com.salty.protos.GetContactListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -34,9 +32,9 @@ public interface ContactService extends BasicService {
 
     void deleteContact(String userId, RequestCallback<DeleteContactResp> callback);
 
-    void getContacts(RequestCallback<GetContactsResp> callback);
+    void getContactList(RequestCallback<GetContactListResp> callback);
 
-    void getContactOperationList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback);
+    void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback);
 
     @Nullable
     ContactOperationMessage getContactOperationFromLocal(String targetUserId);

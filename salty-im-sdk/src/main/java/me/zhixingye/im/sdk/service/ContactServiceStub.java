@@ -51,15 +51,16 @@ public class ContactServiceStub extends IContactRemoteService.Stub {
     }
 
     @Override
-    public void getContactOperationMessageList(long maxMessageTime, IRemoteRequestCallback callback) {
+    public void getContactOperationList(long startDateTime, long endDateTime, IRemoteRequestCallback callback) {
         IMCore.get().getContactService().getContactOperationList(
-                maxMessageTime,
+                startDateTime,
+                endDateTime,
                 new ByteRemoteCallback<>(callback));
     }
 
     @Override
-    public void getContacts(IRemoteRequestCallback callback) {
-        IMCore.get().getContactService().getContacts(
+    public void getContactList(IRemoteRequestCallback callback) {
+        IMCore.get().getContactService().getContactList(
                 new ByteRemoteCallback<>(callback));
     }
 

@@ -5,10 +5,10 @@ import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactServiceGrpc;
 import com.salty.protos.DeleteContactReq;
 import com.salty.protos.DeleteContactResp;
-import com.salty.protos.GetContactOperationMessageListReq;
-import com.salty.protos.GetContactOperationMessageListResp;
-import com.salty.protos.GetContactsReq;
-import com.salty.protos.GetContactsResp;
+import com.salty.protos.GetContactListReq;
+import com.salty.protos.GetContactListResp;
+import com.salty.protos.GetContactOperationListReq;
+import com.salty.protos.GetContactOperationListResp;
 import com.salty.protos.RefusedContactReq;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactReq;
@@ -77,23 +77,24 @@ public class ContactApi extends BasicApi {
                 new DefaultStreamObserver<>(DeleteContactResp.getDefaultInstance(), callback));
     }
 
-    public void getAllContact(RequestCallback<GetContactsResp> callback) {
-        GetContactsReq req = GetContactsReq.newBuilder()
+    public void getAllContact(RequestCallback<GetContactListResp> callback) {
+        GetContactListReq req = GetContactListReq.newBuilder()
                 .build();
 
-        mContactServiceStub.getContacts(
+        mContactServiceStub.getContactList(
                 createReq(req),
-                new DefaultStreamObserver<>(GetContactsResp.getDefaultInstance(), callback)
+                new DefaultStreamObserver<>(GetContactListResp.getDefaultInstance(), callback)
         );
     }
 
-    public void getContactOperationMessageList(long maxMessageTime, RequestCallback<GetContactOperationMessageListResp> callback) {
-        GetContactOperationMessageListReq req = GetContactOperationMessageListReq.newBuilder()
-                .setMaxMessageTime(maxMessageTime)
+    public void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback) {
+        GetContactOperationListReq req = GetContactOperationListReq.newBuilder()
+                .setStartDateTime(startDateTime)
+                .setEndDateTime(endDateTime)
                 .build();
 
-        mContactServiceStub.getContactOperationMessageList(
+        mContactServiceStub.getContactOperationList(
                 createReq(req),
-                new DefaultStreamObserver<>(GetContactOperationMessageListResp.getDefaultInstance(), callback));
+                new DefaultStreamObserver<>(GetContactOperationListResp.getDefaultInstance(), callback));
     }
 }
