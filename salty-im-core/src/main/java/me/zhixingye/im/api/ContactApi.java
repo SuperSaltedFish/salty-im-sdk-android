@@ -2,6 +2,7 @@ package me.zhixingye.im.api;
 
 import com.salty.protos.AcceptContactReq;
 import com.salty.protos.AcceptContactResp;
+import com.salty.protos.ContactRemark;
 import com.salty.protos.ContactServiceGrpc;
 import com.salty.protos.DeleteContactReq;
 import com.salty.protos.DeleteContactResp;
@@ -13,6 +14,8 @@ import com.salty.protos.RefusedContactReq;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactReq;
 import com.salty.protos.RequestContactResp;
+import com.salty.protos.UpdateRemarkInfoReq;
+import com.salty.protos.UpdateRemarkInfoResp;
 
 import io.grpc.ManagedChannel;
 
@@ -96,5 +99,16 @@ public class ContactApi extends BasicApi {
         mContactServiceStub.getContactOperationList(
                 createReq(req),
                 new DefaultStreamObserver<>(GetContactOperationListResp.getDefaultInstance(), callback));
+    }
+
+    public void updateContactRemarkInfo(String userId, ContactRemark remark, RequestCallback<UpdateRemarkInfoResp> callback) {
+        UpdateRemarkInfoReq req = UpdateRemarkInfoReq.newBuilder()
+                .setRemarkInfo(remark)
+                .setUserId(userId)
+                .build();
+
+        mContactServiceStub.updateRemarkInfo(
+                createReq(req),
+                new DefaultStreamObserver<>(UpdateRemarkInfoResp.getDefaultInstance(), callback));
     }
 }

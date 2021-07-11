@@ -5,11 +5,13 @@ import androidx.annotation.IntDef;
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.ContactProfile;
+import com.salty.protos.ContactRemark;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationListResp;
 import com.salty.protos.GetContactListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
+import com.salty.protos.UpdateRemarkInfoResp;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -36,6 +38,8 @@ public interface ContactService extends BasicService {
     void getContactList(RequestCallback<GetContactListResp> callback);
 
     void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback);
+
+    void updateContactRemarkInfo(String userId, ContactRemark remark, RequestCallback<UpdateRemarkInfoResp> callback);
 
     @Nullable
     ContactProfile getContactProfileFromLocal(String contactId);

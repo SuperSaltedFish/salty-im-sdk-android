@@ -2,10 +2,14 @@ package me.zhixingye.im.sdk.service;
 
 import android.os.RemoteException;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.ContactProfile;
+import com.salty.protos.ContactRemark;
+import com.salty.protos.UpdateRemarkInfoResp;
 
 import me.zhixingye.im.IMCore;
+import me.zhixingye.im.constant.ResponseCode;
 import me.zhixingye.im.sdk.IContactRemoteService;
 import me.zhixingye.im.sdk.IOnContactOperationChangeListener;
 import me.zhixingye.im.sdk.IOnContactChangeListener;
@@ -66,6 +70,23 @@ public class ContactServiceStub extends IContactRemoteService.Stub {
     @Override
     public void getContactList(IRemoteRequestCallback callback) {
         IMCore.get().getContactService().getContactList(
+                new ByteRemoteCallback<>(callback));
+    }
+
+    @Override
+    public void updateContactRemarkInfo(String userId, byte[] contactRemark, IRemoteRequestCallback callback) throws RemoteException {
+        ByteRemoteCallback<UpdateRemarkInfoResp> remoteCallback = new ByteRemoteCallback<>(callback);
+        ContactRemark remark;
+        try {
+            remark = ContactRemark.parseFrom(contactRemark);
+        } catch (InvalidProtocolBufferException e) {
+            e.printStackTrace();
+            remoteCallback.onFailure(ResponseCode.INTERNAL_UNKNOWN.getCode(), e.toString());
+            return;
+        }
+        IMCore.get().getContactService().updateContactRemarkInfo(
+                userId,
+                remark,
                 new ByteRemoteCallback<>(callback));
     }
 

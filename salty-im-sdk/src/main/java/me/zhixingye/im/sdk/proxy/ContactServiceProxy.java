@@ -2,16 +2,19 @@ package me.zhixingye.im.sdk.proxy;
 
 import android.os.RemoteException;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.ContactProfile;
+import com.salty.protos.ContactRemark;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationListResp;
 import com.salty.protos.GetContactListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
+import com.salty.protos.UpdateRemarkInfoResp;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -107,6 +110,19 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     public void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback) {
         try {
             mRemoteService.getContactOperationList(startDateTime, endDateTime, new RemoteCallbackWrapper<>(callback));
+        } catch (Exception e) {
+            Logger.e(TAG, "远程调用失败", e);
+            ProxyHelper.callRemoteFail(callback);
+        }
+    }
+
+    @Override
+    public void updateContactRemarkInfo(String userId, @NonNull ContactRemark remark, RequestCallback<UpdateRemarkInfoResp> callback) {
+        if (remark == null) {
+            throw new IllegalArgumentException("ContactRemark == null");
+        }
+        try {
+            mRemoteService.updateContactRemarkInfo(userId, remark.toByteArray(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
             ProxyHelper.callRemoteFail(callback);

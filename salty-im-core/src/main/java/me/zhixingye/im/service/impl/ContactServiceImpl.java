@@ -3,11 +3,13 @@ package me.zhixingye.im.service.impl;
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.ContactProfile;
+import com.salty.protos.ContactRemark;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationListResp;
 import com.salty.protos.GetContactListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
+import com.salty.protos.UpdateRemarkInfoResp;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -73,6 +75,13 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
         ServiceAccessor.get(ApiService.class)
                 .createApi(ContactApi.class)
                 .getContactOperationList(startDateTime, endDateTime, new RequestCallbackWrapper<>(callback));
+    }
+
+    @Override
+    public void updateContactRemarkInfo(String userId, ContactRemark remark, RequestCallback<UpdateRemarkInfoResp> callback) {
+        ServiceAccessor.get(ApiService.class)
+                .createApi(ContactApi.class)
+                .updateContactRemarkInfo(userId, remark, new RequestCallbackWrapper<>(callback));
     }
 
     @Nullable

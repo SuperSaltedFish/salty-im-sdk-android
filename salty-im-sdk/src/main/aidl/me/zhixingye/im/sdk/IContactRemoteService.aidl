@@ -19,6 +19,8 @@ interface IContactRemoteService {
 
     void getContactList(IRemoteRequestCallback callback);
 
+    void updateContactRemarkInfo(String userId, out byte[] contactRemark, IRemoteRequestCallback callback);
+
     byte[] getContactProfileFromLocal(String contactId);
 
     byte[] getContactOperationFromLocal(String targetUserId);
