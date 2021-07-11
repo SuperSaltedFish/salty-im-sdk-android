@@ -7,6 +7,7 @@ import androidx.annotation.WorkerThread;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
+import com.salty.protos.ContactProfile;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationListResp;
 import com.salty.protos.GetContactListResp;
@@ -21,6 +22,7 @@ import javax.annotation.Nullable;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.IContactRemoteService;
 import me.zhixingye.im.sdk.IOnContactOperationChangeListener;
+import me.zhixingye.im.sdk.IOnContactProfileChangeListener;
 import me.zhixingye.im.sdk.IRemoteService;
 import me.zhixingye.im.sdk.tool.HandlerFactory;
 import me.zhixingye.im.service.ContactService;
@@ -37,6 +39,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     private static final String TAG = "ContactServiceProxy";
 
     private IContactRemoteService mRemoteService;
+    private final Set<OnContactProfileChangeListener> mOnContactProfileChangeListeners = new CopyOnWriteArraySet<>();
     private final Set<OnContactOperationChangeListener> mOnContactOperationChangeListeners = new CopyOnWriteArraySet<>();
 
     @WorkerThread
@@ -114,6 +117,21 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
 
     @Nullable
     @Override
+    public ContactProfile getContactProfileFromLocal(String contactId) {
+        try {
+            byte[] data = mRemoteService.getContactProfileFromLocal(contactId);
+            if (data == null) {
+                return null;
+            }
+            return ContactProfile.parseFrom(data);
+        } catch (Exception e) {
+            Logger.e(TAG, "远程调用失败", e);
+            return null;
+        }
+    }
+
+    @Nullable
+    @Override
     public ContactOperationMessage getContactOperationFromLocal(String targetUserId) {
         try {
             byte[] data = mRemoteService.getContactOperationFromLocal(targetUserId);
@@ -128,6 +146,16 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     }
 
     @Override
+    public void addOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
+
+    }
+
+    @Override
+    public void removeOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
+
+    }
+
+    @Override
     public void addOnContactOperationChangeListener(OnContactOperationChangeListener listener) {
 
     }
@@ -138,6 +166,24 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     }
 
     public void setupRemoteListener() throws RemoteException {
+        mRemoteService.setOnContactProfileChangeListener(new IOnContactProfileChangeListener.Stub() {
+            @Override
+            public void onContactProfileChange(byte[] protoData) throws RemoteException {
+                try {
+                    final ContactProfile profile = ContactProfile.parseFrom(protoData);
+                    HandlerFactory.getMainHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (OnContactProfileChangeListener listener : mOnContactProfileChangeListeners) {
+                                listener.onContactProfileChange(profile);
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    Logger.e(TAG, "远程调用失败", e);
+                }
+            }
+        });
         mRemoteService.setOnContactOperationChangeListener(new IOnContactOperationChangeListener.Stub() {
             @Override
             public void onContactOperationChange(final byte[] protoData, final int changeType) {
@@ -146,17 +192,14 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
                     HandlerFactory.getMainHandler().post(new Runnable() {
                         @Override
                         public void run() {
-                            if (message != null) {
-                                for (OnContactOperationChangeListener listener : mOnContactOperationChangeListeners) {
-                                    listener.onContactOperationChange(message, changeType);
-                                }
+                            for (OnContactOperationChangeListener listener : mOnContactOperationChangeListeners) {
+                                listener.onContactOperationChange(message, changeType);
                             }
                         }
                     });
                 } catch (Exception e) {
                     Logger.e(TAG, "远程调用失败", e);
                 }
-
             }
         });
     }

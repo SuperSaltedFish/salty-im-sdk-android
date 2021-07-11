@@ -3,10 +3,12 @@ package me.zhixingye.im.sdk.service;
 import android.os.RemoteException;
 
 import com.salty.protos.ContactOperationMessage;
+import com.salty.protos.ContactProfile;
 
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IContactRemoteService;
 import me.zhixingye.im.sdk.IOnContactOperationChangeListener;
+import me.zhixingye.im.sdk.IOnContactProfileChangeListener;
 import me.zhixingye.im.sdk.IRemoteRequestCallback;
 import me.zhixingye.im.service.ContactService;
 
@@ -65,12 +67,30 @@ public class ContactServiceStub extends IContactRemoteService.Stub {
     }
 
     @Override
+    public byte[] getContactProfileFromLocal(String contactId) {
+        ContactProfile profile = IMCore.get()
+                .getContactService()
+                .getContactProfileFromLocal(contactId);
+        if (profile == null) {
+            return null;
+        }
+        return profile.toByteArray();
+    }
+
+    @Override
     public byte[] getContactOperationFromLocal(String targetUserId) {
-        ContactOperationMessage operation = IMCore.get().getContactService().getContactOperationFromLocal(targetUserId);
+        ContactOperationMessage operation = IMCore.get()
+                .getContactService()
+                .getContactOperationFromLocal(targetUserId);
         if (operation == null) {
             return null;
         }
         return operation.toByteArray();
+    }
+
+    @Override
+    public void setOnContactProfileChangeListener(IOnContactProfileChangeListener listener) {
+
     }
 
     @Override

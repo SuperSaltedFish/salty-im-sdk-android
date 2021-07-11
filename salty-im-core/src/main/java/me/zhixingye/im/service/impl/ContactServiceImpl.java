@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import javax.annotation.Nullable;
+
 import me.zhixingye.im.api.ContactApi;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.ApiService;
@@ -27,6 +29,7 @@ import me.zhixingye.im.service.LoginService;
 public class ContactServiceImpl extends BasicServiceImpl implements ContactService {
 
     private final Set<OnContactOperationChangeListener> mOnContactOperationChangeListeners = new CopyOnWriteArraySet<>();
+    private final Set<OnContactProfileChangeListener> mOnContactProfileChangeListeners = new CopyOnWriteArraySet<>();
 
     public ContactServiceImpl() {
         super();
@@ -74,9 +77,28 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
                 .getContactOperationList(startDateTime, endDateTime, new RequestCallbackWrapper<>(callback));
     }
 
+    @Nullable
+    @Override
+    public ContactProfile getContactProfileFromLocal(String contactId) {
+        return null;
+    }
+
+    @Nullable
     @Override
     public ContactOperationMessage getContactOperationFromLocal(String targetUserId) {
         return null;
+    }
+
+    @Override
+    public synchronized void addOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
+        if (listener != null) {
+            mOnContactProfileChangeListeners.add(listener);
+        }
+    }
+
+    @Override
+    public synchronized void removeOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
+        mOnContactProfileChangeListeners.remove(listener);
     }
 
     @Override

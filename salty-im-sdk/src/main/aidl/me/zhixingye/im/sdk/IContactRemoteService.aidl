@@ -3,6 +3,7 @@ package me.zhixingye.im.sdk;
 
 // Declare any non-default types here with import statements
 import me.zhixingye.im.sdk.IRemoteRequestCallback;
+import me.zhixingye.im.sdk.IOnContactProfileChangeListener;
 import me.zhixingye.im.sdk.IOnContactOperationChangeListener;
 
 interface IContactRemoteService {
@@ -18,7 +19,11 @@ interface IContactRemoteService {
 
     void getContactList(IRemoteRequestCallback callback);
 
+    byte[] getContactProfileFromLocal(String contactId);
+
     byte[] getContactOperationFromLocal(String targetUserId);
+
+    void setOnContactProfileChangeListener(IOnContactProfileChangeListener listener);
 
     void setOnContactOperationChangeListener(IOnContactOperationChangeListener listener);
 }

@@ -4,6 +4,7 @@ import androidx.annotation.IntDef;
 
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
+import com.salty.protos.ContactProfile;
 import com.salty.protos.DeleteContactResp;
 import com.salty.protos.GetContactOperationListResp;
 import com.salty.protos.GetContactListResp;
@@ -37,11 +38,22 @@ public interface ContactService extends BasicService {
     void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback);
 
     @Nullable
+    ContactProfile getContactProfileFromLocal(String contactId);
+
+    @Nullable
     ContactOperationMessage getContactOperationFromLocal(String targetUserId);
+
+    void addOnContactProfileChangeListener(OnContactProfileChangeListener listener);
+
+    void removeOnContactProfileChangeListener(OnContactProfileChangeListener listener);
 
     void addOnContactOperationChangeListener(OnContactOperationChangeListener listener);
 
     void removeOnContactOperationChangeListener(OnContactOperationChangeListener listener);
+
+    interface OnContactProfileChangeListener {
+        void onContactProfileChange(ContactProfile profile);
+    }
 
     interface OnContactOperationChangeListener {
         int CHANGE_TYPE_RECEIVE = 1;
