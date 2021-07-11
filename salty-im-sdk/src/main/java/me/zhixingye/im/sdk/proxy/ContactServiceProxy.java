@@ -146,23 +146,27 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     }
 
     @Override
-    public void addOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
-
+    public synchronized void addOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
+        if (listener != null) {
+            mOnContactProfileChangeListeners.add(listener);
+        }
     }
 
     @Override
-    public void removeOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
-
+    public synchronized void removeOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
+        mOnContactProfileChangeListeners.remove(listener);
     }
 
     @Override
-    public void addOnContactOperationChangeListener(OnContactOperationChangeListener listener) {
-
+    public synchronized void addOnContactOperationChangeListener(OnContactOperationChangeListener listener) {
+        if (listener != null) {
+            mOnContactOperationChangeListeners.add(listener);
+        }
     }
 
     @Override
-    public void removeOnContactOperationChangeListener(OnContactOperationChangeListener listener) {
-
+    public synchronized void removeOnContactOperationChangeListener(OnContactOperationChangeListener listener) {
+        mOnContactOperationChangeListeners.remove(listener);
     }
 
     public void setupRemoteListener() throws RemoteException {
