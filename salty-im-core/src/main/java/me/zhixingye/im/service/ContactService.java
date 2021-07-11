@@ -52,18 +52,30 @@ public interface ContactService extends BasicService {
     void removeOnContactOperationChangeListener(OnContactOperationChangeListener listener);
 
     interface OnContactProfileChangeListener {
-        void onContactProfileChange(ContactProfile profile);
+        int CHANGE_TYPE_ADDED = 1;
+        int CHANGE_TYPE_UPDATED = 2;
+        int CHANGE_TYPE_DELETED = 3;
+
+        @IntDef({
+                CHANGE_TYPE_ADDED,
+                CHANGE_TYPE_UPDATED,
+                CHANGE_TYPE_DELETED})
+        @Retention(RetentionPolicy.SOURCE)
+        @interface ChangeType {
+        }
+
+        void onContactProfileChange(ContactProfile profile, @ChangeType int type);
     }
 
     interface OnContactOperationChangeListener {
-        int CHANGE_TYPE_RECEIVE = 1;
-        int CHANGE_TYPE_UPDATE = 2;
-        int CHANGE_TYPE_DELETE = 3;
+        int CHANGE_TYPE_RECEIVED = 1;
+        int CHANGE_TYPE_UPDATED = 2;
+        int CHANGE_TYPE_DELETED = 3;
 
         @IntDef({
-                CHANGE_TYPE_RECEIVE,
-                CHANGE_TYPE_UPDATE,
-                CHANGE_TYPE_DELETE})
+                CHANGE_TYPE_RECEIVED,
+                CHANGE_TYPE_UPDATED,
+                CHANGE_TYPE_DELETED})
         @Retention(RetentionPolicy.SOURCE)
         @interface ChangeType {
         }

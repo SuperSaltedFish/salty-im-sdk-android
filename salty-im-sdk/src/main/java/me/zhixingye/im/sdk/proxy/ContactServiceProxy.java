@@ -172,14 +172,14 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     public void setupRemoteListener() throws RemoteException {
         mRemoteService.setOnContactProfileChangeListener(new IOnContactProfileChangeListener.Stub() {
             @Override
-            public void onContactProfileChange(byte[] protoData) throws RemoteException {
+            public void onContactProfileChange(byte[] protoData, @OnContactProfileChangeListener.ChangeType int changeType) throws RemoteException {
                 try {
                     final ContactProfile profile = ContactProfile.parseFrom(protoData);
                     HandlerFactory.getMainHandler().post(new Runnable() {
                         @Override
                         public void run() {
                             for (OnContactProfileChangeListener listener : mOnContactProfileChangeListeners) {
-                                listener.onContactProfileChange(profile);
+                                listener.onContactProfileChange(profile, changeType);
                             }
                         }
                     });
