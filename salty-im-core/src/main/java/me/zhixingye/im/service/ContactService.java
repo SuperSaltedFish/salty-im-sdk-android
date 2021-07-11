@@ -43,15 +43,15 @@ public interface ContactService extends BasicService {
     @Nullable
     ContactOperationMessage getContactOperationFromLocal(String targetUserId);
 
-    void addOnContactProfileChangeListener(OnContactProfileChangeListener listener);
+    void addOnContactChangeListener(OnContactChangeListener listener);
 
-    void removeOnContactProfileChangeListener(OnContactProfileChangeListener listener);
+    void removeOnContactChangeListener(OnContactChangeListener listener);
 
     void addOnContactOperationChangeListener(OnContactOperationChangeListener listener);
 
     void removeOnContactOperationChangeListener(OnContactOperationChangeListener listener);
 
-    interface OnContactProfileChangeListener {
+    interface OnContactChangeListener {
         int CHANGE_TYPE_ADDED = 1;
         int CHANGE_TYPE_UPDATED = 2;
         int CHANGE_TYPE_DELETED = 3;

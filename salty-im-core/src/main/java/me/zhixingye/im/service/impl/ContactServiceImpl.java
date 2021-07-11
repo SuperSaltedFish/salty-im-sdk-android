@@ -9,7 +9,6 @@ import com.salty.protos.GetContactListResp;
 import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -19,7 +18,6 @@ import me.zhixingye.im.api.ContactApi;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.ContactService;
-import me.zhixingye.im.service.LoginService;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
@@ -29,7 +27,7 @@ import me.zhixingye.im.service.LoginService;
 public class ContactServiceImpl extends BasicServiceImpl implements ContactService {
 
     private final Set<OnContactOperationChangeListener> mOnContactOperationChangeListeners = new CopyOnWriteArraySet<>();
-    private final Set<OnContactProfileChangeListener> mOnContactProfileChangeListeners = new CopyOnWriteArraySet<>();
+    private final Set<OnContactChangeListener> mOnContactChangeListeners = new CopyOnWriteArraySet<>();
 
     public ContactServiceImpl() {
         super();
@@ -90,15 +88,15 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
     }
 
     @Override
-    public synchronized void addOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
+    public synchronized void addOnContactChangeListener(OnContactChangeListener listener) {
         if (listener != null) {
-            mOnContactProfileChangeListeners.add(listener);
+            mOnContactChangeListeners.add(listener);
         }
     }
 
     @Override
-    public synchronized void removeOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
-        mOnContactProfileChangeListeners.remove(listener);
+    public synchronized void removeOnContactChangeListener(OnContactChangeListener listener) {
+        mOnContactChangeListeners.remove(listener);
     }
 
     @Override

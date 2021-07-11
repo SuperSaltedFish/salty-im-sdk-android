@@ -4,7 +4,6 @@ import android.os.RemoteException;
 
 import androidx.annotation.WorkerThread;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.salty.protos.AcceptContactResp;
 import com.salty.protos.ContactOperationMessage;
 import com.salty.protos.ContactProfile;
@@ -21,12 +20,11 @@ import javax.annotation.Nullable;
 
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.IContactRemoteService;
+import me.zhixingye.im.sdk.IOnContactChangeListener;
 import me.zhixingye.im.sdk.IOnContactOperationChangeListener;
-import me.zhixingye.im.sdk.IOnContactProfileChangeListener;
 import me.zhixingye.im.sdk.IRemoteService;
 import me.zhixingye.im.sdk.tool.HandlerFactory;
 import me.zhixingye.im.service.ContactService;
-import me.zhixingye.im.service.LoginService;
 import me.zhixingye.im.tool.Logger;
 
 /**
@@ -39,7 +37,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     private static final String TAG = "ContactServiceProxy";
 
     private IContactRemoteService mRemoteService;
-    private final Set<OnContactProfileChangeListener> mOnContactProfileChangeListeners = new CopyOnWriteArraySet<>();
+    private final Set<OnContactChangeListener> mOnContactChangeListeners = new CopyOnWriteArraySet<>();
     private final Set<OnContactOperationChangeListener> mOnContactOperationChangeListeners = new CopyOnWriteArraySet<>();
 
     @WorkerThread
@@ -146,15 +144,15 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     }
 
     @Override
-    public synchronized void addOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
+    public synchronized void addOnContactChangeListener(OnContactChangeListener listener) {
         if (listener != null) {
-            mOnContactProfileChangeListeners.add(listener);
+            mOnContactChangeListeners.add(listener);
         }
     }
 
     @Override
-    public synchronized void removeOnContactProfileChangeListener(OnContactProfileChangeListener listener) {
-        mOnContactProfileChangeListeners.remove(listener);
+    public synchronized void removeOnContactChangeListener(OnContactChangeListener listener) {
+        mOnContactChangeListeners.remove(listener);
     }
 
     @Override
@@ -170,15 +168,15 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
     }
 
     public void setupRemoteListener() throws RemoteException {
-        mRemoteService.setOnContactProfileChangeListener(new IOnContactProfileChangeListener.Stub() {
+        mRemoteService.setOnContactChangeListener(new IOnContactChangeListener.Stub() {
             @Override
-            public void onContactProfileChange(byte[] protoData, @OnContactProfileChangeListener.ChangeType int changeType) throws RemoteException {
+            public void onContactChange(byte[] protoData, @OnContactChangeListener.ChangeType int changeType) throws RemoteException {
                 try {
                     final ContactProfile profile = ContactProfile.parseFrom(protoData);
                     HandlerFactory.getMainHandler().post(new Runnable() {
                         @Override
                         public void run() {
-                            for (OnContactProfileChangeListener listener : mOnContactProfileChangeListeners) {
+                            for (OnContactChangeListener listener : mOnContactChangeListeners) {
                                 listener.onContactProfileChange(profile, changeType);
                             }
                         }

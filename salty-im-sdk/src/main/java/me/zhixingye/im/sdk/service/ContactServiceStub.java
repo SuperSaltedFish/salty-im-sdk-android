@@ -8,7 +8,7 @@ import com.salty.protos.ContactProfile;
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.sdk.IContactRemoteService;
 import me.zhixingye.im.sdk.IOnContactOperationChangeListener;
-import me.zhixingye.im.sdk.IOnContactProfileChangeListener;
+import me.zhixingye.im.sdk.IOnContactChangeListener;
 import me.zhixingye.im.sdk.IRemoteRequestCallback;
 import me.zhixingye.im.service.ContactService;
 
@@ -21,6 +21,9 @@ public class ContactServiceStub extends IContactRemoteService.Stub {
 
     private IOnContactOperationChangeListener mRemoteOnContactOperationChangeListener;
     private ContactService.OnContactOperationChangeListener mLocalOnContactOperationChangeListener;
+
+    private IOnContactChangeListener mRemoteOnContactChangeListener;
+    private ContactService.OnContactChangeListener mLocalOnContactChangeListener;
 
     @Override
     public void requestContact(String userId, String reason, IRemoteRequestCallback callback) {
@@ -89,8 +92,23 @@ public class ContactServiceStub extends IContactRemoteService.Stub {
     }
 
     @Override
-    public void setOnContactProfileChangeListener(IOnContactProfileChangeListener listener) {
-
+    public void setOnContactChangeListener(IOnContactChangeListener listener) {
+        mRemoteOnContactChangeListener = listener;
+        if (mLocalOnContactChangeListener == null) {
+            mLocalOnContactChangeListener = new ContactService.OnContactChangeListener() {
+                @Override
+                public void onContactProfileChange(ContactProfile profile, @ChangeType int type) {
+                    if (mRemoteOnContactChangeListener != null) {
+                        try {
+                            mRemoteOnContactChangeListener.onContactChange(profile.toByteArray(), type);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+            IMCore.get().getContactService().addOnContactOperationChangeListener(mLocalOnContactOperationChangeListener);
+        }
     }
 
     @Override
