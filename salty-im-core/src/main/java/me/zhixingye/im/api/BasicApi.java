@@ -30,7 +30,6 @@ import me.zhixingye.im.exception.ResponseException;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.DeviceService;
 import me.zhixingye.im.service.UserService;
-import me.zhixingye.im.service.impl.ServiceAccessor;
 import me.zhixingye.im.tool.Logger;
 import me.zhixingye.im.util.StringUtil;
 
@@ -55,8 +54,8 @@ public abstract class BasicApi {
                 .setValue(message.toByteString())
                 .build();
 
-        DeviceService deviceService = ServiceAccessor.get(DeviceService.class);
-        UserService userService = ServiceAccessor.get(UserService.class);
+        DeviceService deviceService = IMCore.get().getDeviceService();
+        UserService userService = IMCore.get().getUserService();
 
         GrpcReq req = GrpcReq.newBuilder()
                 .setDeviceId(StringUtil.getNotNull(deviceService.getDeviceId()))

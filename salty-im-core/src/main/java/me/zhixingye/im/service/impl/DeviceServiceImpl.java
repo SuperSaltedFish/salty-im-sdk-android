@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
+import android.text.TextUtils;
+
+import java.util.UUID;
 
 import me.zhixingye.im.IMCore;
 import me.zhixingye.im.service.DeviceService;
@@ -14,6 +17,14 @@ import me.zhixingye.im.service.DeviceService;
  * @author zhixingye , 2020年05月01日.
  */
 public class DeviceServiceImpl extends BasicServiceImpl implements DeviceService {
+
+    private static final String TAG = "DeviceServiceImpl";
+
+    private static final String STORAGE_NAME = "DeviceServiceImpl";
+    private static final String STORAGE_KEY_DEVICE_ID = "DeviceID";
+
+    private volatile String mDeviceId;
+
     @Override
     public String getAppVersion() {
         Context context = IMCore.getAppContext();
@@ -28,6 +39,17 @@ public class DeviceServiceImpl extends BasicServiceImpl implements DeviceService
 
     @Override
     public String getDeviceId() {
-        return Settings.Secure.getString(IMCore.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        if (TextUtils.isEmpty(mDeviceId)) {
+            synchronized (this) {
+                if (TextUtils.isEmpty(mDeviceId)) {
+                    mDeviceId = IMCore.get().getStorageService().getStringFromStorage(STORAGE_NAME, STORAGE_KEY_DEVICE_ID, "");
+                }
+                if (TextUtils.isEmpty(mDeviceId)) {
+                    mDeviceId = UUID.randomUUID().toString();
+                    IMCore.get().getStorageService().putStringToStorage(STORAGE_NAME, STORAGE_KEY_DEVICE_ID, mDeviceId);
+                }
+            }
+        }
+        return mDeviceId;
     }
 }

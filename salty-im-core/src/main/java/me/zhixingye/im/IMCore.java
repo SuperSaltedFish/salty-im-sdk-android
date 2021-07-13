@@ -59,18 +59,17 @@ public class IMCore {
         return mAppContext;
     }
 
-    private LoginService mLoginService = new LoginServiceImpl();
-    private RegisterService mRegisterService = new RegisterServiceImpl();
-    private ContactService mContactService = new ContactServiceImpl();
-    private ConversationService mConversationService = new ConversationServiceImpl();
-    private GroupService mGroupService = new GroupServiceImpl();
-    private MessageService mMessageService = new MessageServiceImpl();
-    private SMSService mSMSService = new SMSServiceImpl();
-    private StorageService mStorageService = new StorageServiceImpl();
-    private UserService mUserService = new UserServiceImpl();
-    private PasswordService mPasswordService = new PasswordServiceImpl();
-
-    private DeviceService mDeviceService = new DeviceServiceImpl();
+    private final LoginService mLoginService = new LoginServiceImpl();
+    private final RegisterService mRegisterService = new RegisterServiceImpl();
+    private final ContactService mContactService = new ContactServiceImpl();
+    private final ConversationService mConversationService = new ConversationServiceImpl();
+    private final GroupService mGroupService = new GroupServiceImpl();
+    private final MessageService mMessageService = new MessageServiceImpl();
+    private final SMSService mSMSService = new SMSServiceImpl();
+    private final StorageService mStorageService = new StorageServiceImpl();
+    private final UserService mUserService = new UserServiceImpl();
+    private final PasswordService mPasswordService = new PasswordServiceImpl();
+    private final DeviceService mDeviceService = new DeviceServiceImpl();
 
     private IMCore() {
 
@@ -114,5 +113,9 @@ public class IMCore {
 
     public PasswordService getPasswordService() {
         return mPasswordService;
+    }
+
+    public DeviceService getDeviceService() {
+        return mDeviceService;
     }
 }
