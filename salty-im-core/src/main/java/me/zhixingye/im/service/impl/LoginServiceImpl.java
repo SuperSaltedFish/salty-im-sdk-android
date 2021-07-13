@@ -7,18 +7,17 @@ import androidx.annotation.Nullable;
 import com.salty.protos.LoginResp;
 import com.salty.protos.UserProfile;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Semaphore;
 
 import me.zhixingye.im.IMCore;
+import me.zhixingye.im.api.BasicApi;
 import me.zhixingye.im.api.UserApi;
 import me.zhixingye.im.constant.ResponseCode;
 import me.zhixingye.im.database.SQLiteServiceManager;
 import me.zhixingye.im.database.UserDao;
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.LoginService;
 import me.zhixingye.im.service.StorageService;
 import me.zhixingye.im.service.event.OnLoggedInEvent;
@@ -40,11 +39,17 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
     private static final String STORAGE_KEY_LOGIN_INFO = TAG + ".LoginInfo";
 
+    private final UserApi mUserApi;
+
     private final Semaphore mLoginLock = new Semaphore(1);
+
+    private final Set<OnLoginListener> mOnLoginListeners = new CopyOnWriteArraySet<>();
 
     private volatile boolean isLogged = false;
 
-    private final Set<OnLoginListener> mOnLoginListeners = new CopyOnWriteArraySet<>();
+    public LoginServiceImpl() {
+        mUserApi = BasicApi.getApi(UserApi.class);
+    }
 
     @Override
     public void loginByTelephone(String telephone, String password, RequestCallback<UserProfile> callback) {
@@ -125,21 +130,15 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
         };
 
         if (!TextUtils.isEmpty(telephone)) {
-            ServiceAccessor.get(ApiService.class)
-                    .createApi(UserApi.class)
-                    .loginByTelephone(telephone, password, callbackWrapper);
+            mUserApi.loginByTelephone(telephone, password, callbackWrapper);
         } else {
-            ServiceAccessor.get(ApiService.class)
-                    .createApi(UserApi.class)
-                    .loginByEmail(email, password, callbackWrapper);
+            mUserApi.loginByEmail(email, password, callbackWrapper);
         }
     }
 
     @Override
     public void logout() {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .logout(null);
+        mUserApi.logout(null);
 
         saveLoginRespToLocal(null);
 

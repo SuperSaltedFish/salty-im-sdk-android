@@ -16,16 +16,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
+import me.zhixingye.im.api.BasicApi;
 import me.zhixingye.im.api.UserApi;
 import me.zhixingye.im.database.UserDao;
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.service.event.OnEventListener;
 import me.zhixingye.im.service.event.OnLoggedInEvent;
 import me.zhixingye.im.service.event.OnLoggedOutEvent;
 import me.zhixingye.im.service.event.RequestSaveUserProfileEvent;
-import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.Logger;
 
 /**
@@ -41,10 +40,13 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
     private UserProfile mUserProfile;
     private String mToken;
 
+    private final UserApi mUserApi;
+
     private final Map<String, UserProfile> mUserProfileCache;
 
     public UserServiceImpl() {
         mUserProfileCache = new ConcurrentHashMap<>();
+        mUserApi = BasicApi.getApi(UserApi.class);
 
         listenerOnLoggedInEvent();
         listenerOnLoggedOutEvent();
@@ -79,49 +81,41 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(String nickname, String description, UserProfile.Sex sex, long birthday, String location, RequestCallback<UpdateUserInfoResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .updateUserInfo(nickname, description, sex, birthday, location,  new RequestCallbackWrapper<>(callback));
+        mUserApi.updateUserInfo(nickname, description, sex, birthday, location, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void getUserInfoByUserId(String userId, final RequestCallback<GetUserInfoResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .getUserInfoByUserId(userId, new RequestCallbackWrapper<GetUserInfoResp>(callback) {
-                    @Override
-                    public void onCompleted(GetUserInfoResp response) {
-                        saveUserProfileToCache(response.getProfile());
-                        super.onCompleted(response);
+        mUserApi.getUserInfoByUserId(userId, new RequestCallbackWrapper<GetUserInfoResp>(callback) {
+            @Override
+            public void onCompleted(GetUserInfoResp response) {
+                saveUserProfileToCache(response.getProfile());
+                super.onCompleted(response);
 
-                    }
-                });
+            }
+        });
     }
 
     @Override
     public void queryUserInfoByTelephone(String telephone, final RequestCallback<QueryUserInfoResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .queryUserInfoByTelephone(telephone, new RequestCallbackWrapper<QueryUserInfoResp>(callback) {
-                    @Override
-                    public void onCompleted(QueryUserInfoResp response) {
-                        saveUserProfileToCache(response.getProfile());
-                        super.onCompleted(response);
-                    }
-                });
+        mUserApi.queryUserInfoByTelephone(telephone, new RequestCallbackWrapper<QueryUserInfoResp>(callback) {
+            @Override
+            public void onCompleted(QueryUserInfoResp response) {
+                saveUserProfileToCache(response.getProfile());
+                super.onCompleted(response);
+            }
+        });
     }
 
     @Override
     public void queryUserInfoByEmail(String email, final RequestCallback<QueryUserInfoResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .queryUserInfoByEmail(email, new RequestCallbackWrapper<QueryUserInfoResp>(callback) {
-                    @Override
-                    public void onCompleted(QueryUserInfoResp response) {
-                        saveUserProfileToCache(response.getProfile());
-                        super.onCompleted(response);
-                    }
-                });
+        mUserApi.queryUserInfoByEmail(email, new RequestCallbackWrapper<QueryUserInfoResp>(callback) {
+            @Override
+            public void onCompleted(QueryUserInfoResp response) {
+                saveUserProfileToCache(response.getProfile());
+                super.onCompleted(response);
+            }
+        });
     }
 
     private void saveUserProfileToCache(UserProfile profile) {

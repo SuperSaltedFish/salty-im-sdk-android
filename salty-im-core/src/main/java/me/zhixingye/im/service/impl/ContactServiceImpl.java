@@ -16,9 +16,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.annotation.Nullable;
 
+import me.zhixingye.im.api.BasicApi;
 import me.zhixingye.im.api.ContactApi;
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.ContactService;
 
 /**
@@ -28,60 +28,48 @@ import me.zhixingye.im.service.ContactService;
  */
 public class ContactServiceImpl extends BasicServiceImpl implements ContactService {
 
+    private final ContactApi mContactApi;
+
     private final Set<OnContactOperationChangeListener> mOnContactOperationChangeListeners = new CopyOnWriteArraySet<>();
     private final Set<OnContactChangeListener> mOnContactChangeListeners = new CopyOnWriteArraySet<>();
 
     public ContactServiceImpl() {
-        super();
+        mContactApi = BasicApi.getApi(ContactApi.class);
     }
 
     @Override
     public void requestContact(String userId, String reason, RequestCallback<RequestContactResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(ContactApi.class)
-                .requestContact(userId, reason, new RequestCallbackWrapper<>(callback));
+        mContactApi.requestContact(userId, reason, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void refusedContact(String userId, String reason, RequestCallback<RefusedContactResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(ContactApi.class)
-                .refusedContact(userId, reason, new RequestCallbackWrapper<>(callback));
+        mContactApi.refusedContact(userId, reason, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void acceptContact(String userId, RequestCallback<AcceptContactResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(ContactApi.class)
-                .acceptContact(userId, new RequestCallbackWrapper<>(callback));
+        mContactApi.acceptContact(userId, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void deleteContact(String userId, RequestCallback<DeleteContactResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(ContactApi.class)
-                .deleteContact(userId, new RequestCallbackWrapper<>(callback));
+        mContactApi.deleteContact(userId, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void getContactList(RequestCallback<GetContactListResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(ContactApi.class)
-                .getAllContact(new RequestCallbackWrapper<>(callback));
+        mContactApi.getAllContact(new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(ContactApi.class)
-                .getContactOperationList(startDateTime, endDateTime, new RequestCallbackWrapper<>(callback));
+        mContactApi.getContactOperationList(startDateTime, endDateTime, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void updateContactRemarkInfo(String userId, ContactRemark remark, RequestCallback<UpdateRemarkInfoResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(ContactApi.class)
-                .updateContactRemarkInfo(userId, remark, new RequestCallbackWrapper<>(callback));
+        mContactApi.updateContactRemarkInfo(userId, remark, new RequestCallbackWrapper<>(callback));
     }
 
     @Nullable

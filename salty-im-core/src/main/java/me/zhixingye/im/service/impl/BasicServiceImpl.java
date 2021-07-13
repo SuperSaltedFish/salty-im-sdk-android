@@ -24,7 +24,7 @@ public class BasicServiceImpl {
 
     private static final Map<Class<?>, Set<OnEventListener<BasicEvent<?>>>> EVENT_LISTENER_MAP = new HashMap<>();
 
-    protected  <T extends BasicEvent<?>> void sendEvent(final T event) {
+    protected <T extends BasicEvent<?>> void sendEvent(final T event) {
         if (event == null) {
             return;
         }
@@ -98,11 +98,6 @@ public class BasicServiceImpl {
         @Override
         public void onFailure(int code, String error) {
             CallbackHelper.callFailure(code, error, mCallback);
-            handlerErrorCodeIfNeed(code);
-        }
-
-        private void handlerErrorCodeIfNeed(int code) {
-
         }
     }
 }

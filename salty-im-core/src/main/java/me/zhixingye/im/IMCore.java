@@ -1,9 +1,7 @@
 package me.zhixingye.im;
 
 import android.content.Context;
-import android.provider.Telephony;
 
-import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.ContactService;
 import me.zhixingye.im.service.ConversationService;
 import me.zhixingye.im.service.DeviceService;
@@ -15,7 +13,6 @@ import me.zhixingye.im.service.RegisterService;
 import me.zhixingye.im.service.SMSService;
 import me.zhixingye.im.service.StorageService;
 import me.zhixingye.im.service.UserService;
-import me.zhixingye.im.service.impl.ApiServiceImpl;
 import me.zhixingye.im.service.impl.ContactServiceImpl;
 import me.zhixingye.im.service.impl.ConversationServiceImpl;
 import me.zhixingye.im.service.impl.DeviceServiceImpl;
@@ -25,7 +22,6 @@ import me.zhixingye.im.service.impl.MessageServiceImpl;
 import me.zhixingye.im.service.impl.PasswordServiceImpl;
 import me.zhixingye.im.service.impl.RegisterServiceImpl;
 import me.zhixingye.im.service.impl.SMSServiceImpl;
-import me.zhixingye.im.service.impl.ServiceAccessor;
 import me.zhixingye.im.service.impl.StorageServiceImpl;
 import me.zhixingye.im.service.impl.UserServiceImpl;
 
@@ -74,7 +70,6 @@ public class IMCore {
     private UserService mUserService = new UserServiceImpl();
     private PasswordService mPasswordService = new PasswordServiceImpl();
 
-    private ApiService mApiService = new ApiServiceImpl();
     private DeviceService mDeviceService = new DeviceServiceImpl();
 
     private IMCore() {

@@ -11,21 +11,26 @@ import com.salty.protos.GrpcResp;
 
 import io.grpc.ManagedChannel;
 import io.grpc.Status;
+import io.grpc.android.AndroidChannelBuilder;
+import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
+import me.zhixingye.im.BuildConfig;
+import me.zhixingye.im.IMCore;
 import me.zhixingye.im.constant.ResponseCode;
 import me.zhixingye.im.exception.ResponseException;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.DeviceService;
 import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.service.impl.ServiceAccessor;
-import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.Logger;
 import me.zhixingye.im.util.StringUtil;
 
@@ -38,9 +43,13 @@ public abstract class BasicApi {
 
     private static final String TAG = "BasicApi";
 
-    public abstract void onBindManagedChannel(ManagedChannel channel);
+    private static ManagedChannel sChannel;
 
-    GrpcReq createReq(MessageLite message) {
+    private static Map<Class<? extends BasicApi>, BasicApi> sApiMap;
+
+    protected abstract void onBindManagedChannel(ManagedChannel channel);
+
+    protected GrpcReq createReq(MessageLite message) {
         Any data = Any.newBuilder()
                 .setTypeUrl("type.googleapis.com/" + message.getClass().getCanonicalName())
                 .setValue(message.toByteString())
@@ -60,6 +69,34 @@ public abstract class BasicApi {
 
         printRequest(req, message);
         return req;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static synchronized <T extends BasicApi> T getApi(Class<T> apiCls) {
+        if (sChannel == null) {
+            OkHttpChannelBuilder builder = OkHttpChannelBuilder
+                    .forTarget(BuildConfig.SERVER_ADDRESS)
+                    .usePlaintext();
+            sChannel = AndroidChannelBuilder.usingBuilder(builder)
+                    .context(IMCore.getAppContext().getApplicationContext())
+                    .build();
+        }
+        if (sApiMap == null) {
+            sApiMap = new HashMap<>();
+        }
+        T api = (T) sApiMap.get(apiCls);
+        if (api == null) {
+            try {
+                api = apiCls.newInstance();
+                sApiMap.put(apiCls, api);
+                api.onBindManagedChannel(sChannel);
+            } catch (Exception e) {
+                Logger.e(TAG, "创建api失败", e);
+                throw new RuntimeException(e);
+            }
+        }
+        return api;
     }
 
     private static void printRequest(GrpcReq req, MessageLite data) {
@@ -163,7 +200,9 @@ public abstract class BasicApi {
 
         private void onError(int code, String error, Throwable t) {
             printError(code, error, t, mRespDataDefaultInstance);
-            CallbackHelper.callFailure(code, error, mCallback);
+            if (mCallback != null) {
+                mCallback.onFailure(code, error);
+            }
         }
 
         @Override
@@ -201,7 +240,9 @@ public abstract class BasicApi {
                     onError(new ResponseException(ResponseCode.INTERNAL_UNKNOWN, "data == null"));
                 } else {
                     printResponse(mResponse, data, mRespDataDefaultInstance);
-                    CallbackHelper.callCompleted(data, mCallback);
+                    if (mCallback != null) {
+                        mCallback.onCompleted(data);
+                    }
                 }
             } catch (Exception e) {
                 onError(new ResponseException(ResponseCode.INTERNAL_UNKNOWN, "create data fail ", e));

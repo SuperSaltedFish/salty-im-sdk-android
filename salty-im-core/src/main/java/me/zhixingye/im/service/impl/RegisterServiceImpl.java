@@ -2,9 +2,9 @@ package me.zhixingye.im.service.impl;
 
 import com.salty.protos.RegisterResp;
 
+import me.zhixingye.im.api.BasicApi;
 import me.zhixingye.im.api.UserApi;
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.RegisterService;
 
 /**
@@ -16,17 +16,18 @@ public class RegisterServiceImpl extends BasicServiceImpl implements RegisterSer
 
     private static final String TAG = "RegisterServiceImpl";
 
+    private final UserApi mUserApi;
+
+    public RegisterServiceImpl() {
+        mUserApi = BasicApi.getApi(UserApi.class);
+    }
     @Override
     public void registerByTelephone(String telephone, String password, RequestCallback<RegisterResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .registerByTelephone(telephone, password,  new RequestCallbackWrapper<>(callback));
+        mUserApi.registerByTelephone(telephone, password,  new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void registerByEmail(String email, String password, RequestCallback<RegisterResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .registerByEmail(email, password,  new RequestCallbackWrapper<>(callback));
+        mUserApi.registerByEmail(email, password,  new RequestCallbackWrapper<>(callback));
     }
 }

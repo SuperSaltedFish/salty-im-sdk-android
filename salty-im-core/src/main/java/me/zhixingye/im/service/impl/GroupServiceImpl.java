@@ -8,10 +8,12 @@ import com.salty.protos.QuitGroupResp;
 import com.salty.protos.UpdateGroupNameResp;
 import com.salty.protos.UpdateGroupNoticeResp;
 import com.salty.protos.UpdateMemberNicknameResp;
+
 import java.util.List;
+
+import me.zhixingye.im.api.BasicApi;
 import me.zhixingye.im.api.GroupApi;
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.GroupService;
 
 /**
@@ -21,63 +23,49 @@ import me.zhixingye.im.service.GroupService;
  */
 public class GroupServiceImpl extends BasicServiceImpl implements GroupService {
 
+    private final GroupApi mGroupApi;
 
     public GroupServiceImpl() {
+        mGroupApi = BasicApi.getApi(GroupApi.class);
     }
 
     @Override
     public void createGroup(String groupName, List<String> memberUserIdArr, RequestCallback<CreateGroupResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(GroupApi.class)
-                .createGroup(groupName, memberUserIdArr, new RequestCallbackWrapper<>(callback));
+        mGroupApi.createGroup(groupName, memberUserIdArr, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void joinGroup(String groupId, String reason, RequestCallback<JoinGroupResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(GroupApi.class)
-                .joinGroup(groupId, reason, new RequestCallbackWrapper<>(callback));
+        mGroupApi.joinGroup(groupId, reason, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void quitGroup(String groupId, RequestCallback<QuitGroupResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(GroupApi.class)
-                .quitGroup(groupId, new RequestCallbackWrapper<>(callback));
+        mGroupApi.quitGroup(groupId, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void addGroupMember(String groupId, List<String> memberUserIdArr, RequestCallback<AddGroupMemberResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(GroupApi.class)
-                .addGroupMember(groupId, memberUserIdArr, new RequestCallbackWrapper<>(callback));
+        mGroupApi.addGroupMember(groupId, memberUserIdArr, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void kickGroupMember(String groupId, String memberUserId, RequestCallback<KickGroupMemberResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(GroupApi.class)
-                .kickGroupMember(groupId, memberUserId, new RequestCallbackWrapper<>(callback));
+        mGroupApi.kickGroupMember(groupId, memberUserId, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void updateGroupName(String groupId, String groupName, RequestCallback<UpdateGroupNameResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(GroupApi.class)
-                .updateGroupName(groupId, groupName, new RequestCallbackWrapper<>(callback));
+        mGroupApi.updateGroupName(groupId, groupName, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void updateGroupNotice(String groupId, String notice, RequestCallback<UpdateGroupNoticeResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(GroupApi.class)
-                .updateGroupNotice(groupId, notice, new RequestCallbackWrapper<>(callback));
+        mGroupApi.updateGroupNotice(groupId, notice, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void updateMemberNickname(String groupId, String memberNickname, RequestCallback<UpdateMemberNicknameResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(GroupApi.class)
-                .updateMemberNickname(groupId, memberNickname, new RequestCallbackWrapper<>(callback));
+        mGroupApi.updateMemberNickname(groupId, memberNickname, new RequestCallbackWrapper<>(callback));
     }
 }

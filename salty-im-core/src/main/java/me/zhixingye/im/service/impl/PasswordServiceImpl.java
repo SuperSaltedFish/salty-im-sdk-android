@@ -2,9 +2,9 @@ package me.zhixingye.im.service.impl;
 
 import com.salty.protos.ResetPasswordResp;
 
+import me.zhixingye.im.api.BasicApi;
 import me.zhixingye.im.api.UserApi;
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.PasswordService;
 
 /**
@@ -16,17 +16,19 @@ public class PasswordServiceImpl extends BasicServiceImpl implements PasswordSer
 
     private static final String TAG = "PasswordServiceImpl";
 
+    private final UserApi mUserApi;
+
+    public PasswordServiceImpl() {
+        mUserApi = BasicApi.getApi(UserApi.class);
+    }
+
     @Override
     public void resetLoginPasswordByTelephone(String telephone, String newPassword, RequestCallback<ResetPasswordResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .resetLoginPasswordByTelephone(telephone, newPassword,  new RequestCallbackWrapper<>(callback));
+        mUserApi.resetLoginPasswordByTelephone(telephone, newPassword, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void resetLoginPasswordByEmail(String telephone, String newPassword, RequestCallback<ResetPasswordResp> callback) {
-        ServiceAccessor.get(ApiService.class)
-                .createApi(UserApi.class)
-                .resetLoginPasswordByTelephone(telephone, newPassword,  new RequestCallbackWrapper<>(callback));
+        mUserApi.resetLoginPasswordByTelephone(telephone, newPassword, new RequestCallbackWrapper<>(callback));
     }
 }
