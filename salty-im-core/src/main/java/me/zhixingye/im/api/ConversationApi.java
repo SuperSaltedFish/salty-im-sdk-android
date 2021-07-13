@@ -16,8 +16,11 @@ import com.salty.protos.UpdateConversationTopReq;
 import com.salty.protos.UpdateConversationTopResp;
 import com.salty.protos.UpdateNotificationStatusReq;
 import com.salty.protos.UpdateNotificationStatusResp;
+
 import io.grpc.ManagedChannel;
+
 import java.util.concurrent.TimeUnit;
+
 import me.zhixingye.im.listener.RequestCallback;
 
 /**
@@ -40,7 +43,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         mConversationServiceStub.getAllConversation(
                 createReq(req),
-                new DefaultStreamObserver<>(GetAllConversationResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(GetAllConversationResp.getDefaultInstance(), callback));
     }
 
     public void getConversationDetail(String conversationId, Conversation.ConversationType type, RequestCallback<GetConversationDetailResp> callback) {
@@ -50,7 +53,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         mConversationServiceStub.getConversationDetail(
                 createReq(req),
-                new DefaultStreamObserver<>(GetConversationDetailResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(GetConversationDetailResp.getDefaultInstance(), callback));
     }
 
     public void removeConversation(String conversationId, Conversation.ConversationType type, RequestCallback<RemoveConversationResp> callback) {
@@ -60,7 +63,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         mConversationServiceStub.removeConversation(
                 createReq(req),
-                new DefaultStreamObserver<>(RemoveConversationResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(RemoveConversationResp.getDefaultInstance(), callback));
     }
 
     public void clearConversationMessage(String conversationId, Conversation.ConversationType type, RequestCallback<ClearConversationMessageResp> callback) {
@@ -70,7 +73,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         mConversationServiceStub.clearConversationMessage(
                 createReq(req),
-                new DefaultStreamObserver<>(ClearConversationMessageResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(ClearConversationMessageResp.getDefaultInstance(), callback));
     }
 
 
@@ -82,7 +85,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         mConversationServiceStub.getConversationDetail(
                 createReq(req),
-                new DefaultStreamObserver<>(UpdateConversationTitleResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(UpdateConversationTitleResp.getDefaultInstance(), callback));
     }
 
     public void updateConversationTop(String conversationId, Conversation.ConversationType type, boolean isTop, RequestCallback<UpdateConversationTopResp> callback) {
@@ -93,7 +96,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         mConversationServiceStub.getConversationDetail(
                 createReq(req),
-                new DefaultStreamObserver<>(UpdateConversationTopResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(UpdateConversationTopResp.getDefaultInstance(), callback));
     }
 
     public void updateNotificationStatus(String conversationId, Conversation.ConversationType type, Conversation.NotificationStatus status, RequestCallback<UpdateNotificationStatusResp> callback) {
@@ -104,6 +107,6 @@ public class ConversationApi extends BasicApi {
                 .build();
         mConversationServiceStub.getConversationDetail(
                 createReq(req),
-                new DefaultStreamObserver<>(UpdateNotificationStatusResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(UpdateNotificationStatusResp.getDefaultInstance(), callback));
     }
 }

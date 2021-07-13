@@ -11,9 +11,7 @@ import me.zhixingye.im.listener.RequestCallback;
  * @author zhixingye , 2020年05月01日.
  */
 public interface SMSService extends BasicService {
-    void obtainVerificationCodeForTelephoneType(String telephone, SMSOperationType type,
-            RequestCallback<ObtainTelephoneSMSCodeResp> callback);
+    void obtainVerificationCodeForTelephoneType(String telephone, SMSOperationType type, RequestCallback<ObtainTelephoneSMSCodeResp> callback);
 
-    void verifyTelephoneSMSCode(String telephone, String smsCode, SMSOperationType type,
-            RequestCallback<VerifyTelephoneSMSCodeResp> callback);
+    void verifyTelephoneSMSCode(String telephone, String smsCode, SMSOperationType type, RequestCallback<VerifyTelephoneSMSCodeResp> callback);
 }

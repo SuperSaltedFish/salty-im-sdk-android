@@ -33,7 +33,7 @@ public class SMSApi extends BasicApi {
 
         mSMSServiceStub.obtainTelephoneSMSCode(
                 createReq(smsReq),
-                new DefaultStreamObserver<>(ObtainTelephoneSMSCodeResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(ObtainTelephoneSMSCodeResp.getDefaultInstance(), callback));
     }
 
     public void verifyTelephoneSMSCode(String telephone, String smsCode, SMSOperationType type, RequestCallback<VerifyTelephoneSMSCodeResp> callback) {
@@ -45,6 +45,6 @@ public class SMSApi extends BasicApi {
 
         mSMSServiceStub.verifyTelephoneSMSCode(
                 createReq(smsReq),
-                new DefaultStreamObserver<>(VerifyTelephoneSMSCodeResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(VerifyTelephoneSMSCodeResp.getDefaultInstance(), callback));
     }
 }

@@ -78,7 +78,6 @@ public class BasicServiceImpl {
                 EVENT_LISTENER_MAP.put(eventCls, eventListenerSet);
             }
             eventListenerSet.add((OnEventListener<BasicEvent<?>>) listener);
-            Logger.i("zhixingye", "addOnEventListener" + EVENT_LISTENER_MAP.size());
         }
     }
 

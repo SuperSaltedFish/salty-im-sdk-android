@@ -1,13 +1,19 @@
 package me.zhixingye.im;
 
 import android.content.Context;
+import android.os.SystemClock;
+import android.util.Log;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import me.zhixingye.im.util.ReflectUtil;
+
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumented test, which will execute on an Android device.

@@ -11,7 +11,6 @@ public enum ResponseCode {
 
     INTERNAL_UNKNOWN(-101, "未知的错误"),
     INTERNAL_UNKNOWN_RESP_DATA(-102, "无法解析响应数据"),
-    INTERNAL_ILLICIT_RESP_DATA(-103, "非法的响应数据"),
     INTERNAL_IPC_EXCEPTION(-104, "客户端繁忙，请稍后再试"),
 
     INTERNAL_USER_NOT_LOGGED_IN(-201, "用户未登录，请登陆后再试"),
@@ -23,8 +22,8 @@ public enum ResponseCode {
         return code != StatusCode.STATUS_OK;
     }
 
-    private int code;
-    private String msg;
+    private final int code;
+    private final String msg;
 
     ResponseCode(int code, String msg) {
         this.code = code;

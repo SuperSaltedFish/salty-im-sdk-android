@@ -50,7 +50,7 @@ public class UserApi extends BasicApi {
 
         mUserServiceStub.register(
                 createReq(req),
-                new DefaultStreamObserver<>(RegisterResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(RegisterResp.getDefaultInstance(), callback));
     }
 
     public void registerByEmail(String email, String password, RequestCallback<RegisterResp> callback) {
@@ -65,7 +65,7 @@ public class UserApi extends BasicApi {
 
         mUserServiceStub.register(
                 createReq(req),
-                new DefaultStreamObserver<>(RegisterResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(RegisterResp.getDefaultInstance(), callback));
     }
 
     public void loginByTelephone(String telephone, String password, RequestCallback<LoginResp> callback) {
@@ -75,7 +75,7 @@ public class UserApi extends BasicApi {
                 .build();
         mUserServiceStub.login(
                 createReq(req),
-                new DefaultStreamObserver<>(LoginResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(LoginResp.getDefaultInstance(), callback));
     }
 
     public void loginByEmail(String email, String password, RequestCallback<LoginResp> callback) {
@@ -86,7 +86,7 @@ public class UserApi extends BasicApi {
 
         mUserServiceStub.login(
                 createReq(req),
-                new DefaultStreamObserver<>(LoginResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(LoginResp.getDefaultInstance(), callback));
     }
 
     public void logout(RequestCallback<LogoutResp> callback) {
@@ -94,7 +94,7 @@ public class UserApi extends BasicApi {
                 .build();
         mUserServiceStub.login(
                 createReq(req),
-                new DefaultStreamObserver<>(LogoutResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(LogoutResp.getDefaultInstance(), callback));
     }
 
     public void resetLoginPasswordByTelephone(String telephone, String newPassword, RequestCallback<ResetPasswordResp> callback) {
@@ -105,7 +105,7 @@ public class UserApi extends BasicApi {
 
         mUserServiceStub.resetPassword(
                 createReq(req),
-                new DefaultStreamObserver<>(ResetPasswordResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(ResetPasswordResp.getDefaultInstance(), callback));
     }
 
     public void resetLoginPasswordByEmail(String email, String newPassword, RequestCallback<ResetPasswordResp> callback) {
@@ -116,7 +116,7 @@ public class UserApi extends BasicApi {
 
         mUserServiceStub.resetPassword(
                 createReq(req),
-                new DefaultStreamObserver<>(ResetPasswordResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(ResetPasswordResp.getDefaultInstance(), callback));
     }
 
     public void updateUserInfo(String nickname, String description, UserProfile.Sex sex, long birthday, String location, RequestCallback<UpdateUserInfoResp> callback) {
@@ -134,7 +134,7 @@ public class UserApi extends BasicApi {
 
         mUserServiceStub.updateUserInfo(
                 createReq(req),
-                new DefaultStreamObserver<>(UpdateUserInfoResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(UpdateUserInfoResp.getDefaultInstance(), callback));
     }
 
     public void getUserInfoByUserId(String userId, RequestCallback<GetUserInfoResp> callback) {
@@ -144,7 +144,7 @@ public class UserApi extends BasicApi {
 
         mUserServiceStub.getUserInfo(
                 createReq(req),
-                new DefaultStreamObserver<>(GetUserInfoResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(GetUserInfoResp.getDefaultInstance(), callback));
     }
 
     public void queryUserInfoByTelephone(String telephone, RequestCallback<QueryUserInfoResp> callback) {
@@ -154,7 +154,7 @@ public class UserApi extends BasicApi {
 
         mUserServiceStub.queryUserInfo(
                 createReq(req),
-                new DefaultStreamObserver<>(QueryUserInfoResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(QueryUserInfoResp.getDefaultInstance(), callback));
     }
 
     public void queryUserInfoByEmail(String email, RequestCallback<QueryUserInfoResp> callback) {
@@ -164,7 +164,7 @@ public class UserApi extends BasicApi {
 
         mUserServiceStub.queryUserInfo(
                 createReq(req),
-                new DefaultStreamObserver<>(QueryUserInfoResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(QueryUserInfoResp.getDefaultInstance(), callback));
     }
 
 }

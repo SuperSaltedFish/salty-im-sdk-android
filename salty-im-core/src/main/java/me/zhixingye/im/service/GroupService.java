@@ -24,18 +24,13 @@ public interface GroupService extends BasicService {
 
     void quitGroup(String groupId, RequestCallback<QuitGroupResp> callback);
 
-    void addGroupMember(String groupId, List<String> memberUserIdArr,
-            RequestCallback<AddGroupMemberResp> callback);
+    void addGroupMember(String groupId, List<String> memberUserIdArr, RequestCallback<AddGroupMemberResp> callback);
 
-    void kickGroupMember(String groupId, String memberUserId,
-            RequestCallback<KickGroupMemberResp> callback);
+    void kickGroupMember(String groupId, String memberUserId, RequestCallback<KickGroupMemberResp> callback);
 
-    void updateGroupName(String groupId, String groupName,
-            RequestCallback<UpdateGroupNameResp> callback);
+    void updateGroupName(String groupId, String groupName, RequestCallback<UpdateGroupNameResp> callback);
 
-    void updateGroupNotice(String groupId, String notice,
-            RequestCallback<UpdateGroupNoticeResp> callback);
+    void updateGroupNotice(String groupId, String notice, RequestCallback<UpdateGroupNoticeResp> callback);
 
-    void updateMemberNickname(String groupId, String memberNickname,
-            RequestCallback<UpdateMemberNicknameResp> callback);
+    void updateMemberNickname(String groupId, String memberNickname, RequestCallback<UpdateMemberNicknameResp> callback);
 }

@@ -2,6 +2,8 @@ package me.zhixingye.im;
 
 import org.junit.Test;
 
+import me.zhixingye.im.util.ReflectUtil;
+
 import static org.junit.Assert.*;
 
 /**

@@ -20,10 +20,12 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import me.zhixingye.im.constant.ResponseCode;
+import me.zhixingye.im.exception.ResponseException;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.DeviceService;
 import me.zhixingye.im.service.UserService;
 import me.zhixingye.im.service.impl.ServiceAccessor;
+import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.Logger;
 import me.zhixingye.im.util.StringUtil;
 
@@ -60,94 +62,6 @@ public abstract class BasicApi {
         return req;
     }
 
-    @SuppressWarnings("unchecked")
-    static class DefaultStreamObserver<T extends GeneratedMessageLite> implements StreamObserver<GrpcResp> {
-
-        private final RequestCallback<T> mCallback;
-        private GrpcResp mResponse;
-        private final T mDefaultInstance;
-
-        DefaultStreamObserver(T defaultInstance, RequestCallback<T> callback) {
-            mCallback = callback;
-            mDefaultInstance = defaultInstance;
-        }
-
-        @Override
-        public void onNext(GrpcResp value) {
-            mResponse = value;
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            Status status = Status.fromThrowable(t);
-
-            String error;
-            switch (status.getCode()) {
-                case DEADLINE_EXCEEDED:
-                    error = "连接超时，请检查当前网络状态是否正常！";
-                    break;
-                default:
-                    error = status.getDescription();
-                    break;
-            }
-            if (TextUtils.isEmpty(error) && status.getCause() != null) {
-                error = status.getCause().getMessage();
-            }
-            callError(-status.getCode().value(), error, t);
-        }
-
-        @Override
-        public void onCompleted() {
-            if (mResponse == null) {
-                onError(new Throwable("GrpcResp == null"));
-                return;
-            }
-
-            T resultMessage = null;
-            try {
-                if (ResponseCode.isErrorCode(mResponse.getCode())) {
-                    callError(mResponse.getCode().getNumber(), mResponse.getMessage(), null);
-                    return;
-                }
-
-                Any anyData = mResponse.getData();
-                if (anyData == null) {
-                    onError(new Throwable("anyData == null"));
-                    return;
-                }
-
-                ByteString protoData = anyData.getValue();
-                if (protoData == null) {
-                    onError(new Throwable("protoData == null"));
-                    return;
-                }
-
-                if (mCallback == null) {
-                    return;
-                }
-
-                resultMessage = (T) mDefaultInstance.getParserForType().parseFrom(protoData);
-                if (resultMessage == null) {
-                    onError(new Throwable("resultMessage == null"));
-                } else {
-                    mCallback.onCompleted(resultMessage);
-                }
-            } catch (Exception e) {
-                onError(e);
-            } finally {
-                printResponse(mResponse, resultMessage, mDefaultInstance);
-            }
-        }
-
-        private void callError(int code, String error, @Nullable Throwable t) {
-            printError(code, error, t, mDefaultInstance);
-            if (mCallback != null) {
-                mCallback.onFailure(code, error);
-            }
-        }
-    }
-
-
     private static void printRequest(GrpcReq req, MessageLite data) {
         String title = "发起请求：" + getRequestName(data);
         printGrpcData(
@@ -166,12 +80,13 @@ public abstract class BasicApi {
 
     private static void printError(int code, String error, @Nullable Throwable t, MessageLite defaultDataInstance) {
         Logger.d(TAG, String.format(Locale.getDefault(),
-                "\n请求异常：%s，code = %d，error = %s，exception = %s\n}",
+                "\n请求错误：%s，code = %d，error = %s，exception = %s\n}",
                 getRequestName(defaultDataInstance),
                 code,
                 error,
                 t == null ? "null" : t.toString()));
     }
+
 
     private static void printGrpcData(String title, String grpcStr, String dataContent) {
         Pattern firstLinePattern = Pattern.compile("#.*?\\n");
@@ -202,7 +117,99 @@ public abstract class BasicApi {
     }
 
     private static String getRequestName(MessageLite message) {
+        if (message == null) {
+            return "Unknown";
+        }
         return message.getClass().getSimpleName();
     }
+
+
+    @SuppressWarnings("unchecked")
+    static class InnerStreamObserver<T extends GeneratedMessageLite<?, ?>> implements StreamObserver<GrpcResp> {
+
+        private final RequestCallback<T> mCallback;
+        private final T mRespDataDefaultInstance;
+        private GrpcResp mResponse;
+
+        InnerStreamObserver(T respDataDefaultInstance, RequestCallback<T> callback) {
+            mCallback = callback;
+            mRespDataDefaultInstance = respDataDefaultInstance;
+        }
+
+        @Override
+        public void onNext(GrpcResp value) {
+            mResponse = value;
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            Status status = Status.fromThrowable(t);
+
+            String errorMsg;
+            switch (status.getCode()) {
+                case DEADLINE_EXCEEDED:
+                    errorMsg = "连接超时，请检查当前网络状态是否正常！";
+                    break;
+                default:
+                    errorMsg = status.getDescription();
+                    break;
+            }
+
+            if (TextUtils.isEmpty(errorMsg) && status.getCause() != null) {
+                errorMsg = status.getCause().getMessage();
+            }
+
+            onError(-status.getCode().value(), errorMsg, t);
+        }
+
+        private void onError(int code, String error, Throwable t) {
+            printError(code, error, t, mRespDataDefaultInstance);
+            CallbackHelper.callFailure(code, error, mCallback);
+        }
+
+        @Override
+        public void onCompleted() {
+            if (mResponse == null) {
+                onError(new ResponseException(ResponseCode.INTERNAL_USER_NOT_LOGGED_IN, "GrpcResp == null"));
+                return;
+            }
+
+            if (ResponseCode.isErrorCode(mResponse.getCode())) {
+                onError(mResponse.getCode().getNumber(), mResponse.getMessage(), null);
+                return;
+            }
+
+            Any anyData = mResponse.getData();
+            if (anyData == null) {
+                onError(new ResponseException(ResponseCode.INTERNAL_UNKNOWN_RESP_DATA, "anyData == null"));
+                return;
+            }
+
+            ByteString protoData = anyData.getValue();
+            if (protoData == null) {
+                onError(new ResponseException(ResponseCode.INTERNAL_UNKNOWN_RESP_DATA, "protoData == null"));
+                return;
+            }
+
+            if (mRespDataDefaultInstance == null) {
+                onError(new ResponseException(ResponseCode.INTERNAL_UNKNOWN, "respDataDefaultInstance == null"));
+                return;
+            }
+
+            try {
+                T data = (T) mRespDataDefaultInstance.getParserForType().parseFrom(protoData);
+                if (data == null) {
+                    onError(new ResponseException(ResponseCode.INTERNAL_UNKNOWN, "data == null"));
+                } else {
+                    printResponse(mResponse, data, mRespDataDefaultInstance);
+                    CallbackHelper.callCompleted(data, mCallback);
+                }
+            } catch (Exception e) {
+                onError(new ResponseException(ResponseCode.INTERNAL_UNKNOWN, "create data fail ", e));
+            }
+
+        }
+    }
+
 }
 

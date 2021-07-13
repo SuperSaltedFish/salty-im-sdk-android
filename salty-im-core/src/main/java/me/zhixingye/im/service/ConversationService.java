@@ -8,6 +8,7 @@ import com.salty.protos.RemoveConversationResp;
 import com.salty.protos.UpdateConversationTitleResp;
 import com.salty.protos.UpdateConversationTopResp;
 import com.salty.protos.UpdateNotificationStatusResp;
+
 import me.zhixingye.im.listener.RequestCallback;
 
 /**
@@ -18,22 +19,15 @@ import me.zhixingye.im.listener.RequestCallback;
 public interface ConversationService extends BasicService {
     void getAllConversations(RequestCallback<GetAllConversationResp> callback);
 
-    void getConversationDetail(String conversationId, Conversation.ConversationType type,
-            RequestCallback<GetConversationDetailResp> callback);
+    void getConversationDetail(String conversationId, Conversation.ConversationType type, RequestCallback<GetConversationDetailResp> callback);
 
-    void removeConversation(String conversationId, Conversation.ConversationType type,
-            RequestCallback<RemoveConversationResp> callback);
+    void removeConversation(String conversationId, Conversation.ConversationType type, RequestCallback<RemoveConversationResp> callback);
 
-    void clearConversationMessage(String conversationId, Conversation.ConversationType type,
-            RequestCallback<ClearConversationMessageResp> callback);
+    void clearConversationMessage(String conversationId, Conversation.ConversationType type, RequestCallback<ClearConversationMessageResp> callback);
 
-    void updateConversationTitle(String conversationId, Conversation.ConversationType type,
-            String title, RequestCallback<UpdateConversationTitleResp> callback);
+    void updateConversationTitle(String conversationId, Conversation.ConversationType type, String title, RequestCallback<UpdateConversationTitleResp> callback);
 
-    void updateConversationTop(String conversationId, Conversation.ConversationType type,
-            boolean isTop, RequestCallback<UpdateConversationTopResp> callback);
+    void updateConversationTop(String conversationId, Conversation.ConversationType type, boolean isTop, RequestCallback<UpdateConversationTopResp> callback);
 
-    void updateNotificationStatus(String conversationId, Conversation.ConversationType type,
-            Conversation.NotificationStatus status,
-            RequestCallback<UpdateNotificationStatusResp> callback);
+    void updateNotificationStatus(String conversationId, Conversation.ConversationType type, Conversation.NotificationStatus status, RequestCallback<UpdateNotificationStatusResp> callback);
 }

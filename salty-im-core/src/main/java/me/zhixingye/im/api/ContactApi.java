@@ -46,7 +46,7 @@ public class ContactApi extends BasicApi {
 
         mContactServiceStub.requestContact(
                 createReq(req),
-                new DefaultStreamObserver<>(RequestContactResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(RequestContactResp.getDefaultInstance(), callback));
     }
 
     public void refusedContact(String userId, String reason, RequestCallback<RefusedContactResp> callback) {
@@ -57,7 +57,7 @@ public class ContactApi extends BasicApi {
 
         mContactServiceStub.refusedContact(
                 createReq(req),
-                new DefaultStreamObserver<>(RefusedContactResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(RefusedContactResp.getDefaultInstance(), callback));
     }
 
     public void acceptContact(String userId, RequestCallback<AcceptContactResp> callback) {
@@ -67,7 +67,7 @@ public class ContactApi extends BasicApi {
 
         mContactServiceStub.acceptContact(
                 createReq(req),
-                new DefaultStreamObserver<>(AcceptContactResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(AcceptContactResp.getDefaultInstance(), callback));
     }
 
     public void deleteContact(String userId, RequestCallback<DeleteContactResp> callback) {
@@ -77,7 +77,7 @@ public class ContactApi extends BasicApi {
 
         mContactServiceStub.deleteContact(
                 createReq(req),
-                new DefaultStreamObserver<>(DeleteContactResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(DeleteContactResp.getDefaultInstance(), callback));
     }
 
     public void getAllContact(RequestCallback<GetContactListResp> callback) {
@@ -86,7 +86,7 @@ public class ContactApi extends BasicApi {
 
         mContactServiceStub.getContactList(
                 createReq(req),
-                new DefaultStreamObserver<>(GetContactListResp.getDefaultInstance(), callback)
+                new InnerStreamObserver<>(GetContactListResp.getDefaultInstance(), callback)
         );
     }
 
@@ -98,7 +98,7 @@ public class ContactApi extends BasicApi {
 
         mContactServiceStub.getContactOperationList(
                 createReq(req),
-                new DefaultStreamObserver<>(GetContactOperationListResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(GetContactOperationListResp.getDefaultInstance(), callback));
     }
 
     public void updateContactRemarkInfo(String userId, ContactRemark remark, RequestCallback<UpdateRemarkInfoResp> callback) {
@@ -109,6 +109,6 @@ public class ContactApi extends BasicApi {
 
         mContactServiceStub.updateRemarkInfo(
                 createReq(req),
-                new DefaultStreamObserver<>(UpdateRemarkInfoResp.getDefaultInstance(), callback));
+                new InnerStreamObserver<>(UpdateRemarkInfoResp.getDefaultInstance(), callback));
     }
 }
