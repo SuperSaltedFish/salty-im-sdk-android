@@ -22,7 +22,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class UserServiceProxy implements UserService, RemoteProxy {
+public class UserServiceProxy extends RemoteProxy implements UserService {
 
     private static final String TAG = "ContactServiceProxy";
 
@@ -96,7 +96,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
             mRemoteService.updateUserInfo(nickname, description, sex.getNumber(), birthday, location, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -106,7 +106,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
             mRemoteService.getUserInfoByUserId(userId, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -116,7 +116,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
             mRemoteService.queryUserInfoByTelephone(telephone, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -126,7 +126,7 @@ public class UserServiceProxy implements UserService, RemoteProxy {
             mRemoteService.queryUserInfoByEmail(email, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 }

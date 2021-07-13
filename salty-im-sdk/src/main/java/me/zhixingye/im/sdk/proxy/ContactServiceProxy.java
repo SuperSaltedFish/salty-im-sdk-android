@@ -35,7 +35,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class ContactServiceProxy implements ContactService, RemoteProxy {
+public class ContactServiceProxy extends RemoteProxy implements ContactService {
 
     private static final String TAG = "ContactServiceProxy";
 
@@ -62,7 +62,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
             mRemoteService.requestContact(userId, reason, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -72,7 +72,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
             mRemoteService.refusedContact(userId, reason, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -82,7 +82,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
             mRemoteService.acceptContact(userId, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -92,7 +92,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
             mRemoteService.deleteContact(userId, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -102,7 +102,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
             mRemoteService.getContactList(new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -112,7 +112,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
             mRemoteService.getContactOperationList(startDateTime, endDateTime, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -125,7 +125,7 @@ public class ContactServiceProxy implements ContactService, RemoteProxy {
             mRemoteService.updateContactRemarkInfo(userId, remark.toByteArray(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 

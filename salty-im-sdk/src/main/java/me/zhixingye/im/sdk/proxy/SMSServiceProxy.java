@@ -19,7 +19,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class SMSServiceProxy implements SMSService, RemoteProxy {
+public class SMSServiceProxy extends RemoteProxy implements SMSService {
 
     private static final String TAG = "ContactServiceProxy";
 
@@ -42,7 +42,7 @@ public class SMSServiceProxy implements SMSService, RemoteProxy {
             mRemoteService.verifyTelephoneSMSCode(telephone, smsCode, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -52,7 +52,7 @@ public class SMSServiceProxy implements SMSService, RemoteProxy {
             mRemoteService.obtainVerificationCodeForTelephoneType(telephone, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 }

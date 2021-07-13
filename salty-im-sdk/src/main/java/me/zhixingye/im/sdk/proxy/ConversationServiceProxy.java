@@ -24,7 +24,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class ConversationServiceProxy implements ConversationService, RemoteProxy {
+public class ConversationServiceProxy extends RemoteProxy implements ConversationService {
 
     private static final String TAG = "ContactServiceProxy";
 
@@ -47,7 +47,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
             mRemoteService.getAllConversations(new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -57,7 +57,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
             mRemoteService.getConversationDetail(conversationId, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -67,7 +67,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
             mRemoteService.removeConversation(conversationId, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -77,7 +77,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
             mRemoteService.clearConversationMessage(conversationId, type.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -87,7 +87,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
             mRemoteService.updateConversationTitle(conversationId, type.getNumber(), title, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -97,7 +97,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
             mRemoteService.updateConversationTop(conversationId, type.getNumber(), isTop, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -107,7 +107,7 @@ public class ConversationServiceProxy implements ConversationService, RemoteProx
             mRemoteService.updateNotificationStatus(conversationId, type.getNumber(), status.getNumber(), new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 }

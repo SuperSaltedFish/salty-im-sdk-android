@@ -17,7 +17,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2021年01月21日.
  */
-public class PasswordServiceProxy implements PasswordService, RemoteProxy {
+public class PasswordServiceProxy extends RemoteProxy implements PasswordService {
 
     private static final String TAG = "PasswordServiceProxy";
 
@@ -40,7 +40,7 @@ public class PasswordServiceProxy implements PasswordService, RemoteProxy {
             mRemoteService.resetLoginPasswordByTelephone(telephone, newPassword, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -50,7 +50,7 @@ public class PasswordServiceProxy implements PasswordService, RemoteProxy {
             mRemoteService.resetLoginPasswordByEmail(email, newPassword, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 }

@@ -26,7 +26,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class GroupServiceProxy implements GroupService, RemoteProxy {
+public class GroupServiceProxy  extends RemoteProxy implements GroupService {
 
     private static final String TAG = "ContactServiceProxy";
 
@@ -49,7 +49,7 @@ public class GroupServiceProxy implements GroupService, RemoteProxy {
             mRemoteService.createGroup(groupName, memberUserIdArr, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -59,7 +59,7 @@ public class GroupServiceProxy implements GroupService, RemoteProxy {
             mRemoteService.joinGroup(groupId, reason, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -69,7 +69,7 @@ public class GroupServiceProxy implements GroupService, RemoteProxy {
             mRemoteService.quitGroup(groupId, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -79,7 +79,7 @@ public class GroupServiceProxy implements GroupService, RemoteProxy {
             mRemoteService.addGroupMember(groupId, memberUserIdArr, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -89,7 +89,7 @@ public class GroupServiceProxy implements GroupService, RemoteProxy {
             mRemoteService.kickGroupMember(groupId, memberUserId, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -99,7 +99,7 @@ public class GroupServiceProxy implements GroupService, RemoteProxy {
             mRemoteService.updateGroupName(groupId, groupName, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -109,7 +109,7 @@ public class GroupServiceProxy implements GroupService, RemoteProxy {
             mRemoteService.updateGroupNotice(groupId, notice, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -119,7 +119,7 @@ public class GroupServiceProxy implements GroupService, RemoteProxy {
             mRemoteService.updateMemberNickname(groupId, memberNickname, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 }

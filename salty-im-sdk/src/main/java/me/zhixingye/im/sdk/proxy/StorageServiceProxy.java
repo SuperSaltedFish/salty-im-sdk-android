@@ -1,6 +1,5 @@
 package me.zhixingye.im.sdk.proxy;
 
-import android.annotation.SuppressLint;
 import android.os.RemoteException;
 
 import androidx.annotation.WorkerThread;
@@ -17,7 +16,7 @@ import me.zhixingye.im.tool.Logger;
  * @author zhixingye , 2020年05月01日.
  */
 
-public class StorageServiceProxy implements StorageService, RemoteProxy {
+public class StorageServiceProxy extends RemoteProxy implements StorageService {
 
     private static final String TAG = "ContactServiceProxy";
 

@@ -8,7 +8,6 @@ import androidx.annotation.WorkerThread;
 import com.salty.protos.UserProfile;
 
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -25,7 +24,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2021年01月21日.
  */
-public class LoginServiceProxy implements LoginService, RemoteProxy {
+public class LoginServiceProxy extends RemoteProxy implements LoginService {
 
     private static final String TAG = "AccountServiceProxy";
 
@@ -50,7 +49,7 @@ public class LoginServiceProxy implements LoginService, RemoteProxy {
             mRemoteService.loginByTelephone(telephone, password, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -60,7 +59,7 @@ public class LoginServiceProxy implements LoginService, RemoteProxy {
             mRemoteService.loginByEmail(email, password, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -70,7 +69,7 @@ public class LoginServiceProxy implements LoginService, RemoteProxy {
             mRemoteService.loginByLastLoginInfo(new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 

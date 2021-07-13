@@ -5,7 +5,6 @@ import android.os.RemoteException;
 import androidx.annotation.WorkerThread;
 
 import com.salty.protos.RegisterResp;
-import com.salty.protos.ResetPasswordResp;
 
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.IRegisterRemoteService;
@@ -18,7 +17,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2021年01月21日.
  */
-public class RegisterServiceProxy implements RegisterService, RemoteProxy {
+public class RegisterServiceProxy extends RemoteProxy implements RegisterService {
 
     private static final String TAG = "RegisterServiceProxy";
 
@@ -32,7 +31,7 @@ public class RegisterServiceProxy implements RegisterService, RemoteProxy {
 
     @Override
     public void onUnbind() {
-        mRemoteService=null;
+        mRemoteService = null;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class RegisterServiceProxy implements RegisterService, RemoteProxy {
             mRemoteService.registerByTelephone(telephone, password, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 
@@ -51,7 +50,7 @@ public class RegisterServiceProxy implements RegisterService, RemoteProxy {
             mRemoteService.registerByEmail(email, password, new RemoteCallbackWrapper<>(callback));
         } catch (Exception e) {
             Logger.e(TAG, "远程调用失败", e);
-            ProxyHelper.callRemoteFail(callback);
+            callRemoteFail(callback);
         }
     }
 }
