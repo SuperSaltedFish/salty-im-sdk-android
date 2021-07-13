@@ -1,7 +1,5 @@
 package me.zhixingye.im.service.impl;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.ArraySet;
 
 import androidx.annotation.CallSuper;
@@ -9,16 +7,13 @@ import androidx.annotation.CallSuper;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.event.BasicEvent;
 import me.zhixingye.im.service.event.OnEventListener;
 import me.zhixingye.im.tool.CallbackHelper;
-import me.zhixingye.im.tool.Logger;
+import me.zhixingye.im.tool.ExecutorHelper;
+import me.zhixingye.im.tool.HandlerHelper;
 
 /**
  * 优秀的代码是它自己最好的文档。当你考虑要添加一个注释时，问问自己，“如何能改进这段代码，以让它不需要注释”
@@ -27,25 +22,13 @@ import me.zhixingye.im.tool.Logger;
  */
 public class BasicServiceImpl {
 
-    private static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
-
     private static final Map<Class<?>, Set<OnEventListener<BasicEvent<?>>>> EVENT_LISTENER_MAP = new HashMap<>();
 
-    private static final Executor WORK_EXECUTOR = new ThreadPoolExecutor(
-            2,
-            Runtime.getRuntime().availableProcessors() + 1,
-            30, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>());
-
-    public <T extends BasicEvent<?>> void sendEvent(final T event) {
-        sendEvent(event, false);
-    }
-
-    public <T extends BasicEvent<?>> void sendEvent(final T event, boolean isRunOnUIThread) {
+    protected  <T extends BasicEvent<?>> void sendEvent(final T event) {
         if (event == null) {
             return;
         }
-        Runnable runnable = new Runnable() {
+        runOnUIThread(new Runnable() {
             @Override
             public void run() {
                 synchronized (EVENT_LISTENER_MAP) {
@@ -58,16 +41,11 @@ public class BasicServiceImpl {
                     }
                 }
             }
-        };
-        if (isRunOnUIThread) {
-            runOnUIThread(runnable);
-        } else {
-            runnable.run();
-        }
+        });
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends BasicEvent<?>> void addOnEventListener(Class<T> eventCls, OnEventListener<T> listener) {
+    protected <T extends BasicEvent<?>> void addOnEventListener(Class<T> eventCls, OnEventListener<T> listener) {
         if (eventCls == null || listener == null) {
             return;
         }
@@ -81,7 +59,7 @@ public class BasicServiceImpl {
         }
     }
 
-    public <T extends BasicEvent<?>> void removeOnEventListener(Class<T> eventCls, OnEventListener<T> listener) {
+    protected <T extends BasicEvent<?>> void removeOnEventListener(Class<T> eventCls, OnEventListener<T> listener) {
         if (eventCls == null || listener == null) {
             return;
         }
@@ -93,12 +71,12 @@ public class BasicServiceImpl {
         }
     }
 
-    public void runOnUIThread(Runnable runnable) {
-        MAIN_HANDLER.post(runnable);
+    protected void runOnUIThread(Runnable runnable) {
+        HandlerHelper.getUIHandler().post(runnable);
     }
 
-    public void runOnWorkThread(Runnable runnable) {
-        WORK_EXECUTOR.execute(runnable);
+    protected void runOnWorkThread(Runnable runnable) {
+        ExecutorHelper.getsWorkExecutor().execute(runnable);
     }
 
 

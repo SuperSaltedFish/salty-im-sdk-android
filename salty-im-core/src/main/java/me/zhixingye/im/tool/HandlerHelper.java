@@ -12,26 +12,12 @@ import android.os.Looper;
  */
 public class HandlerHelper {
 
-    private static final String TAG = "HandlerHelper";
-
     private volatile static Handler sUIHandle;
-    private volatile static Handler sWorkHandle;
 
     public static Handler getUIHandler() {
         if (sUIHandle == null) {
             synchronized (HandlerHelper.class) {
                 sUIHandle = new Handler(Looper.getMainLooper());
-            }
-        }
-        return sUIHandle;
-    }
-
-    public static Handler getWorkHandler() {
-        if (sUIHandle == null) {
-            synchronized (HandlerHelper.class) {
-                HandlerThread thread = new HandlerThread(TAG);
-                thread.start();
-                sUIHandle = new Handler(thread.getLooper());
             }
         }
         return sUIHandle;

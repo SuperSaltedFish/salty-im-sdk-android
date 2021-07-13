@@ -6,7 +6,7 @@ package me.zhixingye.im.util;
  * @author zhixingye , 2020年05月01日.
  */
 public class StringUtil {
-    public static String checkNull(String s) {
+    public static String getNotNull(String s) {
         if (s == null) {
             return "";
         }

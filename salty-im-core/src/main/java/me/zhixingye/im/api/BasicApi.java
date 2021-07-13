@@ -50,11 +50,11 @@ public abstract class BasicApi {
         UserService userService = ServiceAccessor.get(UserService.class);
 
         GrpcReq req = GrpcReq.newBuilder()
-                .setDeviceId(StringUtil.checkNull(deviceService.getDeviceId()))
+                .setDeviceId(StringUtil.getNotNull(deviceService.getDeviceId()))
                 .setOs(GrpcReq.OS.ANDROID)
                 .setLanguage(GrpcReq.Language.CHINESE)
-                .setVersion(StringUtil.checkNull(deviceService.getAppVersion()))
-                .setToken(StringUtil.checkNull(userService.getCurrentUserToken()))
+                .setVersion(StringUtil.getNotNull(deviceService.getAppVersion()))
+                .setToken(StringUtil.getNotNull(userService.getCurrentUserToken()))
                 .setData(data)
                 .build();
 
@@ -79,8 +79,8 @@ public abstract class BasicApi {
     }
 
     private static void printError(int code, String error, @Nullable Throwable t, MessageLite defaultDataInstance) {
-        Logger.d(TAG, String.format(Locale.getDefault(),
-                "\n请求错误：%s，code = %d，error = %s，exception = %s\n}",
+        Logger.e(TAG, String.format(Locale.getDefault(),
+                "\n请求失败：%s\n{\n  code = %d，\n  error = %s，\n  exception = %s\n}",
                 getRequestName(defaultDataInstance),
                 code,
                 error,
@@ -109,11 +109,10 @@ public abstract class BasicApi {
         responseData = "  " + responseData;
         responseData = responseData.replace("\n", "\n  ");
 
-        Logger.d(TAG, String.format(Locale.getDefault(),
+        Logger.e(TAG, String.format(Locale.getDefault(),
                 "\n%s\n{\n%s\n}",
                 title,
-                responseData
-        ));
+                responseData));
     }
 
     private static String getRequestName(MessageLite message) {

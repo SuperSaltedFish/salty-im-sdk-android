@@ -1,6 +1,7 @@
 package me.zhixingye.im;
 
 import android.content.Context;
+import android.provider.Telephony;
 
 import me.zhixingye.im.service.ApiService;
 import me.zhixingye.im.service.ContactService;
@@ -62,58 +63,61 @@ public class IMCore {
         return mAppContext;
     }
 
+    private LoginService mLoginService = new LoginServiceImpl();
+    private RegisterService mRegisterService = new RegisterServiceImpl();
+    private ContactService mContactService = new ContactServiceImpl();
+    private ConversationService mConversationService = new ConversationServiceImpl();
+    private GroupService mGroupService = new GroupServiceImpl();
+    private MessageService mMessageService = new MessageServiceImpl();
+    private SMSService mSMSService = new SMSServiceImpl();
+    private StorageService mStorageService = new StorageServiceImpl();
+    private UserService mUserService = new UserServiceImpl();
+    private PasswordService mPasswordService = new PasswordServiceImpl();
+
+    private ApiService mApiService = new ApiServiceImpl();
+    private DeviceService mDeviceService = new DeviceServiceImpl();
+
     private IMCore() {
-        ServiceAccessor.register(LoginService.class, new LoginServiceImpl());
-        ServiceAccessor.register(RegisterService.class, new RegisterServiceImpl());
-        ServiceAccessor.register(ApiService.class, new ApiServiceImpl());
-        ServiceAccessor.register(ContactService.class, new ContactServiceImpl());
-        ServiceAccessor.register(ConversationService.class, new ConversationServiceImpl());
-        ServiceAccessor.register(DeviceService.class, new DeviceServiceImpl());
-        ServiceAccessor.register(GroupService.class, new GroupServiceImpl());
-        ServiceAccessor.register(MessageService.class, new MessageServiceImpl());
-        ServiceAccessor.register(SMSService.class, new SMSServiceImpl());
-        ServiceAccessor.register(StorageService.class, new StorageServiceImpl());
-        ServiceAccessor.register(UserService.class, new UserServiceImpl());
-        ServiceAccessor.register(PasswordService.class, new PasswordServiceImpl());
+
     }
 
     public LoginService getLoginService() {
-        return ServiceAccessor.get(LoginService.class);
+        return mLoginService;
     }
 
     public RegisterService getRegisterService() {
-        return ServiceAccessor.get(RegisterService.class);
+        return mRegisterService;
     }
 
     public ContactService getContactService() {
-        return ServiceAccessor.get(ContactService.class);
+        return mContactService;
     }
 
     public ConversationService getConversationService() {
-        return ServiceAccessor.get(ConversationService.class);
+        return mConversationService;
     }
 
     public GroupService getGroupService() {
-        return ServiceAccessor.get(GroupService.class);
+        return mGroupService;
     }
 
     public MessageService getMessageService() {
-        return ServiceAccessor.get(MessageService.class);
+        return mMessageService;
     }
 
     public SMSService getSMSService() {
-        return ServiceAccessor.get(SMSService.class);
+        return mSMSService;
     }
 
     public StorageService getStorageService() {
-        return ServiceAccessor.get(StorageService.class);
+        return mStorageService;
     }
 
     public UserService getUserService() {
-        return ServiceAccessor.get(UserService.class);
+        return mUserService;
     }
 
     public PasswordService getPasswordService() {
-        return ServiceAccessor.get(PasswordService.class);
+        return mPasswordService;
     }
 }
