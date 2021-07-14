@@ -41,13 +41,12 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
     private UserProfile mUserProfile;
     private String mToken;
 
-    private final UserApi mUserApi;
+    private final UserApi mUserApi = new UserApi();
 
     private final Map<String, UserProfile> mUserProfileCache;
 
     public UserServiceImpl() {
         mUserProfileCache = new ConcurrentHashMap<>();
-        mUserApi = BasicApi.getApi(UserApi.class);
 
         listenerOnLoggedInEvent();
         listenerOnLoggedOutEvent();

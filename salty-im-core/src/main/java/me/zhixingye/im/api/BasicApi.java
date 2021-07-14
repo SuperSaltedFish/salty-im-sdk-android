@@ -42,11 +42,27 @@ public abstract class BasicApi {
 
     private static final String TAG = "BasicApi";
 
-    private static ManagedChannel sChannel;
+    private static ManagedChannel sManagedChannel;
 
-    private static Map<Class<? extends BasicApi>, BasicApi> sApiMap;
+    protected static ManagedChannel getManagedChannel() {
+        if (sManagedChannel == null) {
+            synchronized (BasicApi.class) {
+                if (sManagedChannel == null) {
+                    OkHttpChannelBuilder builder = OkHttpChannelBuilder
+                            .forTarget(BuildConfig.SERVER_ADDRESS)
+                            .disableRetry()
+                            .usePlaintext();
 
-    protected abstract void onBindManagedChannel(ManagedChannel channel);
+                    sManagedChannel = AndroidChannelBuilder.usingBuilder(builder)
+                            .context(IMCore.getAppContext().getApplicationContext())
+                            .build();
+                }
+            }
+        }
+
+        return sManagedChannel;
+    }
+
 
     protected GrpcReq createReq(MessageLite message) {
         Any data = Any.newBuilder()
@@ -70,33 +86,6 @@ public abstract class BasicApi {
         return req;
     }
 
-
-    @SuppressWarnings("unchecked")
-    public static synchronized <T extends BasicApi> T getApi(Class<T> apiCls) {
-        if (sChannel == null) {
-            OkHttpChannelBuilder builder = OkHttpChannelBuilder
-                    .forTarget(BuildConfig.SERVER_ADDRESS)
-                    .usePlaintext();
-            sChannel = AndroidChannelBuilder.usingBuilder(builder)
-                    .context(IMCore.getAppContext().getApplicationContext())
-                    .build();
-        }
-        if (sApiMap == null) {
-            sApiMap = new HashMap<>();
-        }
-        T api = (T) sApiMap.get(apiCls);
-        if (api == null) {
-            try {
-                api = apiCls.newInstance();
-                sApiMap.put(apiCls, api);
-                api.onBindManagedChannel(sChannel);
-            } catch (Exception e) {
-                Logger.e(TAG, "创建api失败", e);
-                throw new RuntimeException(e);
-            }
-        }
-        return api;
-    }
 
     private static void printRequest(GrpcReq req, MessageLite data) {
         String title = "发起请求：" + getRequestName(data);

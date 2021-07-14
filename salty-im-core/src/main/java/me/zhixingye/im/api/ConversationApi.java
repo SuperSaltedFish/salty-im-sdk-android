@@ -17,8 +17,6 @@ import com.salty.protos.UpdateConversationTopResp;
 import com.salty.protos.UpdateNotificationStatusReq;
 import com.salty.protos.UpdateNotificationStatusResp;
 
-import io.grpc.ManagedChannel;
-
 import java.util.concurrent.TimeUnit;
 
 import me.zhixingye.im.listener.RequestCallback;
@@ -30,18 +28,15 @@ import me.zhixingye.im.listener.RequestCallback;
  */
 public class ConversationApi extends BasicApi {
 
-    private ConversationServiceGrpc.ConversationServiceStub mConversationServiceStub;
-
-    @Override
-    public void onBindManagedChannel(ManagedChannel channel) {
-        mConversationServiceStub = ConversationServiceGrpc.newStub(channel)
+    public ConversationServiceGrpc.ConversationServiceStub newServiceStub() {
+        return ConversationServiceGrpc.newStub(getManagedChannel())
                 .withDeadlineAfter(30, TimeUnit.SECONDS);
     }
 
     public void getAllConversations(RequestCallback<GetAllConversationResp> callback) {
         GetAllConversationReq req = GetAllConversationReq.newBuilder()
                 .build();
-        mConversationServiceStub.getAllConversation(
+        newServiceStub().getAllConversation(
                 createReq(req),
                 new InnerStreamObserver<>(GetAllConversationResp.getDefaultInstance(), callback));
     }
@@ -51,7 +46,7 @@ public class ConversationApi extends BasicApi {
                 .setConversationId(conversationId)
                 .setConversationType(type)
                 .build();
-        mConversationServiceStub.getConversationDetail(
+        newServiceStub().getConversationDetail(
                 createReq(req),
                 new InnerStreamObserver<>(GetConversationDetailResp.getDefaultInstance(), callback));
     }
@@ -61,7 +56,7 @@ public class ConversationApi extends BasicApi {
                 .setConversationId(conversationId)
                 .setConversationType(type)
                 .build();
-        mConversationServiceStub.removeConversation(
+        newServiceStub().removeConversation(
                 createReq(req),
                 new InnerStreamObserver<>(RemoveConversationResp.getDefaultInstance(), callback));
     }
@@ -71,7 +66,7 @@ public class ConversationApi extends BasicApi {
                 .setConversationId(conversationId)
                 .setConversationType(type)
                 .build();
-        mConversationServiceStub.clearConversationMessage(
+        newServiceStub().clearConversationMessage(
                 createReq(req),
                 new InnerStreamObserver<>(ClearConversationMessageResp.getDefaultInstance(), callback));
     }
@@ -83,7 +78,7 @@ public class ConversationApi extends BasicApi {
                 .setConversationType(type)
                 .setTitle(title)
                 .build();
-        mConversationServiceStub.getConversationDetail(
+        newServiceStub().getConversationDetail(
                 createReq(req),
                 new InnerStreamObserver<>(UpdateConversationTitleResp.getDefaultInstance(), callback));
     }
@@ -94,7 +89,7 @@ public class ConversationApi extends BasicApi {
                 .setConversationType(type)
                 .setIsTop(isTop)
                 .build();
-        mConversationServiceStub.getConversationDetail(
+        newServiceStub().getConversationDetail(
                 createReq(req),
                 new InnerStreamObserver<>(UpdateConversationTopResp.getDefaultInstance(), callback));
     }
@@ -105,7 +100,7 @@ public class ConversationApi extends BasicApi {
                 .setConversationType(type)
                 .setNotificationStatus(status)
                 .build();
-        mConversationServiceStub.getConversationDetail(
+        newServiceStub().getConversationDetail(
                 createReq(req),
                 new InnerStreamObserver<>(UpdateNotificationStatusResp.getDefaultInstance(), callback));
     }

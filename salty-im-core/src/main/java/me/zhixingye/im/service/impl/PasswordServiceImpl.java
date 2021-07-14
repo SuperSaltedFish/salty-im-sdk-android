@@ -16,10 +16,9 @@ public class PasswordServiceImpl extends BasicServiceImpl implements PasswordSer
 
     private static final String TAG = "PasswordServiceImpl";
 
-    private final UserApi mUserApi;
+    private final UserApi mUserApi = new UserApi();
 
     public PasswordServiceImpl() {
-        mUserApi = BasicApi.getApi(UserApi.class);
     }
 
     @Override

@@ -18,8 +18,6 @@ import com.salty.protos.UpdateGroupNoticeResp;
 import com.salty.protos.UpdateMemberNicknameReq;
 import com.salty.protos.UpdateMemberNicknameResp;
 
-import io.grpc.ManagedChannel;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -32,11 +30,8 @@ import me.zhixingye.im.listener.RequestCallback;
  */
 public class GroupApi extends BasicApi {
 
-    private GroupServiceGrpc.GroupServiceStub mGroupServiceStub;
-
-    @Override
-    public void onBindManagedChannel(ManagedChannel channel) {
-        mGroupServiceStub = GroupServiceGrpc.newStub(channel)
+    public GroupServiceGrpc.GroupServiceStub newServiceStub() {
+        return GroupServiceGrpc.newStub(getManagedChannel())
                 .withDeadlineAfter(30, TimeUnit.SECONDS);
     }
 
@@ -45,7 +40,7 @@ public class GroupApi extends BasicApi {
                 .setGroupName(groupName)
                 .addAllMemberUserIdArr(memberUserIdArr)
                 .build();
-        mGroupServiceStub.createGroup(
+        newServiceStub().createGroup(
                 createReq(req),
                 new InnerStreamObserver<>(CreateGroupResp.getDefaultInstance(), callback));
     }
@@ -55,7 +50,7 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setReason(reason)
                 .build();
-        mGroupServiceStub.createGroup(
+        newServiceStub().createGroup(
                 createReq(req),
                 new InnerStreamObserver<>(JoinGroupResp.getDefaultInstance(), callback));
     }
@@ -64,7 +59,7 @@ public class GroupApi extends BasicApi {
         QuitGroupReq req = QuitGroupReq.newBuilder()
                 .setGroupId(groupId)
                 .build();
-        mGroupServiceStub.createGroup(
+        newServiceStub().createGroup(
                 createReq(req),
                 new InnerStreamObserver<>(QuitGroupResp.getDefaultInstance(), callback));
     }
@@ -74,7 +69,7 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .addAllMemberUserIdArr(memberUserIdArr)
                 .build();
-        mGroupServiceStub.createGroup(
+        newServiceStub().createGroup(
                 createReq(req),
                 new InnerStreamObserver<>(AddGroupMemberResp.getDefaultInstance(), callback));
     }
@@ -84,7 +79,7 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setMemberUserId(memberUserId)
                 .build();
-        mGroupServiceStub.createGroup(
+        newServiceStub().createGroup(
                 createReq(req),
                 new InnerStreamObserver<>(KickGroupMemberResp.getDefaultInstance(), callback));
     }
@@ -94,7 +89,7 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setGroupName(groupName)
                 .build();
-        mGroupServiceStub.createGroup(
+        newServiceStub().createGroup(
                 createReq(req),
                 new InnerStreamObserver<>(UpdateGroupNameResp.getDefaultInstance(), callback));
     }
@@ -104,7 +99,7 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setNotice(notice)
                 .build();
-        mGroupServiceStub.createGroup(
+        newServiceStub().createGroup(
                 createReq(req),
                 new InnerStreamObserver<>(UpdateGroupNoticeResp.getDefaultInstance(), callback));
     }
@@ -114,7 +109,7 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setMemberNickname(memberNickname)
                 .build();
-        mGroupServiceStub.createGroup(
+        newServiceStub().createGroup(
                 createReq(req),
                 new InnerStreamObserver<>(UpdateMemberNicknameResp.getDefaultInstance(), callback));
     }

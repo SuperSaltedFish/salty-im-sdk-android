@@ -21,10 +21,9 @@ import me.zhixingye.im.service.ConversationService;
  */
 public class ConversationServiceImpl extends BasicServiceImpl implements ConversationService {
 
-    private final ConversationApi mConversationApi;
+    private final ConversationApi mConversationApi = new ConversationApi();
 
     public ConversationServiceImpl() {
-        mConversationApi = BasicApi.getApi(ConversationApi.class);
     }
 
     @Override

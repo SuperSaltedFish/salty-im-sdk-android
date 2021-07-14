@@ -30,7 +30,7 @@ public class HandlerHelper {
         if (Looper.getMainLooper().isCurrentThread()) {
             runnable.run();
         } else {
-            sUIHandle.post(runnable);
+            getUIHandler().post(runnable);
         }
     }
 }

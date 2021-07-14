@@ -39,7 +39,7 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
     private static final String STORAGE_KEY_LOGIN_INFO = TAG + ".LoginInfo";
 
-    private final UserApi mUserApi;
+    private final UserApi mUserApi = new UserApi();
 
     private final Semaphore mLoginLock = new Semaphore(1);
 
@@ -48,7 +48,6 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
     private volatile boolean isLogged = false;
 
     public LoginServiceImpl() {
-        mUserApi = BasicApi.getApi(UserApi.class);
     }
 
     @Override

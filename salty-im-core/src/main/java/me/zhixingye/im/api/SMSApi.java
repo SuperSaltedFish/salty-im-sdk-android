@@ -6,8 +6,9 @@ import com.salty.protos.SMSOperationType;
 import com.salty.protos.SMSServiceGrpc;
 import com.salty.protos.VerifyTelephoneSMSCodeReq;
 import com.salty.protos.VerifyTelephoneSMSCodeResp;
-import io.grpc.ManagedChannel;
+
 import java.util.concurrent.TimeUnit;
+
 import me.zhixingye.im.listener.RequestCallback;
 
 /**
@@ -17,11 +18,8 @@ import me.zhixingye.im.listener.RequestCallback;
  */
 public class SMSApi extends BasicApi {
 
-    private SMSServiceGrpc.SMSServiceStub mSMSServiceStub;
-
-    @Override
-    public void onBindManagedChannel(ManagedChannel channel) {
-        mSMSServiceStub = SMSServiceGrpc.newStub(channel)
+    public SMSServiceGrpc.SMSServiceStub newServiceStub() {
+        return SMSServiceGrpc.newStub(getManagedChannel())
                 .withDeadlineAfter(30, TimeUnit.SECONDS);
     }
 
@@ -31,7 +29,7 @@ public class SMSApi extends BasicApi {
                 .setOperationType(type)
                 .build();
 
-        mSMSServiceStub.obtainTelephoneSMSCode(
+        newServiceStub().obtainTelephoneSMSCode(
                 createReq(smsReq),
                 new InnerStreamObserver<>(ObtainTelephoneSMSCodeResp.getDefaultInstance(), callback));
     }
@@ -43,7 +41,7 @@ public class SMSApi extends BasicApi {
                 .setOperationType(type)
                 .build();
 
-        mSMSServiceStub.verifyTelephoneSMSCode(
+        newServiceStub().verifyTelephoneSMSCode(
                 createReq(smsReq),
                 new InnerStreamObserver<>(VerifyTelephoneSMSCodeResp.getDefaultInstance(), callback));
     }

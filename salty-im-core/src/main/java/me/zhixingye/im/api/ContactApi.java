@@ -17,8 +17,6 @@ import com.salty.protos.RequestContactResp;
 import com.salty.protos.UpdateRemarkInfoReq;
 import com.salty.protos.UpdateRemarkInfoResp;
 
-import io.grpc.ManagedChannel;
-
 import java.util.concurrent.TimeUnit;
 
 import me.zhixingye.im.listener.RequestCallback;
@@ -30,11 +28,8 @@ import me.zhixingye.im.listener.RequestCallback;
  */
 public class ContactApi extends BasicApi {
 
-    private ContactServiceGrpc.ContactServiceStub mContactServiceStub;
-
-    @Override
-    public void onBindManagedChannel(ManagedChannel channel) {
-        mContactServiceStub = ContactServiceGrpc.newStub(channel)
+    public ContactServiceGrpc.ContactServiceStub newServiceStub() {
+        return ContactServiceGrpc.newStub(getManagedChannel())
                 .withDeadlineAfter(30, TimeUnit.SECONDS);
     }
 
@@ -44,7 +39,7 @@ public class ContactApi extends BasicApi {
                 .setReason(reason)
                 .build();
 
-        mContactServiceStub.requestContact(
+        newServiceStub().requestContact(
                 createReq(req),
                 new InnerStreamObserver<>(RequestContactResp.getDefaultInstance(), callback));
     }
@@ -55,7 +50,7 @@ public class ContactApi extends BasicApi {
                 .setReason(reason)
                 .build();
 
-        mContactServiceStub.refusedContact(
+        newServiceStub().refusedContact(
                 createReq(req),
                 new InnerStreamObserver<>(RefusedContactResp.getDefaultInstance(), callback));
     }
@@ -65,7 +60,7 @@ public class ContactApi extends BasicApi {
                 .setUserId(userId)
                 .build();
 
-        mContactServiceStub.acceptContact(
+        newServiceStub().acceptContact(
                 createReq(req),
                 new InnerStreamObserver<>(AcceptContactResp.getDefaultInstance(), callback));
     }
@@ -75,7 +70,7 @@ public class ContactApi extends BasicApi {
                 .setUserId(userId)
                 .build();
 
-        mContactServiceStub.deleteContact(
+        newServiceStub().deleteContact(
                 createReq(req),
                 new InnerStreamObserver<>(DeleteContactResp.getDefaultInstance(), callback));
     }
@@ -84,7 +79,7 @@ public class ContactApi extends BasicApi {
         GetContactListReq req = GetContactListReq.newBuilder()
                 .build();
 
-        mContactServiceStub.getContactList(
+        newServiceStub().getContactList(
                 createReq(req),
                 new InnerStreamObserver<>(GetContactListResp.getDefaultInstance(), callback)
         );
@@ -96,7 +91,7 @@ public class ContactApi extends BasicApi {
                 .setEndDateTime(endDateTime)
                 .build();
 
-        mContactServiceStub.getContactOperationList(
+        newServiceStub().getContactOperationList(
                 createReq(req),
                 new InnerStreamObserver<>(GetContactOperationListResp.getDefaultInstance(), callback));
     }
@@ -107,7 +102,7 @@ public class ContactApi extends BasicApi {
                 .setUserId(userId)
                 .build();
 
-        mContactServiceStub.updateRemarkInfo(
+        newServiceStub().updateRemarkInfo(
                 createReq(req),
                 new InnerStreamObserver<>(UpdateRemarkInfoResp.getDefaultInstance(), callback));
     }

@@ -23,10 +23,9 @@ import me.zhixingye.im.service.GroupService;
  */
 public class GroupServiceImpl extends BasicServiceImpl implements GroupService {
 
-    private final GroupApi mGroupApi;
+    private final GroupApi mGroupApi = new GroupApi();
 
     public GroupServiceImpl() {
-        mGroupApi = BasicApi.getApi(GroupApi.class);
     }
 
     @Override

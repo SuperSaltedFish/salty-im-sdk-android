@@ -16,18 +16,18 @@ public class RegisterServiceImpl extends BasicServiceImpl implements RegisterSer
 
     private static final String TAG = "RegisterServiceImpl";
 
-    private final UserApi mUserApi;
+    private final UserApi mUserApi = new UserApi();
 
     public RegisterServiceImpl() {
-        mUserApi = BasicApi.getApi(UserApi.class);
     }
+
     @Override
     public void registerByTelephone(String telephone, String password, RequestCallback<RegisterResp> callback) {
-        mUserApi.registerByTelephone(telephone, password,  new RequestCallbackWrapper<>(callback));
+        mUserApi.registerByTelephone(telephone, password, new RequestCallbackWrapper<>(callback));
     }
 
     @Override
     public void registerByEmail(String email, String password, RequestCallback<RegisterResp> callback) {
-        mUserApi.registerByEmail(email, password,  new RequestCallbackWrapper<>(callback));
+        mUserApi.registerByEmail(email, password, new RequestCallbackWrapper<>(callback));
     }
 }

@@ -16,10 +16,9 @@ import me.zhixingye.im.service.SMSService;
  */
 public class SMSServiceImpl extends BasicServiceImpl implements SMSService {
 
-    private final SMSApi mSMSApi;
+    private final SMSApi mSMSApi = new SMSApi();
 
     public SMSServiceImpl() {
-        mSMSApi = BasicApi.getApi(SMSApi.class);
     }
 
     @Override

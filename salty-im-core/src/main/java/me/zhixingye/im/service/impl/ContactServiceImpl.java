@@ -28,13 +28,12 @@ import me.zhixingye.im.service.ContactService;
  */
 public class ContactServiceImpl extends BasicServiceImpl implements ContactService {
 
-    private final ContactApi mContactApi;
+    private final ContactApi mContactApi = new ContactApi();
 
     private final Set<OnContactOperationChangeListener> mOnContactOperationChangeListeners = new CopyOnWriteArraySet<>();
     private final Set<OnContactChangeListener> mOnContactChangeListeners = new CopyOnWriteArraySet<>();
 
     public ContactServiceImpl() {
-        mContactApi = BasicApi.getApi(ContactApi.class);
     }
 
     @Override

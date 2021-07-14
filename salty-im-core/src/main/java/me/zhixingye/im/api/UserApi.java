@@ -16,8 +16,9 @@ import com.salty.protos.UpdateUserInfoReq;
 import com.salty.protos.UpdateUserInfoResp;
 import com.salty.protos.UserProfile;
 import com.salty.protos.UserServiceGrpc;
-import io.grpc.ManagedChannel;
+
 import java.util.concurrent.TimeUnit;
+
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.util.Sha256Util;
 
@@ -28,13 +29,10 @@ import me.zhixingye.im.util.Sha256Util;
  */
 public class UserApi extends BasicApi {
 
-    private static final String PASSWORD_SALTY = "salty";
+    private static final String PASSWORD_SALTY = "PasswordSalty";
 
-    private UserServiceGrpc.UserServiceStub mUserServiceStub;
-
-    @Override
-    public void onBindManagedChannel(ManagedChannel channel) {
-        mUserServiceStub = UserServiceGrpc.newStub(channel)
+    public UserServiceGrpc.UserServiceStub newServiceStub() {
+        return UserServiceGrpc.newStub(getManagedChannel())
                 .withDeadlineAfter(30, TimeUnit.SECONDS);
     }
 
@@ -48,7 +46,7 @@ public class UserApi extends BasicApi {
                 .setPassword(Sha256Util.sha256WithSalt(password, PASSWORD_SALTY))
                 .build();
 
-        mUserServiceStub.register(
+        newServiceStub().register(
                 createReq(req),
                 new InnerStreamObserver<>(RegisterResp.getDefaultInstance(), callback));
     }
@@ -63,7 +61,7 @@ public class UserApi extends BasicApi {
                 .setPassword(Sha256Util.sha256WithSalt(password, PASSWORD_SALTY))
                 .build();
 
-        mUserServiceStub.register(
+        newServiceStub().register(
                 createReq(req),
                 new InnerStreamObserver<>(RegisterResp.getDefaultInstance(), callback));
     }
@@ -73,7 +71,7 @@ public class UserApi extends BasicApi {
                 .setTelephone(telephone)
                 .setPassword(Sha256Util.sha256WithSalt(password, PASSWORD_SALTY))
                 .build();
-        mUserServiceStub.login(
+        newServiceStub().login(
                 createReq(req),
                 new InnerStreamObserver<>(LoginResp.getDefaultInstance(), callback));
     }
@@ -84,7 +82,7 @@ public class UserApi extends BasicApi {
                 .setPassword(Sha256Util.sha256WithSalt(password, PASSWORD_SALTY))
                 .build();
 
-        mUserServiceStub.login(
+        newServiceStub().login(
                 createReq(req),
                 new InnerStreamObserver<>(LoginResp.getDefaultInstance(), callback));
     }
@@ -92,7 +90,7 @@ public class UserApi extends BasicApi {
     public void logout(RequestCallback<LogoutResp> callback) {
         LogoutReq req = LogoutReq.newBuilder()
                 .build();
-        mUserServiceStub.login(
+        newServiceStub().login(
                 createReq(req),
                 new InnerStreamObserver<>(LogoutResp.getDefaultInstance(), callback));
     }
@@ -103,7 +101,7 @@ public class UserApi extends BasicApi {
                 .setNewPassword(Sha256Util.sha256WithSalt(newPassword, PASSWORD_SALTY))
                 .build();
 
-        mUserServiceStub.resetPassword(
+        newServiceStub().resetPassword(
                 createReq(req),
                 new InnerStreamObserver<>(ResetPasswordResp.getDefaultInstance(), callback));
     }
@@ -114,7 +112,7 @@ public class UserApi extends BasicApi {
                 .setNewPassword(Sha256Util.sha256WithSalt(newPassword, PASSWORD_SALTY))
                 .build();
 
-        mUserServiceStub.resetPassword(
+        newServiceStub().resetPassword(
                 createReq(req),
                 new InnerStreamObserver<>(ResetPasswordResp.getDefaultInstance(), callback));
     }
@@ -132,7 +130,7 @@ public class UserApi extends BasicApi {
                 .setProfile(profile)
                 .build();
 
-        mUserServiceStub.updateUserInfo(
+        newServiceStub().updateUserInfo(
                 createReq(req),
                 new InnerStreamObserver<>(UpdateUserInfoResp.getDefaultInstance(), callback));
     }
@@ -142,7 +140,7 @@ public class UserApi extends BasicApi {
                 .setUserId(userId)
                 .build();
 
-        mUserServiceStub.getUserInfo(
+        newServiceStub().getUserInfo(
                 createReq(req),
                 new InnerStreamObserver<>(GetUserInfoResp.getDefaultInstance(), callback));
     }
@@ -152,7 +150,7 @@ public class UserApi extends BasicApi {
                 .setTelephone(telephone)
                 .build();
 
-        mUserServiceStub.queryUserInfo(
+        newServiceStub().queryUserInfo(
                 createReq(req),
                 new InnerStreamObserver<>(QueryUserInfoResp.getDefaultInstance(), callback));
     }
@@ -162,7 +160,7 @@ public class UserApi extends BasicApi {
                 .setEmail(email)
                 .build();
 
-        mUserServiceStub.queryUserInfo(
+        newServiceStub().queryUserInfo(
                 createReq(req),
                 new InnerStreamObserver<>(QueryUserInfoResp.getDefaultInstance(), callback));
     }

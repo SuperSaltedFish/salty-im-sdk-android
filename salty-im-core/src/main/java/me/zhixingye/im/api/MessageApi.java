@@ -13,8 +13,4 @@ public class MessageApi extends BasicApi {
 
     }
 
-    @Override
-    public void onBindManagedChannel(ManagedChannel channel) {
-
-    }
 }
