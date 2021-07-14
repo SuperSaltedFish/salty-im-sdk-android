@@ -17,11 +17,11 @@ import me.zhixingye.im.api.UserApi;
 import me.zhixingye.im.constant.ResponseCode;
 import me.zhixingye.im.database.SQLiteServiceManager;
 import me.zhixingye.im.database.UserDao;
+import me.zhixingye.im.event.EventManager;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.LoginService;
-import me.zhixingye.im.service.StorageService;
-import me.zhixingye.im.service.event.OnLoggedInEvent;
-import me.zhixingye.im.service.event.OnLoggedOutEvent;
+import me.zhixingye.im.event.OnLoggedInEvent;
+import me.zhixingye.im.event.OnLoggedOutEvent;
 import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.Logger;
 import me.zhixingye.im.util.MD5Util;
@@ -146,7 +146,7 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
         isLogged = false;
 
-        sendEvent(new OnLoggedOutEvent());
+        EventManager.sendEvent(new OnLoggedOutEvent());
 
         callOnLoggedOutListener();
     }
@@ -245,7 +245,7 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
         isLogged = true;
 
-        sendEvent(new OnLoggedInEvent(loginResp));
+        EventManager.sendEvent(new OnLoggedInEvent(loginResp));
 
         callOnLoggedInListener();
 
@@ -254,15 +254,15 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
 
     private void saveLoginRespToLocal(@Nullable LoginResp loginResp) {
         if (loginResp == null) {
-            ServiceAccessor.get(StorageService.class).removeFromStorage(TAG, STORAGE_KEY_LOGIN_INFO);
+            IMCore.get().getStorageService().removeFromStorage(TAG, STORAGE_KEY_LOGIN_INFO);
         } else {
-            ServiceAccessor.get(StorageService.class).putByteArrayToStorage(TAG, STORAGE_KEY_LOGIN_INFO, loginResp.toByteArray());
+            IMCore.get().getStorageService().putByteArrayToStorage(TAG, STORAGE_KEY_LOGIN_INFO, loginResp.toByteArray());
         }
     }
 
     @Nullable
     private LoginResp getLoginRespFromLocal() {
-        byte[] data = ServiceAccessor.get(StorageService.class).getByteArrayFromStorage(TAG, STORAGE_KEY_LOGIN_INFO);
+        byte[] data = IMCore.get().getStorageService().getByteArrayFromStorage(TAG, STORAGE_KEY_LOGIN_INFO);
         if (data == null || data.length == 0) {
             return null;
         }

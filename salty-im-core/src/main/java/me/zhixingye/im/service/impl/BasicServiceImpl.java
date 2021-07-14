@@ -1,16 +1,9 @@
 package me.zhixingye.im.service.impl;
 
-import android.util.ArraySet;
 
 import androidx.annotation.CallSuper;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import me.zhixingye.im.listener.RequestCallback;
-import me.zhixingye.im.service.event.BasicEvent;
-import me.zhixingye.im.service.event.OnEventListener;
 import me.zhixingye.im.tool.CallbackHelper;
 import me.zhixingye.im.tool.ExecutorHelper;
 import me.zhixingye.im.tool.HandlerHelper;
@@ -22,57 +15,12 @@ import me.zhixingye.im.tool.HandlerHelper;
  */
 public class BasicServiceImpl {
 
-    private static final Map<Class<?>, Set<OnEventListener<BasicEvent<?>>>> EVENT_LISTENER_MAP = new HashMap<>();
-
-    protected <T extends BasicEvent<?>> void sendEvent(final T event) {
-        if (event == null) {
-            return;
-        }
-        runOnUIThread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (EVENT_LISTENER_MAP) {
-                    Set<OnEventListener<BasicEvent<?>>> eventListeners = EVENT_LISTENER_MAP.get(event.getClass());
-                    if (eventListeners == null) {
-                        return;
-                    }
-                    for (OnEventListener<BasicEvent<?>> listener : eventListeners) {
-                        listener.onEvent(event);
-                    }
-                }
-            }
-        });
+    public BasicServiceImpl() {
     }
 
-    @SuppressWarnings("unchecked")
-    protected <T extends BasicEvent<?>> void addOnEventListener(Class<T> eventCls, OnEventListener<T> listener) {
-        if (eventCls == null || listener == null) {
-            return;
-        }
-        synchronized (EVENT_LISTENER_MAP) {
-            Set<OnEventListener<BasicEvent<?>>> eventListenerSet = EVENT_LISTENER_MAP.get(eventCls);
-            if (eventListenerSet == null) {
-                eventListenerSet = new ArraySet<>();
-                EVENT_LISTENER_MAP.put(eventCls, eventListenerSet);
-            }
-            eventListenerSet.add((OnEventListener<BasicEvent<?>>) listener);
-        }
-    }
-
-    protected <T extends BasicEvent<?>> void removeOnEventListener(Class<T> eventCls, OnEventListener<T> listener) {
-        if (eventCls == null || listener == null) {
-            return;
-        }
-        synchronized (EVENT_LISTENER_MAP) {
-            Set<OnEventListener<BasicEvent<?>>> eventListenerSet = EVENT_LISTENER_MAP.get(eventCls);
-            if (eventListenerSet != null) {
-                eventListenerSet.remove(listener);
-            }
-        }
-    }
 
     protected void runOnUIThread(Runnable runnable) {
-        HandlerHelper.getUIHandler().post(runnable);
+        HandlerHelper.runOnUIThread(runnable);
     }
 
     protected void runOnWorkThread(Runnable runnable) {

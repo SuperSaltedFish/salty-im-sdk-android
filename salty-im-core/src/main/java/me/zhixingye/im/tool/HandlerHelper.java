@@ -22,4 +22,15 @@ public class HandlerHelper {
         }
         return sUIHandle;
     }
+
+    public static void runOnUIThread(Runnable runnable) {
+        if (runnable == null) {
+            return;
+        }
+        if (Looper.getMainLooper().isCurrentThread()) {
+            runnable.run();
+        } else {
+            sUIHandle.post(runnable);
+        }
+    }
 }

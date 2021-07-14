@@ -1,4 +1,4 @@
-package me.zhixingye.im.service.event;
+package me.zhixingye.im.event;
 
 import com.salty.protos.LoginResp;
 

@@ -19,12 +19,13 @@ import javax.annotation.Nullable;
 import me.zhixingye.im.api.BasicApi;
 import me.zhixingye.im.api.UserApi;
 import me.zhixingye.im.database.UserDao;
+import me.zhixingye.im.event.EventManager;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.service.UserService;
-import me.zhixingye.im.service.event.OnEventListener;
-import me.zhixingye.im.service.event.OnLoggedInEvent;
-import me.zhixingye.im.service.event.OnLoggedOutEvent;
-import me.zhixingye.im.service.event.RequestSaveUserProfileEvent;
+import me.zhixingye.im.event.OnEventListener;
+import me.zhixingye.im.event.OnLoggedInEvent;
+import me.zhixingye.im.event.OnLoggedOutEvent;
+import me.zhixingye.im.event.RequestSaveUserProfileEvent;
 import me.zhixingye.im.tool.Logger;
 
 /**
@@ -133,7 +134,7 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
     }
 
     private void listenerOnLoggedInEvent() {
-        addOnEventListener(OnLoggedInEvent.class, new OnEventListener<OnLoggedInEvent>() {
+        EventManager.addOnEventListener(OnLoggedInEvent.class, new OnEventListener<OnLoggedInEvent>() {
             @Override
             public void onEvent(@NonNull OnLoggedInEvent eventData) {
                 Logger.i(TAG, "listenerOnLoggedInEvent onEvent");
@@ -145,7 +146,7 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
     }
 
     private void listenerOnLoggedOutEvent() {
-        addOnEventListener(OnLoggedOutEvent.class, new OnEventListener<OnLoggedOutEvent>() {
+        EventManager.addOnEventListener(OnLoggedOutEvent.class, new OnEventListener<OnLoggedOutEvent>() {
             @Override
             public void onEvent(@NonNull OnLoggedOutEvent eventData) {
                 Logger.i(TAG, "listenerOnLoggedOutEvent onEvent");
@@ -156,7 +157,7 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
     }
 
     private void listenerRequestSaveUserProfileEvent() {
-        addOnEventListener(RequestSaveUserProfileEvent.class, new OnEventListener<RequestSaveUserProfileEvent>() {
+        EventManager.addOnEventListener(RequestSaveUserProfileEvent.class, new OnEventListener<RequestSaveUserProfileEvent>() {
             @Override
             public void onEvent(@NonNull RequestSaveUserProfileEvent eventData) {
                 Logger.i(TAG, "listenerRequestSaveUserProfileEvent onEvent");
@@ -164,6 +165,4 @@ public class UserServiceImpl extends BasicServiceImpl implements UserService {
             }
         });
     }
-
-
 }

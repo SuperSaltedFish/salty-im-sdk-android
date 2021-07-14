@@ -29,6 +29,7 @@ public class ByteRemoteCallback<T extends MessageLite> implements RequestCallbac
                 e.printStackTrace();
             }
         }
+        mRemoteCallback = null;
     }
 
     @Override
@@ -40,5 +41,6 @@ public class ByteRemoteCallback<T extends MessageLite> implements RequestCallbac
                 e.printStackTrace();
             }
         }
+        mRemoteCallback = null;
     }
 }
