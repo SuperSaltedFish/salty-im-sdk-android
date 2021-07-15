@@ -24,25 +24,25 @@ public class SMSApi extends BasicApi {
     }
 
     public void obtainTelephoneSMSCode(String telephone, SMSOperationType type, RequestCallback<ObtainTelephoneSMSCodeResp> callback) {
-        ObtainTelephoneSMSCodeReq smsReq = ObtainTelephoneSMSCodeReq.newBuilder()
+        ObtainTelephoneSMSCodeReq req = ObtainTelephoneSMSCodeReq.newBuilder()
                 .setTelephone(telephone)
                 .setOperationType(type)
                 .build();
 
         newServiceStub().obtainTelephoneSMSCode(
-                createReq(smsReq),
-                new InnerStreamObserver<>(ObtainTelephoneSMSCodeResp.getDefaultInstance(), callback));
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void verifyTelephoneSMSCode(String telephone, String smsCode, SMSOperationType type, RequestCallback<VerifyTelephoneSMSCodeResp> callback) {
-        VerifyTelephoneSMSCodeReq smsReq = VerifyTelephoneSMSCodeReq.newBuilder()
+        VerifyTelephoneSMSCodeReq req = VerifyTelephoneSMSCodeReq.newBuilder()
                 .setTelephone(telephone)
                 .setSmsCode(smsCode)
                 .setOperationType(type)
                 .build();
 
         newServiceStub().verifyTelephoneSMSCode(
-                createReq(smsReq),
-                new InnerStreamObserver<>(VerifyTelephoneSMSCodeResp.getDefaultInstance(), callback));
+                req,
+                new InnerStreamObserver<>(callback));
     }
 }

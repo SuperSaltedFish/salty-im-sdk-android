@@ -40,8 +40,8 @@ public class ContactApi extends BasicApi {
                 .build();
 
         newServiceStub().requestContact(
-                createReq(req),
-                new InnerStreamObserver<>(RequestContactResp.getDefaultInstance(), callback));
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void refusedContact(String userId, String reason, RequestCallback<RefusedContactResp> callback) {
@@ -51,8 +51,8 @@ public class ContactApi extends BasicApi {
                 .build();
 
         newServiceStub().refusedContact(
-                createReq(req),
-                new InnerStreamObserver<>(RefusedContactResp.getDefaultInstance(), callback));
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void acceptContact(String userId, RequestCallback<AcceptContactResp> callback) {
@@ -61,8 +61,8 @@ public class ContactApi extends BasicApi {
                 .build();
 
         newServiceStub().acceptContact(
-                createReq(req),
-                new InnerStreamObserver<>(AcceptContactResp.getDefaultInstance(), callback));
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void deleteContact(String userId, RequestCallback<DeleteContactResp> callback) {
@@ -71,8 +71,8 @@ public class ContactApi extends BasicApi {
                 .build();
 
         newServiceStub().deleteContact(
-                createReq(req),
-                new InnerStreamObserver<>(DeleteContactResp.getDefaultInstance(), callback));
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void getAllContact(RequestCallback<GetContactListResp> callback) {
@@ -80,8 +80,8 @@ public class ContactApi extends BasicApi {
                 .build();
 
         newServiceStub().getContactList(
-                createReq(req),
-                new InnerStreamObserver<>(GetContactListResp.getDefaultInstance(), callback)
+                req,
+                new InnerStreamObserver<>(callback)
         );
     }
 
@@ -92,8 +92,8 @@ public class ContactApi extends BasicApi {
                 .build();
 
         newServiceStub().getContactOperationList(
-                createReq(req),
-                new InnerStreamObserver<>(GetContactOperationListResp.getDefaultInstance(), callback));
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void updateContactRemarkInfo(String userId, ContactRemark remark, RequestCallback<UpdateRemarkInfoResp> callback) {
@@ -103,7 +103,7 @@ public class ContactApi extends BasicApi {
                 .build();
 
         newServiceStub().updateRemarkInfo(
-                createReq(req),
-                new InnerStreamObserver<>(UpdateRemarkInfoResp.getDefaultInstance(), callback));
+                req,
+                new InnerStreamObserver<>(callback));
     }
 }

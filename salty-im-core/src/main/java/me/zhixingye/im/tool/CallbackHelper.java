@@ -1,6 +1,8 @@
 package me.zhixingye.im.tool;
 
-import me.zhixingye.im.constant.ResponseCode;
+import com.salty.protos.StatusCode;
+
+import me.zhixingye.im.constant.ClientErrorCode;
 import me.zhixingye.im.listener.RequestCallback;
 
 /**
@@ -32,14 +34,12 @@ public class CallbackHelper {
         }
     }
 
-    public static void callFailure(final ResponseCode code, final RequestCallback<?> callback) {
-        if (callback != null) {
-            HandlerHelper.getUIHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    callback.onFailure(code.getCode(), code.getMsg());
-                }
-            });
-        }
+    public static void callFailure(final StatusCode code, String error, final RequestCallback<?> callback) {
+        callFailure(code.getNumber(), error, callback);
+    }
+
+
+    public static void callFailure(final ClientErrorCode code, final RequestCallback<?> callback) {
+        callFailure(code.getCode(), code.getMsg(), callback);
     }
 }

@@ -4,7 +4,7 @@ import android.os.RemoteException;
 
 import androidx.annotation.WorkerThread;
 
-import me.zhixingye.im.constant.ResponseCode;
+import me.zhixingye.im.constant.ClientErrorCode;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.IRemoteService;
 
@@ -23,8 +23,8 @@ public abstract class RemoteProxy {
     public void callRemoteFail(RequestCallback<?> callback) {
         if (callback != null) {
             callback.onFailure(
-                    ResponseCode.INTERNAL_IPC_EXCEPTION.getCode(),
-                    ResponseCode.INTERNAL_IPC_EXCEPTION.getMsg());
+                    ClientErrorCode.INTERNAL_IPC_EXCEPTION.getCode(),
+                    ClientErrorCode.INTERNAL_IPC_EXCEPTION.getMsg());
         }
     }
 

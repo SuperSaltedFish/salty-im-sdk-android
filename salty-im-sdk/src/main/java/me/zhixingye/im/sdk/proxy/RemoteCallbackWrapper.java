@@ -1,14 +1,11 @@
 package me.zhixingye.im.sdk.proxy;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 
-import me.zhixingye.im.constant.ResponseCode;
+import me.zhixingye.im.constant.ClientErrorCode;
 import me.zhixingye.im.listener.RequestCallback;
 import me.zhixingye.im.sdk.IRemoteRequestCallback;
-import me.zhixingye.im.sdk.tool.HandlerFactory;
 import me.zhixingye.im.tool.CallbackHelper;
-import me.zhixingye.im.tool.Logger;
 import me.zhixingye.im.util.ReflectUtil;
 
 /**
@@ -33,7 +30,7 @@ public class RemoteCallbackWrapper<T> extends IRemoteRequestCallback.Stub {
 
         Class<T> genericCls = (Class<T>) ReflectUtil.findGenericClass(mCallback.getClass(), RequestCallback.class, 0);
         if (genericCls == null) {
-            onFailure(ResponseCode.INTERNAL_UNKNOWN.getCode(), "genericCls == null");
+            onFailure(ClientErrorCode.INTERNAL_UNKNOWN.getCode(), "genericCls == null");
             return;
         }
 
@@ -46,12 +43,12 @@ public class RemoteCallbackWrapper<T> extends IRemoteRequestCallback.Stub {
             Method method = genericCls.getMethod("parseFrom", byte[].class);
             T data = (T) method.invoke(null, (Object) protoData);
             if (data == null) {
-                onFailure(ResponseCode.INTERNAL_UNKNOWN.getCode(), "data == null");
+                onFailure(ClientErrorCode.INTERNAL_UNKNOWN.getCode(), "data == null");
             } else {
                 callCompleted(data);
             }
         } catch (Exception e) {
-            onFailure(ResponseCode.INTERNAL_UNKNOWN.getCode(), e.toString());
+            onFailure(ClientErrorCode.INTERNAL_UNKNOWN.getCode(), e.toString());
         }
     }
 

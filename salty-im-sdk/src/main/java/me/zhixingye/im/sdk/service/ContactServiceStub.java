@@ -9,7 +9,7 @@ import com.salty.protos.ContactRemark;
 import com.salty.protos.UpdateRemarkInfoResp;
 
 import me.zhixingye.im.IMCore;
-import me.zhixingye.im.constant.ResponseCode;
+import me.zhixingye.im.constant.ClientErrorCode;
 import me.zhixingye.im.sdk.IContactRemoteService;
 import me.zhixingye.im.sdk.IOnContactOperationChangeListener;
 import me.zhixingye.im.sdk.IOnContactChangeListener;
@@ -74,14 +74,14 @@ public class ContactServiceStub extends IContactRemoteService.Stub {
     }
 
     @Override
-    public void updateContactRemarkInfo(String userId, byte[] contactRemark, IRemoteRequestCallback callback) throws RemoteException {
+    public void updateContactRemarkInfo(String userId, byte[] contactRemark, IRemoteRequestCallback callback) {
         ByteRemoteCallback<UpdateRemarkInfoResp> remoteCallback = new ByteRemoteCallback<>(callback);
         ContactRemark remark;
         try {
             remark = ContactRemark.parseFrom(contactRemark);
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
-            remoteCallback.onFailure(ResponseCode.INTERNAL_UNKNOWN.getCode(), e.toString());
+            remoteCallback.onFailure(ClientErrorCode.INTERNAL_UNKNOWN.getCode(), e.toString());
             return;
         }
         IMCore.get().getContactService().updateContactRemarkInfo(

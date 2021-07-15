@@ -41,8 +41,8 @@ public class GroupApi extends BasicApi {
                 .addAllMemberUserIdArr(memberUserIdArr)
                 .build();
         newServiceStub().createGroup(
-                createReq(req),
-                new InnerStreamObserver<>(CreateGroupResp.getDefaultInstance(), callback));
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void joinGroup(String groupId, String reason, RequestCallback<JoinGroupResp> callback) {
@@ -50,18 +50,18 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setReason(reason)
                 .build();
-        newServiceStub().createGroup(
-                createReq(req),
-                new InnerStreamObserver<>(JoinGroupResp.getDefaultInstance(), callback));
+        newServiceStub().joinGroup(
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void quitGroup(String groupId, RequestCallback<QuitGroupResp> callback) {
         QuitGroupReq req = QuitGroupReq.newBuilder()
                 .setGroupId(groupId)
                 .build();
-        newServiceStub().createGroup(
-                createReq(req),
-                new InnerStreamObserver<>(QuitGroupResp.getDefaultInstance(), callback));
+        newServiceStub().quitGroup(
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void addGroupMember(String groupId, List<String> memberUserIdArr, RequestCallback<AddGroupMemberResp> callback) {
@@ -69,9 +69,9 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .addAllMemberUserIdArr(memberUserIdArr)
                 .build();
-        newServiceStub().createGroup(
-                createReq(req),
-                new InnerStreamObserver<>(AddGroupMemberResp.getDefaultInstance(), callback));
+        newServiceStub().addGroupMember(
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void kickGroupMember(String groupId, String memberUserId, RequestCallback<KickGroupMemberResp> callback) {
@@ -79,9 +79,9 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setMemberUserId(memberUserId)
                 .build();
-        newServiceStub().createGroup(
-                createReq(req),
-                new InnerStreamObserver<>(KickGroupMemberResp.getDefaultInstance(), callback));
+        newServiceStub().kickGroupMember(
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void updateGroupName(String groupId, String groupName, RequestCallback<UpdateGroupNameResp> callback) {
@@ -89,9 +89,9 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setGroupName(groupName)
                 .build();
-        newServiceStub().createGroup(
-                createReq(req),
-                new InnerStreamObserver<>(UpdateGroupNameResp.getDefaultInstance(), callback));
+        newServiceStub().updateGroupName(
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void updateGroupNotice(String groupId, String notice, RequestCallback<UpdateGroupNoticeResp> callback) {
@@ -99,9 +99,9 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setNotice(notice)
                 .build();
-        newServiceStub().createGroup(
-                createReq(req),
-                new InnerStreamObserver<>(UpdateGroupNoticeResp.getDefaultInstance(), callback));
+        newServiceStub().updateGroupNotice(
+                req,
+                new InnerStreamObserver<>(callback));
     }
 
     public void updateMemberNickname(String groupId, String memberNickname, RequestCallback<UpdateMemberNicknameResp> callback) {
@@ -109,8 +109,8 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setMemberNickname(memberNickname)
                 .build();
-        newServiceStub().createGroup(
-                createReq(req),
-                new InnerStreamObserver<>(UpdateMemberNicknameResp.getDefaultInstance(), callback));
+        newServiceStub().updateMemberNickname(
+                req,
+                new InnerStreamObserver<>(callback));
     }
 }

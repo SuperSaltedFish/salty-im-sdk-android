@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 
 import com.salty.protos.LoginResp;
+import com.salty.protos.StatusCode;
 import com.salty.protos.UserProfile;
 
 import java.util.Set;
@@ -12,9 +13,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Semaphore;
 
 import me.zhixingye.im.IMCore;
-import me.zhixingye.im.api.BasicApi;
 import me.zhixingye.im.api.UserApi;
-import me.zhixingye.im.constant.ResponseCode;
+import me.zhixingye.im.constant.ClientErrorCode;
 import me.zhixingye.im.database.SQLiteServiceManager;
 import me.zhixingye.im.database.UserDao;
 import me.zhixingye.im.event.EventManager;
@@ -78,13 +78,13 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
                 try {
                     LoginResp loginResp = getLoginRespFromLocal();
                     if (loginResp == null) {
-                        CallbackHelper.callFailure(ResponseCode.INTERNAL_USER_NOT_LOGGED_IN, callback);
+                        CallbackHelper.callFailure(StatusCode.STATUS_TOKEN_EXPIRED, "", callback);
                         return;
                     }
                     if (tryInitLoginInfo(loginResp)) {
                         CallbackHelper.callCompleted(loginResp.getProfile(), callback);
                     } else {
-                        CallbackHelper.callFailure(ResponseCode.INTERNAL_UNKNOWN, callback);
+                        CallbackHelper.callFailure(ClientErrorCode.INTERNAL_UNKNOWN, callback);
                     }
                 } finally {
                     mLoginLock.release();
@@ -111,7 +111,7 @@ public class LoginServiceImpl extends BasicServiceImpl implements LoginService {
                     if (tryInitLoginInfo(loginResp)) {
                         CallbackHelper.callCompleted(loginResp.getProfile(), callback);
                     } else {
-                        CallbackHelper.callFailure(ResponseCode.INTERNAL_UNKNOWN, callback);
+                        CallbackHelper.callFailure(ClientErrorCode.INTERNAL_UNKNOWN, callback);
                     }
                 } finally {
                     mLoginLock.release();
