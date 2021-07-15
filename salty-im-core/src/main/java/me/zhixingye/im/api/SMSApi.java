@@ -31,7 +31,7 @@ public class SMSApi extends BasicApi {
 
         newServiceStub().obtainTelephoneSMSCode(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void verifyTelephoneSMSCode(String telephone, String smsCode, SMSOperationType type, RequestCallback<VerifyTelephoneSMSCodeResp> callback) {
@@ -43,6 +43,6 @@ public class SMSApi extends BasicApi {
 
         newServiceStub().verifyTelephoneSMSCode(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 }

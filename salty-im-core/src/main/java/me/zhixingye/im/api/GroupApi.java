@@ -42,7 +42,7 @@ public class GroupApi extends BasicApi {
                 .build();
         newServiceStub().createGroup(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void joinGroup(String groupId, String reason, RequestCallback<JoinGroupResp> callback) {
@@ -52,7 +52,7 @@ public class GroupApi extends BasicApi {
                 .build();
         newServiceStub().joinGroup(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void quitGroup(String groupId, RequestCallback<QuitGroupResp> callback) {
@@ -61,7 +61,7 @@ public class GroupApi extends BasicApi {
                 .build();
         newServiceStub().quitGroup(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void addGroupMember(String groupId, List<String> memberUserIdArr, RequestCallback<AddGroupMemberResp> callback) {
@@ -71,7 +71,7 @@ public class GroupApi extends BasicApi {
                 .build();
         newServiceStub().addGroupMember(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void kickGroupMember(String groupId, String memberUserId, RequestCallback<KickGroupMemberResp> callback) {
@@ -81,7 +81,7 @@ public class GroupApi extends BasicApi {
                 .build();
         newServiceStub().kickGroupMember(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void updateGroupName(String groupId, String groupName, RequestCallback<UpdateGroupNameResp> callback) {
@@ -91,7 +91,7 @@ public class GroupApi extends BasicApi {
                 .build();
         newServiceStub().updateGroupName(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void updateGroupNotice(String groupId, String notice, RequestCallback<UpdateGroupNoticeResp> callback) {
@@ -101,7 +101,7 @@ public class GroupApi extends BasicApi {
                 .build();
         newServiceStub().updateGroupNotice(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void updateMemberNickname(String groupId, String memberNickname, RequestCallback<UpdateMemberNicknameResp> callback) {
@@ -111,6 +111,6 @@ public class GroupApi extends BasicApi {
                 .build();
         newServiceStub().updateMemberNickname(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 }

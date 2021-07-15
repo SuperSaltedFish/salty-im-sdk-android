@@ -46,7 +46,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().register(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void registerByEmail(String email, String password, RequestCallback<RegisterResp> callback) {
@@ -61,7 +61,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().register(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void loginByTelephone(String telephone, String password, RequestCallback<LoginResp> callback) {
@@ -71,7 +71,7 @@ public class UserApi extends BasicApi {
                 .build();
         newServiceStub().login(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void loginByEmail(String email, String password, RequestCallback<LoginResp> callback) {
@@ -82,7 +82,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().login(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void logout(RequestCallback<LogoutResp> callback) {
@@ -91,7 +91,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().logout(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void resetLoginPasswordByTelephone(String telephone, String newPassword, RequestCallback<ResetPasswordResp> callback) {
@@ -102,7 +102,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().resetPassword(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void resetLoginPasswordByEmail(String email, String newPassword, RequestCallback<ResetPasswordResp> callback) {
@@ -113,7 +113,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().resetPassword(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void updateUserInfo(String nickname, String description, UserProfile.Sex sex, long birthday, String location, RequestCallback<UpdateUserInfoResp> callback) {
@@ -131,7 +131,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().updateUserInfo(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void getUserInfoByUserId(String userId, RequestCallback<GetUserInfoResp> callback) {
@@ -141,7 +141,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().getUserInfo(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void queryUserInfoByTelephone(String telephone, RequestCallback<QueryUserInfoResp> callback) {
@@ -151,7 +151,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().queryUserInfo(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void queryUserInfoByEmail(String email, RequestCallback<QueryUserInfoResp> callback) {
@@ -161,7 +161,7 @@ public class UserApi extends BasicApi {
 
         newServiceStub().queryUserInfo(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
 }

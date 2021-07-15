@@ -38,7 +38,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         newServiceStub().getAllConversation(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void getConversationDetail(String conversationId, Conversation.ConversationType type, RequestCallback<GetConversationDetailResp> callback) {
@@ -48,7 +48,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         newServiceStub().getConversationDetail(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void removeConversation(String conversationId, Conversation.ConversationType type, RequestCallback<RemoveConversationResp> callback) {
@@ -58,7 +58,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         newServiceStub().removeConversation(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void clearConversationMessage(String conversationId, Conversation.ConversationType type, RequestCallback<ClearConversationMessageResp> callback) {
@@ -68,7 +68,7 @@ public class ConversationApi extends BasicApi {
                 .build();
         newServiceStub().clearConversationMessage(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
 
@@ -81,7 +81,7 @@ public class ConversationApi extends BasicApi {
 
         newServiceStub().updateConversationTitle(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void updateConversationTop(String conversationId, Conversation.ConversationType type, boolean isTop, RequestCallback<UpdateConversationTopResp> callback) {
@@ -93,7 +93,7 @@ public class ConversationApi extends BasicApi {
 
         newServiceStub().updateConversationTop(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void updateNotificationStatus(String conversationId, Conversation.ConversationType type, Conversation.NotificationStatus status, RequestCallback<UpdateNotificationStatusResp> callback) {
@@ -105,6 +105,6 @@ public class ConversationApi extends BasicApi {
 
         newServiceStub().updateNotificationStatus(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 }

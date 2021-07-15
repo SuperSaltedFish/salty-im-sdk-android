@@ -1,22 +1,12 @@
 package me.zhixingye.im.api;
 
-
-import com.google.protobuf.Any;
-import com.google.protobuf.MessageLite;
-import com.salty.protos.GrpcReq;
-
-import io.grpc.CallOptions;
-import io.grpc.Channel;
-import io.grpc.ClientCall;
 import io.grpc.ClientInterceptor;
 import io.grpc.ManagedChannel;
-import io.grpc.MethodDescriptor;
 import io.grpc.Status;
 import io.grpc.android.AndroidChannelBuilder;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +37,7 @@ public abstract class BasicApi {
                             .usePlaintext();
 
                     List<ClientInterceptor> clientInterceptorList = new ArrayList<>();
+                    clientInterceptorList.add(new LogClientInterceptor());
                     clientInterceptorList.add(new GrpcClientInterceptor());
 
                     sManagedChannel = AndroidChannelBuilder.usingBuilder(builder)
@@ -60,12 +51,12 @@ public abstract class BasicApi {
         return sManagedChannel;
     }
 
-    static class InnerStreamObserver<T> implements StreamObserver<T> {
+    static class UnaryStreamObserver<T> implements StreamObserver<T> {
 
         private final RequestCallback<T> mCallback;
         private T mResponseData;
 
-        InnerStreamObserver(RequestCallback<T> callback) {
+        UnaryStreamObserver(RequestCallback<T> callback) {
             mCallback = callback;
         }
 
@@ -77,33 +68,8 @@ public abstract class BasicApi {
         @Override
         public void onError(Throwable t) {
             Status status = Status.fromThrowable(t);
-            Throwable cause = status.getCause();
-
-            if (cause instanceof ResponseException) {
-                ResponseException respException = (ResponseException) cause;
-                callError(respException.getStatusCodeValue(), respException.getLocalizedMessage());
-                return;
-            }
-
-            if (cause instanceof ClientInternalException) {
-                ClientInternalException clientInternalException = (ClientInternalException) cause;
-                callError(clientInternalException.getErrorCode(), clientInternalException.getLocalizedMessage());
-                return;
-            }
-
-            switch (status.getCode()) {
-                case DEADLINE_EXCEEDED:
-                    callError(-status.getCode().value(), "连接超时，请检查当前网络状态是否正常！");
-                    break;
-                default:
-                    callError(-status.getCode().value(), status.getDescription());
-                    break;
-            }
-        }
-
-        private void callError(int code, String error) {
             if (mCallback != null) {
-                mCallback.onFailure(code, error);
+                mCallback.onFailure(getErrorCodeFrom(status), getErrorMessageFrom(status));
             }
         }
 
@@ -114,7 +80,41 @@ public abstract class BasicApi {
             }
 
         }
+
     }
 
+    public static int getErrorCodeFrom(Status status) {
+        Throwable cause = status.getCause();
+        if (cause instanceof ResponseException) {
+            ResponseException respException = (ResponseException) cause;
+            return respException.getStatusCodeValue();
+
+        }
+        if (cause instanceof ClientInternalException) {
+            ClientInternalException clientInternalException = (ClientInternalException) cause;
+            return clientInternalException.getErrorCode();
+        }
+        return -status.getCode().value();
+    }
+
+
+    public static String getErrorMessageFrom(Status status) {
+        Throwable cause = status.getCause();
+        if (cause instanceof ResponseException) {
+            ResponseException respException = (ResponseException) cause;
+            return respException.getLocalizedMessage();
+
+        }
+        if (cause instanceof ClientInternalException) {
+            ClientInternalException clientInternalException = (ClientInternalException) cause;
+            return clientInternalException.getLocalizedMessage();
+        }
+        switch (status.getCode()) {
+            case DEADLINE_EXCEEDED:
+                return "连接超时，请检查当前网络状态是否正常！";
+            default:
+                return status.getDescription();
+        }
+    }
 }
 

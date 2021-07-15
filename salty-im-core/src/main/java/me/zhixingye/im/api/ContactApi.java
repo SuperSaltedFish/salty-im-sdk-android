@@ -41,7 +41,7 @@ public class ContactApi extends BasicApi {
 
         newServiceStub().requestContact(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void refusedContact(String userId, String reason, RequestCallback<RefusedContactResp> callback) {
@@ -52,7 +52,7 @@ public class ContactApi extends BasicApi {
 
         newServiceStub().refusedContact(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void acceptContact(String userId, RequestCallback<AcceptContactResp> callback) {
@@ -62,7 +62,7 @@ public class ContactApi extends BasicApi {
 
         newServiceStub().acceptContact(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void deleteContact(String userId, RequestCallback<DeleteContactResp> callback) {
@@ -72,7 +72,7 @@ public class ContactApi extends BasicApi {
 
         newServiceStub().deleteContact(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void getAllContact(RequestCallback<GetContactListResp> callback) {
@@ -81,7 +81,7 @@ public class ContactApi extends BasicApi {
 
         newServiceStub().getContactList(
                 req,
-                new InnerStreamObserver<>(callback)
+                new UnaryStreamObserver<>(callback)
         );
     }
 
@@ -93,7 +93,7 @@ public class ContactApi extends BasicApi {
 
         newServiceStub().getContactOperationList(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 
     public void updateContactRemarkInfo(String userId, ContactRemark remark, RequestCallback<UpdateRemarkInfoResp> callback) {
@@ -104,6 +104,6 @@ public class ContactApi extends BasicApi {
 
         newServiceStub().updateRemarkInfo(
                 req,
-                new InnerStreamObserver<>(callback));
+                new UnaryStreamObserver<>(callback));
     }
 }

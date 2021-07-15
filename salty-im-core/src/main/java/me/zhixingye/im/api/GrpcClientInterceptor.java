@@ -21,7 +21,6 @@ import me.zhixingye.im.exception.ClientInternalException;
 import me.zhixingye.im.exception.ResponseException;
 import me.zhixingye.im.service.DeviceService;
 import me.zhixingye.im.service.UserService;
-import me.zhixingye.im.tool.PrintHelper;
 import me.zhixingye.im.util.StringUtil;
 
 /**
@@ -70,7 +69,6 @@ public class GrpcClientInterceptor implements ClientInterceptor {
             mGrpcMarshaller = ProtoLiteUtils.marshaller(GrpcReq.getDefaultInstance());
         }
 
-
         @Override
         public InputStream stream(MessageLite value) {
             return mGrpcMarshaller.stream(pack(value));
@@ -90,7 +88,7 @@ public class GrpcClientInterceptor implements ClientInterceptor {
             DeviceService deviceService = IMCore.get().getDeviceService();
             UserService userService = IMCore.get().getUserService();
 
-            GrpcReq req = GrpcReq.newBuilder()
+            return GrpcReq.newBuilder()
                     .setDeviceId(StringUtil.getNotNull(deviceService.getDeviceId()))
                     .setOs(GrpcReq.OS.ANDROID)
                     .setLanguage(GrpcReq.Language.CHINESE)
@@ -98,9 +96,6 @@ public class GrpcClientInterceptor implements ClientInterceptor {
                     .setToken(StringUtil.getNotNull(userService.getCurrentUserToken()))
                     .setData(data)
                     .build();
-
-            PrintHelper.printRequest(TAG, req, message);
-            return req;
         }
     }
 
@@ -129,7 +124,7 @@ public class GrpcClientInterceptor implements ClientInterceptor {
 
         protected MessageLite Unpack(GrpcResp resp) {
             if (resp == null) {
-                throw new ClientInternalException(ClientErrorCode.INTERNAL_UNKNOWN, "req == null");
+                throw new ClientInternalException(ClientErrorCode.INTERNAL_UNKNOWN, "resp == null");
             }
 
             if (resp.getCode() != StatusCode.STATUS_OK) {
@@ -151,7 +146,6 @@ public class GrpcClientInterceptor implements ClientInterceptor {
                 if (data == null) {
                     throw new ClientInternalException(ClientErrorCode.INTERNAL_UNKNOWN_RESP_DATA, "data == null");
                 }
-                PrintHelper.printResponse(TAG, resp, data, mDefaultRespDataInstance);
                 return data;
             } catch (Exception e) {
                 throw new ClientInternalException(ClientErrorCode.INTERNAL_UNKNOWN_RESP_DATA, "parseFrom data fail", e);
