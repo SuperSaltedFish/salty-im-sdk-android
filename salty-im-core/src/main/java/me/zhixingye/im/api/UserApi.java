@@ -44,9 +44,7 @@ public class UserApi extends BasicApi {
                 .setPassword(Sha256Util.sha256WithSalt(password, password))
                 .build();
 
-        newServiceStub().register(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().register(req, new UnaryStreamObserver<>(callback));
     }
 
     public void registerByEmail(String email, String password, RequestCallback<RegisterResp> callback) {
@@ -59,9 +57,7 @@ public class UserApi extends BasicApi {
                 .setPassword(Sha256Util.sha256WithSalt(password, password))
                 .build();
 
-        newServiceStub().register(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().register(req, new UnaryStreamObserver<>(callback));
     }
 
     public void loginByTelephone(String telephone, String password, RequestCallback<LoginResp> callback) {
@@ -69,9 +65,7 @@ public class UserApi extends BasicApi {
                 .setTelephone(telephone)
                 .setPassword(Sha256Util.sha256WithSalt(password, password))
                 .build();
-        newServiceStub().login(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().login(req, new UnaryStreamObserver<>(callback));
     }
 
     public void loginByEmail(String email, String password, RequestCallback<LoginResp> callback) {
@@ -80,18 +74,14 @@ public class UserApi extends BasicApi {
                 .setPassword(Sha256Util.sha256WithSalt(password, password))
                 .build();
 
-        newServiceStub().login(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().login(req, new UnaryStreamObserver<>(callback));
     }
 
     public void logout(RequestCallback<LogoutResp> callback) {
         LogoutReq req = LogoutReq.newBuilder()
                 .build();
 
-        newServiceStub().logout(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().logout(req, new UnaryStreamObserver<>(callback));
     }
 
     public void resetLoginPasswordByTelephone(String telephone, String newPassword, RequestCallback<ResetPasswordResp> callback) {
@@ -100,9 +90,7 @@ public class UserApi extends BasicApi {
                 .setNewPassword(Sha256Util.sha256WithSalt(newPassword, newPassword))
                 .build();
 
-        newServiceStub().resetPassword(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().resetPassword(req, new UnaryStreamObserver<>(callback));
     }
 
     public void resetLoginPasswordByEmail(String email, String newPassword, RequestCallback<ResetPasswordResp> callback) {
@@ -111,9 +99,7 @@ public class UserApi extends BasicApi {
                 .setNewPassword(Sha256Util.sha256WithSalt(newPassword, newPassword))
                 .build();
 
-        newServiceStub().resetPassword(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().resetPassword(req, new UnaryStreamObserver<>(callback));
     }
 
     public void updateUserInfo(String nickname, String description, UserProfile.Sex sex, long birthday, String location, RequestCallback<UpdateUserInfoResp> callback) {
@@ -129,9 +115,7 @@ public class UserApi extends BasicApi {
                 .setProfile(profile)
                 .build();
 
-        newServiceStub().updateUserInfo(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().updateUserInfo(req, new UnaryStreamObserver<>(callback));
     }
 
     public void getUserInfoByUserId(String userId, RequestCallback<GetUserInfoResp> callback) {
@@ -139,9 +123,7 @@ public class UserApi extends BasicApi {
                 .setUserId(userId)
                 .build();
 
-        newServiceStub().getUserInfo(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().getUserInfo(req, new UnaryStreamObserver<>(callback));
     }
 
     public void queryUserInfoByTelephone(String telephone, RequestCallback<QueryUserInfoResp> callback) {
@@ -149,9 +131,7 @@ public class UserApi extends BasicApi {
                 .setTelephone(telephone)
                 .build();
 
-        newServiceStub().queryUserInfo(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().queryUserInfo(req, new UnaryStreamObserver<>(callback));
     }
 
     public void queryUserInfoByEmail(String email, RequestCallback<QueryUserInfoResp> callback) {
@@ -159,9 +139,7 @@ public class UserApi extends BasicApi {
                 .setEmail(email)
                 .build();
 
-        newServiceStub().queryUserInfo(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().queryUserInfo(req, new UnaryStreamObserver<>(callback));
     }
 
 }

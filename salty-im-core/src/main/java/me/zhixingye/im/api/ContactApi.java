@@ -39,9 +39,7 @@ public class ContactApi extends BasicApi {
                 .setReason(reason)
                 .build();
 
-        newServiceStub().requestContact(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().requestContact(req, new UnaryStreamObserver<>(callback));
     }
 
     public void refusedContact(String userId, String reason, RequestCallback<RefusedContactResp> callback) {
@@ -50,9 +48,7 @@ public class ContactApi extends BasicApi {
                 .setReason(reason)
                 .build();
 
-        newServiceStub().refusedContact(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().refusedContact(req, new UnaryStreamObserver<>(callback));
     }
 
     public void acceptContact(String userId, RequestCallback<AcceptContactResp> callback) {
@@ -60,9 +56,7 @@ public class ContactApi extends BasicApi {
                 .setUserId(userId)
                 .build();
 
-        newServiceStub().acceptContact(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().acceptContact(req, new UnaryStreamObserver<>(callback));
     }
 
     public void deleteContact(String userId, RequestCallback<DeleteContactResp> callback) {
@@ -70,19 +64,14 @@ public class ContactApi extends BasicApi {
                 .setUserId(userId)
                 .build();
 
-        newServiceStub().deleteContact(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().deleteContact(req, new UnaryStreamObserver<>(callback));
     }
 
     public void getAllContact(RequestCallback<GetContactListResp> callback) {
         GetContactListReq req = GetContactListReq.newBuilder()
                 .build();
 
-        newServiceStub().getContactList(
-                req,
-                new UnaryStreamObserver<>(callback)
-        );
+        newServiceStub().getContactList(req, new UnaryStreamObserver<>(callback));
     }
 
     public void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback) {
@@ -91,9 +80,7 @@ public class ContactApi extends BasicApi {
                 .setEndDateTime(endDateTime)
                 .build();
 
-        newServiceStub().getContactOperationList(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().getContactOperationList(req, new UnaryStreamObserver<>(callback));
     }
 
     public void updateContactRemarkInfo(String userId, ContactRemark remark, RequestCallback<UpdateRemarkInfoResp> callback) {
@@ -102,8 +89,6 @@ public class ContactApi extends BasicApi {
                 .setUserId(userId)
                 .build();
 
-        newServiceStub().updateRemarkInfo(
-                req,
-                new UnaryStreamObserver<>(callback));
+        newServiceStub().updateRemarkInfo(req, new UnaryStreamObserver<>(callback));
     }
 }

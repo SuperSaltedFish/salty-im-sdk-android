@@ -40,9 +40,8 @@ public class GroupApi extends BasicApi {
                 .setGroupName(groupName)
                 .addAllMemberUserIdArr(memberUserIdArr)
                 .build();
-        newServiceStub().createGroup(
-                req,
-                new UnaryStreamObserver<>(callback));
+
+        newServiceStub().createGroup(req, new UnaryStreamObserver<>(callback));
     }
 
     public void joinGroup(String groupId, String reason, RequestCallback<JoinGroupResp> callback) {
@@ -50,18 +49,16 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setReason(reason)
                 .build();
-        newServiceStub().joinGroup(
-                req,
-                new UnaryStreamObserver<>(callback));
+
+        newServiceStub().joinGroup(req, new UnaryStreamObserver<>(callback));
     }
 
     public void quitGroup(String groupId, RequestCallback<QuitGroupResp> callback) {
         QuitGroupReq req = QuitGroupReq.newBuilder()
                 .setGroupId(groupId)
                 .build();
-        newServiceStub().quitGroup(
-                req,
-                new UnaryStreamObserver<>(callback));
+
+        newServiceStub().quitGroup(req, new UnaryStreamObserver<>(callback));
     }
 
     public void addGroupMember(String groupId, List<String> memberUserIdArr, RequestCallback<AddGroupMemberResp> callback) {
@@ -69,9 +66,8 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .addAllMemberUserIdArr(memberUserIdArr)
                 .build();
-        newServiceStub().addGroupMember(
-                req,
-                new UnaryStreamObserver<>(callback));
+
+        newServiceStub().addGroupMember(req, new UnaryStreamObserver<>(callback));
     }
 
     public void kickGroupMember(String groupId, String memberUserId, RequestCallback<KickGroupMemberResp> callback) {
@@ -79,9 +75,8 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setMemberUserId(memberUserId)
                 .build();
-        newServiceStub().kickGroupMember(
-                req,
-                new UnaryStreamObserver<>(callback));
+
+        newServiceStub().kickGroupMember(req, new UnaryStreamObserver<>(callback));
     }
 
     public void updateGroupName(String groupId, String groupName, RequestCallback<UpdateGroupNameResp> callback) {
@@ -89,9 +84,8 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setGroupName(groupName)
                 .build();
-        newServiceStub().updateGroupName(
-                req,
-                new UnaryStreamObserver<>(callback));
+
+        newServiceStub().updateGroupName(req, new UnaryStreamObserver<>(callback));
     }
 
     public void updateGroupNotice(String groupId, String notice, RequestCallback<UpdateGroupNoticeResp> callback) {
@@ -99,9 +93,8 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setNotice(notice)
                 .build();
-        newServiceStub().updateGroupNotice(
-                req,
-                new UnaryStreamObserver<>(callback));
+
+        newServiceStub().updateGroupNotice(req, new UnaryStreamObserver<>(callback));
     }
 
     public void updateMemberNickname(String groupId, String memberNickname, RequestCallback<UpdateMemberNicknameResp> callback) {
@@ -109,8 +102,7 @@ public class GroupApi extends BasicApi {
                 .setGroupId(groupId)
                 .setMemberNickname(memberNickname)
                 .build();
-        newServiceStub().updateMemberNickname(
-                req,
-                new UnaryStreamObserver<>(callback));
+
+        newServiceStub().updateMemberNickname(req, new UnaryStreamObserver<>(callback));
     }
 }
