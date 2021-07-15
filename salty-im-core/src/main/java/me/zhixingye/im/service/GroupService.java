@@ -8,7 +8,9 @@ import com.salty.protos.QuitGroupResp;
 import com.salty.protos.UpdateGroupNameResp;
 import com.salty.protos.UpdateGroupNoticeResp;
 import com.salty.protos.UpdateMemberNicknameResp;
+
 import java.util.List;
+
 import me.zhixingye.im.listener.RequestCallback;
 
 /**
@@ -18,7 +20,7 @@ import me.zhixingye.im.listener.RequestCallback;
  */
 public interface GroupService extends BasicService {
     void createGroup(String groupName, List<String> memberUserIdArr,
-            RequestCallback<CreateGroupResp> callback);
+                     RequestCallback<CreateGroupResp> callback);
 
     void joinGroup(String groupId, String reason, RequestCallback<JoinGroupResp> callback);
 

@@ -9,7 +9,7 @@ import me.zhixingye.im.listener.RequestCallback;
  *
  * @author zhixingye , 2021年01月21日.
  */
-public interface RegisterService extends BasicService{
+public interface RegisterService extends BasicService {
     void registerByTelephone(String telephone, String password, RequestCallback<RegisterResp> callback);
 
     void registerByEmail(String email, String password, RequestCallback<RegisterResp> callback);

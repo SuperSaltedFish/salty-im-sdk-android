@@ -2,10 +2,13 @@ package me.zhixingye.im.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.salty.protos.GroupMemberProfile;
 import com.salty.protos.GroupProfile;
+
 import java.util.List;
 
 /**

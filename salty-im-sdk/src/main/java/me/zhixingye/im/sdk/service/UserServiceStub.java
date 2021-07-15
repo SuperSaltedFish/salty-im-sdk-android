@@ -43,7 +43,7 @@ public class UserServiceStub extends IUserRemoteService.Stub {
 
     @Override
     public void updateUserInfo(String nickname, String description, int sex, long birthday, String location,
-            IRemoteRequestCallback callback) {
+                               IRemoteRequestCallback callback) {
         IMCore.get().getUserService().updateUserInfo(
                 nickname,
                 description,

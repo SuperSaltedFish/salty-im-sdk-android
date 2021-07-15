@@ -26,7 +26,7 @@ import me.zhixingye.im.tool.Logger;
  *
  * @author zhixingye , 2020年05月01日.
  */
-public class GroupServiceProxy  extends RemoteProxy implements GroupService {
+public class GroupServiceProxy extends RemoteProxy implements GroupService {
 
     private static final String TAG = "ContactServiceProxy";
 

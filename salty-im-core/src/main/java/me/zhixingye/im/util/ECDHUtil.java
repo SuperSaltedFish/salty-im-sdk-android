@@ -1,11 +1,13 @@
 package me.zhixingye.im.util;
 
 import android.text.TextUtils;
+
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+
 import javax.crypto.KeyAgreement;
 
 /**
@@ -18,7 +20,7 @@ public class ECDHUtil {
     private static final String ECDH = "ECDH";
 
     public static byte[] ecdh(PrivateKey localKey, Key remoteKey) {
-        return ecdh(localKey, remoteKey,null);
+        return ecdh(localKey, remoteKey, null);
     }
 
     public static byte[] ecdh(PrivateKey localKey, Key remoteKey, String provider) {

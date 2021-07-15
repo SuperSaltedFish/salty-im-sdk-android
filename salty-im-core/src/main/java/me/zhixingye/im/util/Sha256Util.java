@@ -1,8 +1,10 @@
 package me.zhixingye.im.util;
 
 import android.text.TextUtils;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import javax.annotation.Nullable;
 
 /**
