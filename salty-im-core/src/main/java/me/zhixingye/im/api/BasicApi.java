@@ -17,6 +17,8 @@ import io.grpc.okhttp.OkHttpChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.zhixingye.im.BuildConfig;
 import me.zhixingye.im.IMCore;
@@ -44,24 +46,12 @@ public abstract class BasicApi {
                             .disableRetry()
                             .usePlaintext();
 
+                    List<ClientInterceptor> clientInterceptorList = new ArrayList<>();
+                    clientInterceptorList.add(new GrpcClientInterceptor());
+
                     sManagedChannel = AndroidChannelBuilder.usingBuilder(builder)
                             .context(IMCore.getAppContext().getApplicationContext())
-                            .intercept(new AbstractList<ClientInterceptor>() {
-                                @Override
-                                public ClientInterceptor get(int index) {
-                                    return new ClientInterceptor() {
-                                        @Override
-                                        public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
-                                            return next.newCall(GrpcMethodDescriptor.createGrpcMethodDescriptor(method), callOptions);
-                                        }
-                                    };
-                                }
-
-                                @Override
-                                public int size() {
-                                    return 1;
-                                }
-                            })
+                            .intercept(clientInterceptorList)
                             .build();
                 }
             }
