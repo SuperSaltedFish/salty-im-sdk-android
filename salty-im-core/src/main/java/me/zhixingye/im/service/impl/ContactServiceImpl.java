@@ -11,7 +11,12 @@ import com.salty.protos.RefusedContactResp;
 import com.salty.protos.RequestContactResp;
 import com.salty.protos.UpdateRemarkInfoResp;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.annotation.Nullable;
@@ -29,6 +34,9 @@ import me.zhixingye.im.service.ContactService;
 public class ContactServiceImpl extends BasicServiceImpl implements ContactService {
 
     private final ContactApi mContactApi = new ContactApi();
+
+    private final Map<String, ContactProfile> mLocalContactMap = new ConcurrentHashMap<>();
+    private final Map<String, ContactOperationMessage> mLocalContactOperationMap = new ConcurrentHashMap<>();
 
     private final Set<OnContactOperationChangeListener> mOnContactOperationChangeListeners = new CopyOnWriteArraySet<>();
     private final Set<OnContactChangeListener> mOnContactChangeListeners = new CopyOnWriteArraySet<>();
@@ -58,12 +66,36 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
 
     @Override
     public void getContactList(RequestCallback<GetContactListResp> callback) {
-        mContactApi.getAllContact(new RequestCallbackWrapper<>(callback));
+        mContactApi.getAllContact(new RequestCallbackWrapper<GetContactListResp>(callback) {
+            @Override
+            public void onCompleted(GetContactListResp response) {
+                synchronized (mLocalContactMap) {
+                    List<ContactProfile> contactList = response.getContactListList();
+                    mLocalContactMap.clear();
+                    for (ContactProfile contact : contactList) {
+                        mLocalContactMap.put(contact.getUserProfile().getUserId(), contact);
+                    }
+                }
+                super.onCompleted(response);
+            }
+        });
     }
 
     @Override
     public void getContactOperationList(long startDateTime, long endDateTime, RequestCallback<GetContactOperationListResp> callback) {
-        mContactApi.getContactOperationList(startDateTime, endDateTime, new RequestCallbackWrapper<>(callback));
+        mContactApi.getContactOperationList(startDateTime, endDateTime, new RequestCallbackWrapper<GetContactOperationListResp>(callback) {
+            @Override
+            public void onCompleted(GetContactOperationListResp response) {
+                synchronized (mLocalContactOperationMap) {
+                    List<ContactOperationMessage> contactOperationList = response.getMessageListList();
+                    mLocalContactOperationMap.clear();
+                    for (ContactOperationMessage operation : contactOperationList) {
+                        mLocalContactOperationMap.put(operation.getTriggerProfile().getUserId(), operation);
+                    }
+                }
+                super.onCompleted(response);
+            }
+        });
     }
 
     @Override
@@ -74,13 +106,13 @@ public class ContactServiceImpl extends BasicServiceImpl implements ContactServi
     @Nullable
     @Override
     public ContactProfile getContactProfileFromLocal(String contactId) {
-        return null;
+        return mLocalContactMap.get(contactId);
     }
 
     @Nullable
     @Override
     public ContactOperationMessage getContactOperationFromLocal(String targetUserId) {
-        return null;
+        return mLocalContactOperationMap.get(targetUserId);
     }
 
     @Override

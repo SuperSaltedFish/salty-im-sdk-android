@@ -19,7 +19,7 @@ interface IContactRemoteService {
 
     void getContactList(IRemoteRequestCallback callback);
 
-    void updateContactRemarkInfo(String userId, out byte[] contactRemark, IRemoteRequestCallback callback);
+    void updateContactRemarkInfo(String userId, in byte[] contactRemark, IRemoteRequestCallback callback);
 
     byte[] getContactProfileFromLocal(String contactId);
 

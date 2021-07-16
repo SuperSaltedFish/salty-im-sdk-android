@@ -5,13 +5,13 @@ package me.zhixingye.im.sdk;
 import me.zhixingye.im.sdk.IRemoteRequestCallback;
 
 interface IGroupRemoteService {
-    void createGroup(String groupName, out List<String> memberUserIdArr, IRemoteRequestCallback callback);
+    void createGroup(String groupName, in List<String> memberUserIdArr, IRemoteRequestCallback callback);
 
     void joinGroup(String groupId, String reason, IRemoteRequestCallback callback);
 
     void quitGroup(String groupId, IRemoteRequestCallback callback);
 
-    void addGroupMember(String groupId, out List<String> memberUserIdArr, IRemoteRequestCallback callback);
+    void addGroupMember(String groupId, in List<String> memberUserIdArr, IRemoteRequestCallback callback);
 
     void kickGroupMember(String groupId, String memberUserId, IRemoteRequestCallback callback);
 
